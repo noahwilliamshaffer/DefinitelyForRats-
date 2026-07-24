@@ -41,7 +41,7 @@ window.SITE = {
   //   provider: "snipcart" -> full hosted cart + checkout on a static site.
   //                           Set snipcartKey to your Snipcart PUBLIC API key.
   payment: {
-    provider: "none",
+    provider: "stripe",
     snipcartKey: "",
     currency: "usd"
   },

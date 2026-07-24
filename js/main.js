@@ -69,7 +69,7 @@
       // Each product links to its own Stripe-hosted Payment Link (product.buyUrl).
       return p.buyUrl
         ? '<a class="btn btn-primary btn-sm" href="' + escAttr(p.buyUrl) + '" target="_blank" rel="noopener">Buy Now</a>'
-        : '<button class="btn btn-ghost btn-sm" disabled title="Add a Stripe Payment Link (buyUrl) for this item in js/products.js">Set Link</button>';
+        : '<button class="btn btn-ghost btn-sm" disabled title="Add this item\'s Stripe Payment Link (buyUrl) in js/products.js">Currently Unavailable</button>';
     }
 
     if (pay === "snipcart") {
