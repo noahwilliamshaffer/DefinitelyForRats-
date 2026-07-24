@@ -15,6 +15,18 @@ window.SITE = {
   email: "support@apexpeptides.example",
   supportHours: "Mon–Fri, 9am–5pm EST",
 
+  // --- Form delivery ---------------------------------------------------------
+  // Wire the Contact & Wholesale forms to an email service WITHOUT a backend.
+  // Two zero-cost options (pick one, paste your value, done):
+  //   • Formspree   -> create a form at formspree.io, set:
+  //                    formEndpoint: "https://formspree.io/f/XXXXXXXX"
+  //   • Web3Forms   -> get a free access key at web3forms.com, set:
+  //                    formEndpoint: "https://api.web3forms.com/submit"
+  //                    formAccessKey: "your-access-key"
+  // Leave formEndpoint empty ("") to keep the forms in harmless demo mode.
+  formEndpoint: "",
+  formAccessKey: "",
+
   // --- Commerce settings -----------------------------------------------------
   currency: "$",
   freeShipThreshold: 200,              // free USA shipping over this amount

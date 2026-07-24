@@ -52,11 +52,35 @@ each HTML file's `<head>`.
 To swap the catalog, edit **`js/products.js`** — each entry controls a product
 card (name, category, price, sale price, stock, blurb).
 
+## Deploy to GitHub Pages
+
+A workflow is included at `.github/workflows/deploy-pages.yml` that publishes the
+site on every push to `main`. One-time setup:
+
+1. In the repo, go to **Settings → Pages → Build and deployment**.
+2. Set **Source** to **GitHub Actions**.
+
+The next push (or a manual run from the Actions tab) deploys the site to
+`https://noahwilliamshaffer.github.io/peptides/`.
+
+## Wire up the forms (no backend needed)
+
+The Contact and Wholesale forms POST to an email service you choose. Pick one,
+paste your value into `js/site-config.js`, and you'll receive submissions by email:
+
+- **Formspree** — create a form at [formspree.io](https://formspree.io), then set
+  `formEndpoint: "https://formspree.io/f/XXXXXXXX"`.
+- **Web3Forms** — get a free access key at [web3forms.com](https://web3forms.com),
+  then set `formEndpoint: "https://api.web3forms.com/submit"` and
+  `formAccessKey: "your-access-key"`.
+
+Leave `formEndpoint` empty to keep the forms in harmless demo mode.
+
 ## Notes
 
-- **Demo only.** The cart, forms, search, and COA lookup are front-end stubs.
-  There is no real checkout, payment, or backend — wire those up to your own
-  commerce/email backend before going live.
+- **Demo commerce.** The cart, search, and COA lookup are front-end stubs.
+  There is no real checkout or payment — wire those up to your own commerce
+  backend before going live.
 - **Research use only.** The site includes a 21+ age gate and research-only
   disclaimers consistent with this product category. Confirm the legal and
   compliance requirements for your jurisdiction before selling anything.

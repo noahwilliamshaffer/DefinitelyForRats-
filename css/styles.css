@@ -221,6 +221,7 @@ section { padding: 64px 0; }
 .form input:focus, .form textarea:focus, .form select:focus { outline: 2px solid var(--teal); border-color: var(--teal); }
 .form-note { color: #0a7d4b; font-size: 14px; display: none; }
 .form-note.show { display: block; }
+.form-note.error { color: var(--sale); }
 .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 .info-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
