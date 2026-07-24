@@ -54,6 +54,40 @@
     );
   }
 
+  function escAttr(s) {
+    return String(s)
+      .replace(/&/g, "&amp;").replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  // Builds the buy control for a card based on the active payment provider.
+  function actionButton(p) {
+    var pay = (S.payment && S.payment.provider) || "none";
+    if (!p.inStock) return '<button class="btn btn-ghost btn-sm" disabled>Notify Me</button>';
+
+    if (pay === "stripe") {
+      // Each product links to its own Stripe-hosted Payment Link (product.buyUrl).
+      return p.buyUrl
+        ? '<a class="btn btn-primary btn-sm" href="' + escAttr(p.buyUrl) + '" target="_blank" rel="noopener">Buy Now</a>'
+        : '<button class="btn btn-ghost btn-sm" disabled title="Add a Stripe Payment Link (buyUrl) for this item in js/products.js">Set Link</button>';
+    }
+
+    if (pay === "snipcart") {
+      // Snipcart reads these data-attributes to build a real hosted cart/checkout.
+      var price = (p.sale != null ? p.sale : p.price);
+      var pageUrl = location.pathname.split("/").pop() || "index.html";
+      return '<button class="btn btn-primary btn-sm snipcart-add-item"' +
+        ' data-item-id="' + escAttr(p.id) + '"' +
+        ' data-item-name="' + escAttr(p.name) + '"' +
+        ' data-item-price="' + price + '"' +
+        ' data-item-url="' + escAttr(pageUrl) + '"' +
+        ' data-item-description="' + escAttr(p.blurb || "") + '">Add to Cart</button>';
+    }
+
+    // Default: demo cart (no real payment).
+    return '<button class="btn btn-primary btn-sm add-cart" data-id="' + escAttr(p.id) + '">Add to Cart</button>';
+  }
+
   function card(p) {
     var onSale = p.sale != null;
     var badge = "";
@@ -64,9 +98,7 @@
       ? '<span class="price"><s>' + money(p.price) + "</s> <strong>" + money(p.sale) + "</strong></span>"
       : '<span class="price"><strong>' + money(p.price) + "</strong></span>";
 
-    var action = p.inStock
-      ? '<button class="btn btn-primary btn-sm add-cart" data-id="' + p.id + '">Add to Cart</button>'
-      : '<button class="btn btn-ghost btn-sm" disabled>Notify Me</button>';
+    var action = actionButton(p);
 
     return (
       '<article class="product-card">' +
@@ -162,5 +194,56 @@
       });
   });
 
-  document.addEventListener("DOMContentLoaded", render);
+  // Boots the selected payment provider. Runs after the header is injected so
+  // the cart button exists.
+  var SNIPCART_VERSION = "3.7.3";
+  function initPayments() {
+    var cfg = S.payment || {};
+    var pay = cfg.provider || "none";
+
+    if (pay === "stripe") {
+      // Per-product hosted checkout — no site cart needed, so hide the cart icon.
+      var cb = document.querySelector(".cart-btn");
+      if (cb) cb.style.display = "none";
+      return;
+    }
+
+    if (pay === "snipcart") {
+      if (!cfg.snipcartKey) {
+        console.warn("[payments] provider is 'snipcart' but SITE.payment.snipcartKey is empty.");
+        return;
+      }
+      var base = "https://cdn.snipcart.com/themes/v" + SNIPCART_VERSION + "/default/";
+
+      var css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = base + "snipcart.css";
+      document.head.appendChild(css);
+
+      var settings = document.createElement("div");
+      settings.id = "snipcart";
+      settings.setAttribute("hidden", "");
+      settings.setAttribute("data-api-key", cfg.snipcartKey);
+      if (cfg.currency) settings.setAttribute("data-currency", cfg.currency);
+      document.body.appendChild(settings);
+
+      var sc = document.createElement("script");
+      sc.async = true;
+      sc.src = base + "snipcart.js";
+      document.body.appendChild(sc);
+
+      // Turn the header cart into the Snipcart cart trigger + live item count.
+      var cart = document.querySelector(".cart-btn");
+      if (cart) {
+        cart.classList.add("snipcart-checkout");
+        var count = cart.querySelector(".cart-count");
+        if (count) count.classList.add("snipcart-items-count");
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    render();
+    initPayments();
+  });
 })();

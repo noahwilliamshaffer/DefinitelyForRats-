@@ -76,11 +76,52 @@ paste your value into `js/site-config.js`, and you'll receive submissions by ema
 
 Leave `formEndpoint` empty to keep the forms in harmless demo mode.
 
+## Payments (real checkout, no backend)
+
+Payment code is fully wired — you only supply your own account's **public** key.
+Set the provider in `js/site-config.js` under `payment`.
+
+> ⚠️ **Never commit a secret key.** Only publishable keys, payment-link URLs, and
+> Snipcart's *public* API key belong in `site-config.js` — that file ships to the
+> browser. A Stripe secret key (`sk_...`) must never go in this repo.
+
+> ⚠️ **Processor eligibility.** Stripe, PayPal, and Square classify research
+> peptides / "research chemicals" as **restricted or prohibited** under their
+> acceptable-use policies. Confirm your business is eligible (or use a high-risk
+> merchant processor) before relying on this — accounts can be frozen otherwise.
+
+### Option A — Stripe Payment Links (simplest)
+
+Each product links to its own Stripe-hosted checkout page.
+
+1. Create a Stripe account and complete verification at
+   [dashboard.stripe.com](https://dashboard.stripe.com) *(your account — I can't
+   create it or complete identity/bank verification for you)*.
+2. For each product, create a **Payment Link**
+   (dashboard.stripe.com/payment-links).
+3. In `js/site-config.js` set `payment.provider: "stripe"`.
+4. In `js/products.js`, paste each link into that product's `buyUrl`.
+
+Stripe hosts the entire checkout and handles PCI — nothing sensitive touches this site.
+
+### Option B — Snipcart (full cart + checkout)
+
+Keeps the on-site cart experience; Snipcart runs the checkout.
+
+1. Create a [Snipcart](https://snipcart.com) account and connect your payment
+   gateway (Stripe/PayPal/etc.) in their dashboard.
+2. Copy your **Public API Key**.
+3. In `js/site-config.js` set `payment.provider: "snipcart"` and
+   `payment.snipcartKey: "your-public-key"`.
+
+The "Add to Cart" buttons and header cart become live automatically. Snipcart
+validates prices by crawling your deployed product pages, so deploy first
+(GitHub Pages), then test in their **Test** mode before going live.
+
 ## Notes
 
-- **Demo commerce.** The cart, search, and COA lookup are front-end stubs.
-  There is no real checkout or payment — wire those up to your own commerce
-  backend before going live.
+- **Still demo-only:** the product search and COA lookup are front-end stubs.
+- Set `payment.provider` back to `"none"` any time to disable real checkout.
 - **Research use only.** The site includes a 21+ age gate and research-only
   disclaimers consistent with this product category. Confirm the legal and
   compliance requirements for your jurisdiction before selling anything.

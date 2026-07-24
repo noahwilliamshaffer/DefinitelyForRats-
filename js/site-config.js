@@ -27,6 +27,25 @@ window.SITE = {
   formEndpoint: "",
   formAccessKey: "",
 
+  // --- Payments --------------------------------------------------------------
+  // How customers pay. No backend/server required for either real option.
+  // IMPORTANT: only ever put PUBLIC/publishable values here (payment-link URLs,
+  // publishable keys, Snipcart PUBLIC API key). NEVER put a Stripe secret key
+  // (sk_...) or any private key in this file — it ships to the browser.
+  //
+  //   provider: "none"     -> demo cart only (default, no real payments)
+  //   provider: "stripe"   -> per-product Stripe Payment Links. Create a link
+  //                           per product at dashboard.stripe.com/payment-links,
+  //                           then set `buyUrl` on that item in js/products.js.
+  //                           Stripe hosts the entire checkout (PCI handled).
+  //   provider: "snipcart" -> full hosted cart + checkout on a static site.
+  //                           Set snipcartKey to your Snipcart PUBLIC API key.
+  payment: {
+    provider: "none",
+    snipcartKey: "",
+    currency: "usd"
+  },
+
   // --- Commerce settings -----------------------------------------------------
   currency: "$",
   freeShipThreshold: 200,              // free USA shipping over this amount

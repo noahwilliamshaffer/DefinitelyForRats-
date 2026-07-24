@@ -2,10 +2,16 @@
    PRODUCT CATALOG — edit this array to manage what appears in the store.
    These are placeholder listings using generic research-compound names.
    Replace names, prices, and copy with your own. Prices are illustrative.
+
+   PAYMENTS: when SITE.payment.provider === "stripe", add a `buyUrl` to each
+   product — the Stripe Payment Link you created for it at
+   dashboard.stripe.com/payment-links. Example shown on the first item below.
+   (Snipcart mode needs no per-product URL — it uses id/name/price directly.)
    ========================================================================== */
 window.PRODUCTS = [
   // ---- Peptides -------------------------------------------------------------
   { id: "bpc-157",   name: "BPC-157 10mg (10 vials/kit)",        category: "peptides", price: 178, sale: 152, badge: "sale",     bestseller: true,  inStock: true,
+    buyUrl: "", /* e.g. "https://buy.stripe.com/xxxxxxxx" */
     blurb: "Stable gastric pentadecapeptide. Lyophilized, 99%+ purity." },
   { id: "tb-500",    name: "TB-500 10mg (10 vials/kit)",         category: "peptides", price: 168, sale: 138, badge: "sale",     bestseller: true,  inStock: true,
     blurb: "Thymosin Beta-4 fragment. Research grade, batch tested." },
