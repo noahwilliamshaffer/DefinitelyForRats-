@@ -66,10 +66,12 @@
     if (!p.inStock) return '<button class="btn btn-ghost btn-sm" disabled>Notify Me</button>';
 
     if (pay === "stripe") {
-      // Each product links to its own Stripe-hosted Payment Link (product.buyUrl).
-      return p.buyUrl
-        ? '<a class="btn btn-primary btn-sm" href="' + escAttr(p.buyUrl) + '" target="_blank" rel="noopener">Buy Now</a>'
-        : '<button class="btn btn-ghost btn-sm" disabled title="Add this item\'s Stripe Payment Link (buyUrl) in js/products.js">Currently Unavailable</button>';
+      // Prefer the generated links map (scripts/create-stripe-payment-links.mjs);
+      // fall back to a manual buyUrl set directly on the product.
+      var link = (window.PAYMENT_LINKS && window.PAYMENT_LINKS[p.id]) || p.buyUrl;
+      return link
+        ? '<a class="btn btn-primary btn-sm" href="' + escAttr(link) + '" target="_blank" rel="noopener">Buy Now</a>'
+        : '<button class="btn btn-ghost btn-sm" disabled title="Run scripts/create-stripe-payment-links.mjs, or set this item\'s buyUrl in js/products.js">Currently Unavailable</button>';
     }
 
     if (pay === "snipcart") {

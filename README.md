@@ -104,6 +104,34 @@ Each product links to its own Stripe-hosted checkout page.
 
 Stripe hosts the entire checkout and handles PCI — nothing sensitive touches this site.
 
+#### Generate all Payment Links at once (recommended)
+
+Instead of creating 60+ links by hand, run the included generator. It creates a
+Payment Link for every product in `js/products.js` and writes the
+id → URL map to `js/payment-links.js` (which the Buy Now buttons read
+automatically). Requires **Node 18+**; no `npm install`.
+
+```powershell
+# PowerShell (Windows)
+$env:STRIPE_SECRET_KEY="sk_test_your_key"; node scripts/create-stripe-payment-links.mjs
+```
+
+```bash
+# bash / zsh
+STRIPE_SECRET_KEY=sk_test_your_key node scripts/create-stripe-payment-links.mjs
+```
+
+Then `git add js/payment-links.js && git commit && git push` — every Buy Now
+button goes live. Notes:
+
+- Your **secret key** is read from the environment for that one command and is
+  used only to call Stripe from your machine. It is **never** written to a file
+  or committed. `js/payment-links.js` contains only public `buy.stripe.com` URLs.
+- Re-running reuses existing links and only creates new ones (e.g. after you add
+  products). Delete an entry from `js/payment-links.js` to regenerate it.
+- Run it with an `sk_test_` key first to verify, then re-run with your `sk_live_`
+  key (after your account is approved) for real checkout.
+
 ### Option B — Snipcart (full cart + checkout)
 
 Keeps the on-site cart experience; Snipcart runs the checkout.
