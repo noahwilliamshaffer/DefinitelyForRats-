@@ -58,8 +58,6 @@ window.SITE = {
     { label: "Home",         href: "index.html" },
     { label: "Our Company",  href: "about.html" },
     { label: "Buy Peptides", href: "peptides.html" },
-    { label: "Buy Aminos",   href: "aminos.html" },
-    { label: "Accessories",  href: "accessories.html" },
     { label: "Wholesale",    href: "wholesale.html" },
     { label: "Contact Us",   href: "contact.html" },
     { label: "COA",          href: "coa.html" }
@@ -71,10 +69,8 @@ window.SITE = {
       {
         title: "Categories",
         links: [
-          { label: "Peptides",    href: "peptides.html" },
-          { label: "Aminos",      href: "aminos.html" },
-          { label: "Accessories", href: "accessories.html" },
-          { label: "Wholesale",   href: "wholesale.html" }
+          { label: "Peptides",  href: "peptides.html" },
+          { label: "Wholesale", href: "wholesale.html" }
         ]
       },
       {
