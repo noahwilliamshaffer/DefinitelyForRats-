@@ -103,7 +103,7 @@
     var action = actionButton(p);
 
     return (
-      '<article class="product-card">' +
+      '<article class="product-card" id="product-' + escAttr(p.id) + '">' +
       '<div class="product-media">' + badge +
       '<span class="test-badge" title="Third-party tested">&#10003; Tested</span>' +
       vialSvg(p.category, p.id) + "</div>" +

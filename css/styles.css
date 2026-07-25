@@ -145,6 +145,7 @@ section { padding: 64px 0; }
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
   overflow: hidden; display: flex; flex-direction: column;
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s;
+  scroll-margin-top: 100px; /* so #product-<id> anchors clear the sticky header */
 }
 .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: #cfe0ec; }
 .product-media {
