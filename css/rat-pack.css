@@ -7,10 +7,10 @@
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 64px 0;
-  /* rat fur + accents, derived from brand palette (no clinical white/blue) */
-  --fur: #cdb9a3;
-  --fur-line: var(--navy);
-  --ear: #e7a9ad;
+  /* rat fur + accents — warm brown base (per art direction; gray is Grandpa's gag) */
+  --fur: #bd8b57;
+  --fur-line: #4a3524;
+  --pink: #e89aa0;
   --a1: var(--teal);     /* stack accent 1 (BPC-157 / Ipamorelin) */
   --a2: var(--accent);   /* stack accent 2 (TB-500 / CJC-1295)     */
   --rp-dur: 5.5s;
@@ -87,15 +87,17 @@
    SVG rat styling — shared parts enforce ONE character across all four
    ========================================================================== */
 .rp-svg .fur { fill: currentColor; stroke: var(--fur-line); stroke-width: 2.5; stroke-linejoin: round; }
-.rp-svg .ear-in { fill: var(--ear); }
-.rp-svg .eye-w { fill: #fff; stroke: var(--fur-line); stroke-width: 1.4; }
-.rp-svg .eye-p { fill: var(--fur-line); }
-.rp-svg .nose { fill: var(--fur-line); }
-.rp-svg .mouth { fill: var(--fur-line); }
-.rp-svg .whisk line, .rp-svg .lid, .rp-svg .smirk, .rp-svg .tail { fill: none; stroke: var(--fur-line); stroke-linecap: round; }
-.rp-svg .whisk line { stroke-width: 1.5; }
-.rp-svg .lid, .rp-svg .smirk { stroke-width: 1.8; }
-.rp-svg .tail { stroke-width: 2.5; }
+.rp-svg .pink { fill: var(--pink); stroke: none; }
+.rp-svg .eye { fill: #17130f; }
+.rp-svg .glint { fill: #fff; }
+.rp-svg .nose { fill: var(--pink); stroke: none; }
+.rp-svg .teeth { fill: #fff; stroke: var(--fur-line); stroke-width: .8; }
+.rp-svg .brow, .rp-svg .lid, .rp-svg .smirk, .rp-svg .smile { fill: none; stroke: var(--fur-line); stroke-width: 1.7; stroke-linecap: round; }
+.rp-svg .whisk path { fill: none; stroke: var(--fur-line); stroke-width: 1.3; stroke-linecap: round; }
+.rp-svg .paw { fill: var(--pink); stroke: var(--fur-line); stroke-width: 2; stroke-linejoin: round; }
+.rp-svg .belly { fill: #fff; opacity: .34; }
+.rp-svg .sweat { fill: #8fd0e6; stroke: var(--fur-line); stroke-width: .8; }
+.rp-svg .tail { fill: none; stroke: #c98f86; stroke-width: 3; stroke-linecap: round; }
 .rp-svg .limb { fill: none; stroke: currentColor; stroke-width: 6; stroke-linecap: round; }
 
 /* fur colour: default warm; grandpa shifts gray -> brown via the two states */

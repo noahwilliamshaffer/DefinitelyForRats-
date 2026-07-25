@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>APEX PEPTIDES — Research Peptides & Compounds</title>
-  <meta name="description" content="High-purity research peptides and compounds for laboratory use. Third-party tested, 99%+ purity, same-day shipping." />
+  <title>APEX PEPTIDES — The Rat Pack</title>
+  <meta name="description" content="Meet the Rat Pack — four little guys, four very different weeks. Research peptides and compounds for laboratory use only." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/rat-pack.css" />
@@ -12,50 +12,47 @@
 <body>
   <header id="site-header"></header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <p class="eyebrow">Research-Grade Compounds</p>
-      <h1>Advance Your Research with High-Purity Peptides</h1>
-      <p>Rigorously tested, lyophilized research peptides and compounds — backed by
-         third-party COAs and a 99%+ purity standard. For laboratory and in vitro
-         research use only.</p>
-      <div class="hero-cta">
-        <a href="peptides.html" class="btn btn-primary">Shop Peptides</a>
-        <a href="coa.html" class="btn btn-light">View Test Reports</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Feature strip -->
-  <section class="features" style="padding:0">
-    <div class="wrap">
-      <div class="feature"><span class="fi">&#128666;</span><div><h4>Free USA Shipping</h4><p>On all orders over $200</p></div></div>
-      <div class="feature"><span class="fi">&#9889;</span><div><h4>Same-Day Shipping</h4><p>Orders placed before 2 PM EST</p></div></div>
-      <div class="feature"><span class="fi">&#128300;</span><div><h4>99%+ Purity</h4><p>Independently third-party tested</p></div></div>
-    </div>
-  </section>
-
   <!-- The Rat Pack -->
   <section class="ratpack" aria-labelledby="ratpack-title">
-    <!-- shared geometry: one head = one character across all four rats -->
+    <!-- shared geometry: one head + one body = one character across all four rats -->
     <svg class="rp-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
       <defs>
         <g id="rp-head">
-          <circle class="fur" cx="-14" cy="-30" r="9"/>
-          <circle class="ear-in" cx="-14" cy="-30" r="4.5"/>
-          <circle class="fur" cx="14" cy="-30" r="9"/>
-          <circle class="ear-in" cx="14" cy="-30" r="4.5"/>
-          <circle class="fur" cx="0" cy="-14" r="20"/>
-          <circle class="eye-w" cx="-8" cy="-16" r="5"/>
-          <circle class="eye-w" cx="8" cy="-16" r="5"/>
-          <circle class="eye-p" cx="-6.5" cy="-15" r="2.4"/>
-          <circle class="eye-p" cx="9.5" cy="-15" r="2.4"/>
-          <ellipse class="nose" cx="0" cy="-5" rx="3" ry="2.2"/>
+          <!-- ears: oversized, near-circular, wide & high; pink inner fills most -->
+          <circle class="fur" cx="-17" cy="-33" r="12"/>
+          <ellipse class="pink" cx="-17" cy="-32" rx="7.5" ry="9"/>
+          <circle class="fur" cx="17" cy="-33" r="12"/>
+          <ellipse class="pink" cx="17" cy="-32" rx="7.5" ry="9"/>
+          <!-- head -->
+          <circle class="fur" cx="0" cy="-13" r="19"/>
+          <!-- thin curved brows, set high -->
+          <path class="brow" d="M-13 -21 q4 -3 8 -1"/>
+          <path class="brow" d="M5 -21 q4 -2 8 1"/>
+          <!-- big glossy eyes with a highlight upper-left -->
+          <circle class="eye" cx="-7" cy="-13" r="5.5"/>
+          <circle class="eye" cx="7" cy="-13" r="5.5"/>
+          <circle class="glint" cx="-9" cy="-15" r="1.7"/>
+          <circle class="glint" cx="5" cy="-15" r="1.7"/>
+          <!-- pink triangular nose -->
+          <path class="nose" d="M-3 -3 h6 l-3 3.6 Z"/>
+          <!-- gentle closed smile + two square front teeth -->
+          <path class="smile" d="M-4 1.5 q4 4 8 0"/>
+          <rect class="teeth" x="-2.3" y="2" width="2.1" height="3" rx=".4"/>
+          <rect class="teeth" x="0.2" y="2" width="2.1" height="3" rx=".4"/>
+          <!-- three whiskers per side, downward curve -->
           <g class="whisk">
-            <line x1="3" y1="-5" x2="20" y2="-8"/><line x1="3" y1="-4" x2="20" y2="-1"/>
-            <line x1="-3" y1="-5" x2="-20" y2="-8"/><line x1="-3" y1="-4" x2="-20" y2="-1"/>
+            <path d="M4 -2 q10 0 18 3"/><path d="M4 0 q10 2 17 6"/><path d="M4 2 q9 3 15 8"/>
+            <path d="M-4 -2 q-10 0 -18 3"/><path d="M-4 0 q-10 2 -17 6"/><path d="M-4 2 q-9 3 -15 8"/>
           </g>
+        </g>
+        <g id="rp-body">
+          <path class="tail" d="M15 24 q20 4 23 -9 q2 -8 -6 -11"/>
+          <ellipse class="paw" cx="-11" cy="40" rx="6" ry="4.5"/>
+          <ellipse class="paw" cx="11" cy="40" rx="6" ry="4.5"/>
+          <path class="fur" d="M-18 4 q-7 18 2 31 q9 7 16 0 q10 -13 3 -31 q-11 -6 -21 0 Z"/>
+          <ellipse class="belly" cx="0" cy="22" rx="10.5" ry="14"/>
+          <ellipse class="paw" cx="-4" cy="27" rx="3.4" ry="5"/>
+          <ellipse class="paw" cx="4" cy="27" rx="3.4" ry="5"/>
         </g>
       </defs>
     </svg>
@@ -78,28 +75,34 @@
                 <title id="chonk-t">A very round rat slims down into a lean, upright one.</title>
                 <g class="rp-scene">
                   <g class="rp-actor rp-before"><g class="rp-fig">
-                    <path class="tail" d="M28 40 q22 3 19 -16"/>
-                    <ellipse class="fur" cx="-12" cy="44" rx="7" ry="4.5"/>
-                    <ellipse class="fur" cx="12" cy="44" rx="7" ry="4.5"/>
-                    <ellipse class="fur" cx="0" cy="18" rx="30" ry="27"/>
+                    <path class="tail" d="M26 30 q22 6 24 -9 q2 -8 -6 -10"/>
+                    <ellipse class="paw" cx="-12" cy="46" rx="7" ry="5"/>
+                    <ellipse class="paw" cx="12" cy="46" rx="7" ry="5"/>
+                    <circle class="fur" cx="0" cy="18" r="28"/>
+                    <ellipse class="belly" cx="0" cy="24" rx="15" ry="17"/>
+                    <ellipse class="paw" cx="-5" cy="30" rx="4" ry="5"/>
+                    <ellipse class="paw" cx="5" cy="30" rx="4" ry="5"/>
                     <use href="#rp-head"/>
-                    <ellipse class="mouth" cx="0" cy="1" rx="2.6" ry="3.2"/>
+                    <path class="sweat" d="M16 -24 q3 5 0 8 q-3 -3 0 -8 Z"/>
                   </g></g>
                   <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M15 42 q20 2 17 -17"/>
-                    <ellipse class="fur" cx="-7" cy="46" rx="5.5" ry="4"/>
-                    <ellipse class="fur" cx="7" cy="46" rx="5.5" ry="4"/>
-                    <ellipse class="fur" cx="0" cy="20" rx="14" ry="27"/>
-                    <g transform="rotate(-8)">
+                    <path class="tail" d="M12 30 q20 6 22 -8 q1 -8 -6 -10"/>
+                    <ellipse class="paw" cx="-7" cy="44" rx="5.5" ry="4"/>
+                    <ellipse class="paw" cx="7" cy="44" rx="5.5" ry="4"/>
+                    <path class="fur" d="M-12 4 q-4 20 4 34 q8 5 12 0 q8 -14 4 -34 q-9 -5 -20 0 Z"/>
+                    <ellipse class="belly" cx="0" cy="22" rx="6.5" ry="14"/>
+                    <ellipse class="paw" cx="-3" cy="27" rx="3" ry="4.5"/>
+                    <ellipse class="paw" cx="3" cy="27" rx="3" ry="4.5"/>
+                    <g transform="rotate(-7)">
                       <use href="#rp-head"/>
-                      <path class="lid" d="M-12 -18 q4 -3 9 0"/><path class="lid" d="M3 -18 q4 -3 9 0"/>
-                      <path class="smirk" d="M-3 0 q5 4 9 -1"/>
+                      <path class="lid" d="M-12 -15 q4 -3 9 -1"/>
+                      <path class="lid" d="M3 -15 q5 -2 9 1"/>
                     </g>
                   </g></g>
                   <g class="rp-fx chonk-fx">
-                    <line class="speed" x1="8" y1="72" x2="22" y2="72"/>
-                    <line class="speed" x1="6" y1="86" x2="20" y2="86"/>
-                    <line class="speed" x1="8" y1="100" x2="22" y2="100"/>
+                    <line class="speed" x1="8" y1="70" x2="22" y2="70"/>
+                    <line class="speed" x1="6" y1="84" x2="20" y2="84"/>
+                    <line class="speed" x1="8" y1="98" x2="22" y2="98"/>
                   </g>
                   <path class="rp-arrow" d="M44 74 h14 m-5 -5 l5 5 l-5 5"/>
                 </g>
@@ -130,34 +133,25 @@
               <svg class="rp-svg" viewBox="0 0 104 118" role="img" aria-labelledby="ouch-t">
                 <title id="ouch-t">A limping rat with a bandaged knee straightens up, healed.</title>
                 <g class="rp-scene">
-                  <g class="rp-actor rp-before"><g class="rp-fig" transform="rotate(-4)">
-                    <path class="tail" d="M18 40 q20 6 20 -12"/>
-                    <ellipse class="fur" cx="-10" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="12" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="0" cy="15" rx="16" ry="21"/>
-                    <circle class="fur" cx="12" cy="30" r="7"/>
-                    <rect class="bandage" x="4" y="25" width="17" height="9" rx="2" transform="rotate(-18 12 30)"/>
-                    <path class="pain" d="M20 12 v6 M17 15 h6 M18 11 l4 4 M22 11 l-4 4"/>
+                  <g class="rp-actor rp-before"><g class="rp-fig" transform="rotate(-3)">
+                    <use href="#rp-body"/>
+                    <circle class="fur" cx="13" cy="35" r="7"/>
+                    <rect class="bandage" x="5" y="30" width="17" height="9" rx="2" transform="rotate(-18 13 35)"/>
+                    <path class="pain" d="M21 14 v6 M18 17 h6 M19 13 l4 4 M23 13 l-4 4"/>
                     <use href="#rp-head"/>
-                    <path class="lid" d="M3 -17 q5 3 9 0"/>
-                    <path class="smirk" d="M-4 2 q4 -3 8 0"/>
+                    <path class="lid" d="M3 -14 q5 3 9 0"/>
                   </g></g>
                   <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M18 40 q20 3 18 -15"/>
-                    <ellipse class="fur" cx="-9" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="9" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="0" cy="14" rx="18" ry="22"/>
-                    <circle class="fur" cx="11" cy="30" r="6"/>
+                    <use href="#rp-body"/>
                     <use href="#rp-head"/>
-                    <path class="smirk" d="M-5 0 q5 5 10 0"/>
                   </g></g>
                   <g class="rp-fx ouch-fx">
-                    <path class="stream stream1" d="M92 30 Q74 34 64 52"/>
-                    <path class="stream stream2" d="M92 96 Q74 88 64 56"/>
-                    <g transform="translate(64,54)"><g class="spark"><path d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1Z"/></g></g>
-                    <g transform="translate(56,48)"><g class="spark d2"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8Z"/></g></g>
-                    <g transform="translate(70,50)"><g class="spark d3"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8Z"/></g></g>
-                    <g transform="translate(62,60)"><g class="spark d4"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8Z"/></g></g>
+                    <path class="stream stream1" d="M92 32 Q74 36 65 54"/>
+                    <path class="stream stream2" d="M92 98 Q74 90 65 58"/>
+                    <g transform="translate(65,56)"><g class="spark"><path d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/></g></g>
+                    <g transform="translate(57,50)"><g class="spark d2"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8 Z"/></g></g>
+                    <g transform="translate(71,52)"><g class="spark d3"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8 Z"/></g></g>
+                    <g transform="translate(63,62)"><g class="spark d4"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8 Z"/></g></g>
                   </g>
                   <path class="rp-arrow" d="M44 74 h14 m-5 -5 l5 5 l-5 5"/>
                 </g>
@@ -195,23 +189,17 @@
                 <title id="grandpa-t">A gray, hunched rat with a cane brightens to a spry brown one.</title>
                 <g class="rp-scene">
                   <g class="rp-actor rp-before"><g class="rp-fig" transform="rotate(8)">
-                    <path class="tail" d="M18 42 q20 6 20 -10"/>
-                    <ellipse class="fur" cx="-9" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="9" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="0" cy="16" rx="16" ry="21"/>
+                    <use href="#rp-body"/>
                     <use href="#rp-head"/>
-                    <path class="lid" d="M-12 -17 q4 3 9 0"/><path class="lid" d="M3 -17 q4 3 9 0"/>
+                    <path class="lid" d="M-12 -13 q4 3 9 0"/>
+                    <path class="lid" d="M3 -13 q5 3 9 0"/>
                   </g></g>
                   <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M16 42 q20 2 18 -16"/>
-                    <ellipse class="fur" cx="-8" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="8" cy="44" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="0" cy="15" rx="16" ry="21"/>
+                    <use href="#rp-body"/>
                     <use href="#rp-head"/>
-                    <path class="smirk" d="M-5 0 q5 4 10 -1"/>
                   </g></g>
                   <g class="rp-fx grandpa-fx">
-                    <g class="cane"><path d="M31 80 q-3 -5 3 -6"/><line x1="34" y1="80" x2="34" y2="108"/></g>
+                    <g class="cane"><path d="M29 82 q-3 -5 3 -6"/><line x1="32" y1="82" x2="32" y2="110"/></g>
                   </g>
                   <path class="rp-arrow" d="M44 74 h14 m-5 -5 l5 5 l-5 5"/>
                 </g>
@@ -243,22 +231,26 @@
                 <title id="swole-t">An average rat bulks up into a flexing one as a meter fills.</title>
                 <g class="rp-scene">
                   <g class="rp-actor rp-before"><g class="rp-fig">
-                    <path class="tail" d="M16 40 q20 3 18 -15"/>
-                    <ellipse class="fur" cx="-8" cy="42" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="8" cy="42" rx="6" ry="4.5"/>
-                    <path class="limb" d="M-14 6 q-7 8 -5 18"/><path class="limb" d="M14 6 q7 8 5 18"/>
-                    <ellipse class="fur" cx="0" cy="14" rx="15" ry="20"/>
+                    <path class="tail" d="M15 24 q20 4 23 -9 q2 -8 -6 -11"/>
+                    <ellipse class="paw" cx="-10" cy="40" rx="6" ry="4.5"/>
+                    <ellipse class="paw" cx="10" cy="40" rx="6" ry="4.5"/>
+                    <path class="limb" d="M-15 6 q-8 10 -6 22"/>
+                    <path class="limb" d="M15 6 q8 10 6 22"/>
+                    <path class="fur" d="M-16 4 q-6 16 2 29 q8 6 14 0 q9 -12 2 -29 q-9 -5 -18 0 Z"/>
+                    <ellipse class="belly" cx="0" cy="21" rx="9" ry="13"/>
                     <use href="#rp-head"/>
                   </g></g>
                   <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M16 40 q20 3 18 -15"/>
-                    <ellipse class="fur" cx="-8" cy="42" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="8" cy="42" rx="6" ry="4.5"/>
-                    <ellipse class="fur" cx="0" cy="14" rx="18" ry="20"/>
-                    <path class="limb" d="M-15 10 q-11 -2 -13 -13"/><path class="limb" d="M15 10 q11 -2 13 -13"/>
-                    <circle class="fur" cx="-21" cy="-2" r="5"/><circle class="fur" cx="21" cy="-2" r="5"/>
+                    <path class="tail" d="M16 24 q20 4 23 -9 q2 -8 -6 -11"/>
+                    <ellipse class="paw" cx="-10" cy="40" rx="6" ry="4.5"/>
+                    <ellipse class="paw" cx="10" cy="40" rx="6" ry="4.5"/>
+                    <path class="fur" d="M-19 4 q-7 16 3 29 q9 6 16 0 q10 -13 3 -29 q-11 -5 -22 0 Z"/>
+                    <ellipse class="belly" cx="0" cy="21" rx="11" ry="13"/>
+                    <path class="limb" d="M-15 8 q-11 -2 -13 -13"/>
+                    <path class="limb" d="M15 8 q11 -2 13 -13"/>
+                    <circle class="fur" cx="-22" cy="-4" r="5"/>
+                    <circle class="fur" cx="22" cy="-4" r="5"/>
                     <use href="#rp-head"/>
-                    <path class="smirk" d="M-6 0 q6 6 12 0"/>
                   </g></g>
                   <g class="rp-fx swole-fx">
                     <text class="meter-label" x="52" y="98" text-anchor="middle">GH AXIS</text>
@@ -295,43 +287,6 @@
         </article>
 
       </div>
-    </div>
-  </section>
-
-  <!-- Featured products -->
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Featured</span>
-        <h2>Popular Research Peptides</h2>
-        <p>A selection of our most-requested compounds, each supplied with a certificate of analysis.</p>
-      </div>
-      <div class="product-grid" data-products="peptides" data-limit="8"></div>
-      <div style="text-align:center; margin-top:36px">
-        <a href="peptides.html" class="btn btn-ghost">View All Peptides</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Best sellers -->
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Best Sellers</span>
-        <h2>Researcher Favorites</h2>
-        <p>Top-performing compounds, each with an independent test report.</p>
-      </div>
-      <div class="product-grid" data-products="bestseller"></div>
-    </div>
-  </section>
-
-  <!-- Trust band -->
-  <section class="trust">
-    <div class="wrap">
-      <div class="stat"><strong>99%+</strong><span>Verified Purity</span></div>
-      <div class="stat"><strong>3rd&nbsp;Party</strong><span>Independent Testing</span></div>
-      <div class="stat"><strong>Same&nbsp;Day</strong><span>Shipping Cutoff 2 PM</span></div>
-      <div class="stat"><strong>100%</strong><span>Money-Back Purity Guarantee</span></div>
     </div>
   </section>
 
