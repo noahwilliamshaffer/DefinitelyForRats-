@@ -126,7 +126,10 @@
       });
       if (limit > 0) list = list.slice(0, limit);
       host.innerHTML = list.map(card).join("");
-      var countEl = document.querySelector("[data-count]");
+      // Count is scoped to this grid's own section so multiple grids on one
+      // page (e.g. peptides + lab supplies) don't overwrite each other.
+      var section = host.closest("section");
+      var countEl = section && section.querySelector("[data-count]");
       if (countEl && mode !== "bestseller") countEl.textContent = list.length + " products";
     });
   }

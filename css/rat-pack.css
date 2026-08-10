@@ -7,10 +7,12 @@
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 64px 0;
-  /* rat fur + accents — warm brown base (per art direction; gray is Grandpa's gag) */
-  --fur: #bd8b57;
-  --fur-line: #4a3524;
-  --pink: #e89aa0;
+  /* rat palette — matched to the style reference: soft gray coat, pink ears/
+     paws/tail, cream belly. Grandpa's before-state fades paler, his after-state
+     returns as a warm glossy coat so the aging gag still reads. */
+  --fur: #9099a3;
+  --fur-line: #454e59;
+  --pink: #eeadb2;
   --a1: var(--teal);     /* stack accent 1 (BPC-157 / Ipamorelin) */
   --a2: var(--accent);   /* stack accent 2 (TB-500 / CJC-1295)     */
   --rp-dur: 5.5s;
@@ -88,27 +90,38 @@
    ========================================================================== */
 .rp-svg .fur { fill: currentColor; stroke: var(--fur-line); stroke-width: 2.5; stroke-linejoin: round; }
 .rp-svg .pink { fill: var(--pink); stroke: none; }
-.rp-svg .eye { fill: #17130f; }
+.rp-svg .eye { fill: #1a1614; }
 .rp-svg .glint { fill: #fff; }
-.rp-svg .nose { fill: var(--pink); stroke: none; }
+.rp-svg .nose { fill: var(--pink); stroke: var(--fur-line); stroke-width: 1; stroke-linejoin: round; }
 .rp-svg .teeth { fill: #fff; stroke: var(--fur-line); stroke-width: .8; }
 .rp-svg .brow, .rp-svg .lid, .rp-svg .smirk, .rp-svg .smile { fill: none; stroke: var(--fur-line); stroke-width: 1.7; stroke-linecap: round; }
-.rp-svg .whisk path { fill: none; stroke: var(--fur-line); stroke-width: 1.3; stroke-linecap: round; }
+.rp-svg .whisk path { fill: none; stroke: var(--fur-line); stroke-width: 1.2; stroke-linecap: round; }
 .rp-svg .paw { fill: var(--pink); stroke: var(--fur-line); stroke-width: 2; stroke-linejoin: round; }
-.rp-svg .belly { fill: #fff; opacity: .34; }
+.rp-svg .belly { fill: #eef1f4; stroke: none; }
 .rp-svg .sweat { fill: #8fd0e6; stroke: var(--fur-line); stroke-width: .8; }
-.rp-svg .tail { fill: none; stroke: #c98f86; stroke-width: 3; stroke-linecap: round; }
+.rp-svg .tail { fill: none; stroke: #d99a90; stroke-width: 3.2; stroke-linecap: round; }
 .rp-svg .limb { fill: none; stroke: currentColor; stroke-width: 6; stroke-linecap: round; }
 
-/* fur colour: default warm; grandpa shifts gray -> brown via the two states */
+/* ---- Idle life: blinking (shared eyes) + tail sway (per card) ------------- */
+.ratpack .eyeg { transform-box: fill-box; transform-origin: center; animation: rp-blink 4.6s infinite; }
+@keyframes rp-blink { 0%, 93%, 100% { transform: scaleY(1) } 96% { transform: scaleY(.08) } }
+.rat-card.is-animating .tail { transform-box: fill-box; transform-origin: 12% 82%; animation: rp-tailsway 3.8s ease-in-out infinite; }
+@keyframes rp-tailsway { 0%, 100% { transform: rotate(0) } 50% { transform: rotate(5deg) } }
+
+/* ---- Hover: a small happy hop -------------------------------------------- */
+.rat-card:hover .rp-scene { animation: rp-hop .45s ease; }
+@keyframes rp-hop { 0%, 100% { transform: translateY(0) } 40% { transform: translateY(-4px) } }
+
+/* fur colour: cast is reference-gray; grandpa fades paler when old and comes
+   back with a warm glossy coat */
 .ratpack .rp-actor { color: var(--fur); }
-.grandpa .rp-before { color: #9aa6ae; }
+.grandpa .rp-before { color: #bcc1c6; }
 .grandpa .rp-after  { color: #b3803f; }
 
 /* position (actor) vs motion (figure) are separated so reduced-motion can
    re-place the actors without disturbing the artwork */
-.rp-actor  { transform: translate(52px, 74px); }
-.swole .rp-actor { transform: translate(52px, 58px); }
+.rp-actor  { transform: translate(52px, 68px); }
+.swole .rp-actor { transform: translate(52px, 52px) scale(.9); }
 .rp-fig    { transform-box: fill-box; transform-origin: 50% 78%; }
 .rp-before { opacity: 1; }
 .rp-after  { opacity: 0; }
@@ -169,9 +182,9 @@
    Reduced-motion: intentional static  before → after  (no animation)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .rat-card * { animation: none !important; }
-  .rp-before { opacity: 1 !important; transform-box: fill-box; transform-origin: center; transform: translate(28px, 72px) scale(.6); }
-  .rp-after  { opacity: 1 !important; transform-box: fill-box; transform-origin: center; transform: translate(76px, 72px) scale(.6); }
+  .rat-card *, .rp-defs *, .ratpack .eyeg { animation: none !important; }
+  .rp-before { opacity: 1 !important; transform-box: fill-box; transform-origin: center; transform: translate(28px, 66px) scale(.55); }
+  .rp-after  { opacity: 1 !important; transform-box: fill-box; transform-origin: center; transform: translate(78px, 66px) scale(.55); }
   .rp-fig    { transform: none !important; }
   .rp-fx     { display: none; }
   .rp-arrow  { opacity: 1; }

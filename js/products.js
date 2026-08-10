@@ -47,5 +47,11 @@ window.PRODUCTS = [
   { id: "nad-500", name: "NAD+ 500mg Buffered (10 vials/kit)", category: "peptides", price: 278, sale: 228, badge: "sale", bestseller: false, inStock: true,
     blurb: "Buffered nicotinamide adenine dinucleotide for laboratory research. Third-party tested." },
   { id: "nad-250", name: "NAD+ 250mg Buffered (10 vials/kit)", category: "peptides", price: 178, sale: 148, badge: "sale", bestseller: false, inStock: true,
-    blurb: "Buffered NAD+, 250mg. Research use only, batch tested." }
+    blurb: "Buffered NAD+, 250mg. Research use only, batch tested." },
+
+  /* ---- Lab supplies -------------------------------------------------------- */
+  { id: "bac-water", name: "Bacteriostatic Water 30mL (0.9% benzyl alcohol)", category: "accessories", price: 18, sale: null, badge: null, bestseller: false, inStock: true,
+    blurb: "Sterile reconstitution solution for laboratory use." },
+  { id: "insulin-syr", name: "Insulin Syringes 31G 0.5mL (100-pack)", category: "accessories", price: 24, sale: null, badge: null, bestseller: false, inStock: true,
+    blurb: "Sterile single-use syringes. Laboratory supplies." }
 ];
