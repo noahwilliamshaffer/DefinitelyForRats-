@@ -3,314 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>APEX PEPTIDES — The Rat Pack</title>
-  <meta name="description" content="Meet the Rat Pack — four little guys, four very different weeks. Research peptides and compounds for laboratory use only." />
+  <title>DEFINITELY FOR RATS — Research Peptides for Laboratory Rats</title>
+  <meta name="description" content="Retatrutide research kits, bacteriostatic water, and insulin syringes, sold for laboratory research use only. Definitely for rats." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/rat-pack.css" />
 </head>
 <body>
-  <header id="site-header"></header>
-
-  <!-- The Rat Pack -->
-  <section class="ratpack" aria-labelledby="ratpack-title">
-    <!-- shared geometry: one set of ears + one face + one body = one character.
-         Ears are separate from the face so Grandpa's before-state can droop them. -->
-    <svg class="rp-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-      <defs>
-        <g id="rp-ears">
-          <!-- oversized, near-circular, set wide and high; pink inner fills most -->
-          <circle class="fur" cx="-19" cy="-32" r="13.5"/>
-          <ellipse class="pink" cx="-19" cy="-31" rx="9" ry="10.5"/>
-          <circle class="fur" cx="19" cy="-32" r="13.5"/>
-          <ellipse class="pink" cx="19" cy="-31" rx="9" ry="10.5"/>
-        </g>
-        <g id="rp-face">
-          <!-- head -->
-          <circle class="fur" cx="0" cy="-12" r="19"/>
-          <!-- thin curved brows, set high -->
-          <path class="brow" d="M-13 -21 q4 -3 8 -1"/>
-          <path class="brow" d="M5 -22 q4 -2 8 1"/>
-          <!-- big glossy eyes, grouped with their highlight so they blink together -->
-          <g class="eyeg"><circle class="eye" cx="-7" cy="-13" r="5.6"/><circle class="glint" cx="-8.8" cy="-15" r="1.8"/></g>
-          <g class="eyeg"><circle class="eye" cx="7" cy="-13" r="5.6"/><circle class="glint" cx="5.2" cy="-15" r="1.8"/></g>
-          <!-- soft pink triangular nose -->
-          <path class="nose" d="M-3.2 -4 h6.4 l-3.2 4 Z"/>
-          <!-- gentle closed smile + two square front teeth -->
-          <path class="smile" d="M-5 1 q5 4.5 10 0"/>
-          <rect class="teeth" x="-2.4" y="2.4" width="2.2" height="3.2" rx=".5"/>
-          <rect class="teeth" x="0.2" y="2.4" width="2.2" height="3.2" rx=".5"/>
-          <!-- three whiskers per side, slight downward curve -->
-          <g class="whisk">
-            <path d="M5 -3 q11 -1 19 2"/><path d="M5 -1 q11 1 18 5"/><path d="M5 1 q10 3 16 8"/>
-            <path d="M-5 -3 q-11 -1 -19 2"/><path d="M-5 -1 q-11 1 -18 5"/><path d="M-5 1 q-10 3 -16 8"/>
-          </g>
-        </g>
-        <g id="rp-head">
-          <use href="#rp-ears"/>
-          <use href="#rp-face"/>
-        </g>
-        <g id="rp-body">
-          <!-- big pink feet forward, pear body, cream belly, hands at chest -->
-          <ellipse class="paw" cx="-11" cy="41" rx="7" ry="4.5"/>
-          <ellipse class="paw" cx="11" cy="41" rx="7" ry="4.5"/>
-          <path class="fur" d="M-18 4 q-8 18 2 32 q9 7 16 0 q11 -14 3 -32 q-11 -6 -21 0 Z"/>
-          <ellipse class="belly" cx="0" cy="24" rx="11" ry="14.5"/>
-          <ellipse class="paw" cx="-4" cy="26" rx="3.4" ry="5"/>
-          <ellipse class="paw" cx="4" cy="26" rx="3.4" ry="5"/>
-        </g>
-      </defs>
-    </svg>
-
-    <div class="wrap">
-      <div class="rp-head">
-        <span class="eyebrow">Meet the cast</span>
-        <h2 id="ratpack-title">THE RAT PACK</h2>
-        <p class="rp-sub">Four little guys. Four very different weeks.</p>
-        <p class="rp-disclaimer">Illustrations are conceptual and for entertainment purposes only. They do not depict or represent actual results. The products are definitely for rats and laboratory research use only and are not for human consumption.</p>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <p class="wordmark">Definitely For Rats</p>
+        <h1>And remember: it&rsquo;s definitely for&nbsp;rats.</h1>
+        <p class="subhead">Research peptides for the discerning laboratory rat. One compound, two supplies, zero ambiguity about who they&rsquo;re for.</p>
+        <a class="btn cta" href="#products">Shop for your rat &rarr;</a>
       </div>
+    </section>
 
-      <div class="ratpack-grid">
-
-        <!-- CHONK -->
-        <article class="rat-card chonk">
-          <div class="rat-top">
-            <div class="rat-stage">
-              <svg class="rp-svg" viewBox="0 0 104 118" role="img" aria-labelledby="chonk-t">
-                <title id="chonk-t">A very round rat slims down into a lean, upright one.</title>
-                <g class="rp-scene">
-                  <g class="rp-actor rp-before"><g class="rp-fig">
-                    <path class="tail" d="M26 32 q22 6 24 -9 q2 -8 -6 -10"/>
-                    <ellipse class="paw" cx="-12" cy="44" rx="7" ry="5"/>
-                    <ellipse class="paw" cx="12" cy="44" rx="7" ry="5"/>
-                    <circle class="fur" cx="0" cy="20" r="27"/>
-                    <ellipse class="belly" cx="0" cy="26" rx="15" ry="16"/>
-                    <ellipse class="paw" cx="-5" cy="30" rx="4" ry="5"/>
-                    <ellipse class="paw" cx="5" cy="30" rx="4" ry="5"/>
-                    <use href="#rp-head"/>
-                    <path class="sweat" d="M17 -25 q3 5 0 8 q-3 -3 0 -8 Z"/>
-                  </g></g>
-                  <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M12 32 q20 6 22 -8 q1 -8 -6 -10"/>
-                    <ellipse class="paw" cx="-7" cy="44" rx="5.5" ry="4"/>
-                    <ellipse class="paw" cx="7" cy="44" rx="5.5" ry="4"/>
-                    <path class="fur" d="M-12 4 q-4 20 4 34 q8 5 12 0 q8 -14 4 -34 q-9 -5 -20 0 Z"/>
-                    <ellipse class="belly" cx="0" cy="22" rx="6.5" ry="14"/>
-                    <ellipse class="paw" cx="-3" cy="26" rx="3" ry="4.5"/>
-                    <ellipse class="paw" cx="3" cy="26" rx="3" ry="4.5"/>
-                    <g transform="rotate(-7)">
-                      <use href="#rp-head"/>
-                      <path class="lid" d="M-12 -15 q4 -3 9 -1"/>
-                      <path class="lid" d="M3 -15 q5 -2 9 1"/>
-                    </g>
-                  </g></g>
-                  <g class="rp-fx chonk-fx">
-                    <line class="speed" x1="8" y1="66" x2="22" y2="66"/>
-                    <line class="speed" x1="6" y1="80" x2="20" y2="80"/>
-                    <line class="speed" x1="8" y1="94" x2="22" y2="94"/>
-                  </g>
-                  <path class="rp-arrow" d="M46 70 h12 m-4 -4 l4 4 l-4 4"/>
-                </g>
-              </svg>
-            </div>
-            <div>
-              <div class="rat-idline"><span class="rat-name">Chonk</span><span class="rat-tag">Weight management</span></div>
-              <ul class="rat-compounds">
-                <li class="rat-row" style="--row:var(--a1)">
-                  <a href="peptides.html#product-retatrutide">
-                    <span class="rat-cname">Retatrutide</span>
-                    <span class="rat-cpurpose">triple-agonist (GLP-1/GIP/glucagon); the headline compound for metabolic and body-composition research.</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="rat-foot">
-            <p class="rat-caption">&ldquo;Our roundest rat, reimagined.&rdquo;</p>
-            <a class="rat-cta" href="coa.html">See the research &rarr;</a>
-          </div>
-        </article>
-
-        <!-- OUCH -->
-        <article class="rat-card ouch">
-          <div class="rat-top">
-            <div class="rat-stage">
-              <svg class="rp-svg" viewBox="0 0 104 118" role="img" aria-labelledby="ouch-t">
-                <title id="ouch-t">A limping rat with a bandaged knee straightens up, healed.</title>
-                <g class="rp-scene">
-                  <g class="rp-actor rp-before"><g class="rp-fig" transform="rotate(-3)">
-                    <path class="tail" d="M15 26 q20 4 23 -9 q2 -8 -6 -11"/>
-                    <use href="#rp-body"/>
-                    <circle class="fur" cx="13" cy="34" r="7"/>
-                    <rect class="bandage" x="5" y="29" width="17" height="9" rx="2" transform="rotate(-18 13 34)"/>
-                    <path class="pain" d="M20 22 v6 M17 25 h6 M18 21 l4 4 M22 21 l-4 4"/>
-                    <use href="#rp-head"/>
-                    <path class="lid" d="M3 -14 q5 3 9 0"/>
-                  </g></g>
-                  <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M15 26 q20 4 23 -9 q2 -8 -6 -11"/>
-                    <use href="#rp-body"/>
-                    <use href="#rp-head"/>
-                  </g></g>
-                  <g class="rp-fx ouch-fx">
-                    <path class="stream stream1" d="M92 34 Q78 62 68 98"/>
-                    <path class="stream stream2" d="M92 96 Q80 96 70 102"/>
-                    <g transform="translate(66,98)"><g class="spark"><path d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/></g></g>
-                    <g transform="translate(58,94)"><g class="spark d2"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8 Z"/></g></g>
-                    <g transform="translate(74,96)"><g class="spark d3"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8 Z"/></g></g>
-                    <g transform="translate(63,106)"><g class="spark d4"><path d="M0 -3 L.8 -.8 L3 0 L.8 .8 L0 3 L-.8 .8 L-3 0 L-.8 -.8 Z"/></g></g>
-                  </g>
-                  <path class="rp-arrow" d="M46 70 h12 m-4 -4 l4 4 l-4 4"/>
-                </g>
-              </svg>
-            </div>
-            <div>
-              <div class="rat-idline"><span class="rat-name">Ouch</span><span class="rat-tag">Recovery &amp; repair</span></div>
-              <ul class="rat-compounds">
-                <li class="rat-row" style="--row:var(--a1)">
-                  <a href="peptides.html#product-bpc-157">
-                    <span class="rat-cname">BPC-157</span>
-                    <span class="rat-cpurpose">tissue repair and gut healing; the default &ldquo;starter&rdquo; peptide, widest research base among the group.</span>
-                  </a>
-                </li>
-                <li class="rat-row" style="--row:var(--a2)">
-                  <a href="peptides.html#product-tb-500">
-                    <span class="rat-cname">TB-500 (thymosin beta-4 fragment)</span>
-                    <span class="rat-cpurpose">often stacked with BPC-157 for recovery and injury research.</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="rat-foot">
-            <p class="rat-caption">&ldquo;That knee has seen things. It&rsquo;s better now.&rdquo;</p>
-            <a class="rat-cta" href="coa.html">See the research &rarr;</a>
-          </div>
-        </article>
-
-        <!-- GRANDPA -->
-        <article class="rat-card grandpa">
-          <div class="rat-top">
-            <div class="rat-stage">
-              <svg class="rp-svg" viewBox="0 0 104 118" role="img" aria-labelledby="grandpa-t">
-                <title id="grandpa-t">A gray, hunched rat with a cane brightens to a spry brown one.</title>
-                <g class="rp-scene">
-                  <g class="rp-actor rp-before"><g class="rp-fig" transform="rotate(8)">
-                    <path class="tail" d="M15 28 q18 8 22 -6 q2 -8 -5 -11"/>
-                    <use href="#rp-body"/>
-                    <!-- drooped ears: set lower and wider than the shared pair -->
-                    <circle class="fur" cx="-22" cy="-26" r="13.5"/>
-                    <ellipse class="pink" cx="-22" cy="-25" rx="9" ry="10.5"/>
-                    <circle class="fur" cx="22" cy="-26" r="13.5"/>
-                    <ellipse class="pink" cx="22" cy="-25" rx="9" ry="10.5"/>
-                    <use href="#rp-face"/>
-                    <path class="lid" d="M-12 -13 q4 3 9 0"/>
-                    <path class="lid" d="M3 -13 q5 3 9 0"/>
-                  </g></g>
-                  <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M15 26 q20 4 23 -9 q2 -8 -6 -11"/>
-                    <use href="#rp-body"/>
-                    <use href="#rp-head"/>
-                  </g></g>
-                  <g class="rp-fx grandpa-fx">
-                    <g class="cane"><path d="M33 90 q-3 -5 3 -6"/><line x1="36" y1="90" x2="36" y2="112"/></g>
-                  </g>
-                  <path class="rp-arrow" d="M46 70 h12 m-4 -4 l4 4 l-4 4"/>
-                </g>
-              </svg>
-            </div>
-            <div>
-              <div class="rat-idline"><span class="rat-name">Grandpa</span><span class="rat-tag">Cellular aging</span></div>
-              <ul class="rat-compounds">
-                <li class="rat-row" style="--row:var(--gold)">
-                  <a href="peptides.html#product-nad-500">
-                    <span class="rat-cname">NAD+</span>
-                    <span class="rat-cpurpose">cellular energy and metabolism; the anchor compound for longevity and mitochondrial research.</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="rat-foot">
-            <p class="rat-caption">&ldquo;Age is just a number. Ask this guy.&rdquo;</p>
-            <a class="rat-cta" href="coa.html">See the research &rarr;</a>
-          </div>
-        </article>
-
-        <!-- SWOLE -->
-        <article class="rat-card swole">
-          <div class="rat-top">
-            <div class="rat-stage">
-              <svg class="rp-svg" viewBox="0 0 104 118" role="img" aria-labelledby="swole-t">
-                <title id="swole-t">An average rat bulks up into a flexing one as a meter fills.</title>
-                <g class="rp-scene">
-                  <g class="rp-actor rp-before"><g class="rp-fig">
-                    <path class="tail" d="M15 26 q20 4 23 -9 q2 -8 -6 -11"/>
-                    <ellipse class="paw" cx="-10" cy="41" rx="6.5" ry="4.5"/>
-                    <ellipse class="paw" cx="10" cy="41" rx="6.5" ry="4.5"/>
-                    <path class="limb" d="M-15 6 q-8 10 -6 22"/>
-                    <path class="limb" d="M15 6 q8 10 6 22"/>
-                    <path class="fur" d="M-16 4 q-6 16 2 30 q8 6 14 0 q9 -13 2 -30 q-9 -5 -18 0 Z"/>
-                    <ellipse class="belly" cx="0" cy="22" rx="9" ry="13"/>
-                    <use href="#rp-head"/>
-                  </g></g>
-                  <g class="rp-actor rp-after"><g class="rp-fig">
-                    <path class="tail" d="M16 26 q20 4 23 -9 q2 -8 -6 -11"/>
-                    <ellipse class="paw" cx="-10" cy="41" rx="6.5" ry="4.5"/>
-                    <ellipse class="paw" cx="10" cy="41" rx="6.5" ry="4.5"/>
-                    <path class="fur" d="M-19 4 q-7 16 3 30 q9 6 16 0 q10 -14 3 -30 q-11 -5 -22 0 Z"/>
-                    <ellipse class="belly" cx="0" cy="22" rx="11" ry="13"/>
-                    <path class="limb" d="M-15 8 q-11 -2 -13 -13"/>
-                    <path class="limb" d="M15 8 q11 -2 13 -13"/>
-                    <circle class="fur" cx="-22" cy="-4" r="5"/>
-                    <circle class="fur" cx="22" cy="-4" r="5"/>
-                    <use href="#rp-head"/>
-                  </g></g>
-                  <g class="rp-fx swole-fx">
-                    <text class="meter-label" x="52" y="98" text-anchor="middle">GH AXIS</text>
-                    <rect class="meter-track" x="26" y="102" width="52" height="7" rx="3"/>
-                    <rect class="seg seg1" x="27" y="103" width="25" height="5" rx="2"/>
-                    <rect class="seg seg2" x="52" y="103" width="25" height="5" rx="2"/>
-                  </g>
-                  <path class="rp-arrow" d="M46 70 h12 m-4 -4 l4 4 l-4 4"/>
-                </g>
-              </svg>
-            </div>
-            <div>
-              <div class="rat-idline"><span class="rat-name">Swole</span><span class="rat-tag">GH axis</span></div>
-              <ul class="rat-compounds">
-                <li class="rat-row" style="--row:var(--a1)">
-                  <a href="peptides.html#product-ipamorelin">
-                    <span class="rat-cname">Ipamorelin</span>
-                    <span class="rat-cpurpose">selective growth hormone secretagogue, popular for its clean side-effect profile.</span>
-                  </a>
-                </li>
-                <li class="rat-row" style="--row:var(--a2)">
-                  <a href="peptides.html#product-cjc-1295-dac">
-                    <span class="rat-cname">CJC-1295</span>
-                    <span class="rat-cpurpose">GHRH analog, usually stacked with Ipamorelin for GH-axis research.</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="rat-foot">
-            <p class="rat-caption">&ldquo;He knows exactly what he did.&rdquo;</p>
-            <a class="rat-cta" href="coa.html">See the research &rarr;</a>
-          </div>
-        </article>
-
+    <!-- Persistent disclaimer, directly under the hero -->
+    <div class="disclaimer-strip">
+      <div class="wrap">
+        <p>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
       </div>
     </div>
-  </section>
 
-  <footer id="site-footer"></footer>
+    <!-- Products -->
+    <section id="products" class="products">
+      <div class="wrap">
+        <div class="grid" id="product-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer: disclaimer + copyright, nothing else -->
+  <footer class="site-foot">
+    <div class="wrap">
+      <p class="foot-disclaimer">Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+      <p class="foot-copy">&copy; <span data-year>2026</span> Definitely For Rats. All rights reserved.</p>
+    </div>
+  </footer>
 
   <script src="js/site-config.js"></script>
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
-  <script src="js/components.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/rat-pack.js"></script>
 </body>
 </html>

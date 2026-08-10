@@ -1,6 +1,6 @@
 /* AUTO-GENERATED FILE — do not edit by hand.
-   Maps product id -> Stripe Payment Link URL.
+   Maps variant id (see js/products.js) -> Stripe Payment Link URL.
    Populate it by running:  node scripts/create-stripe-payment-links.mjs
-   (see README → "Generate all Stripe Payment Links"). Safe to commit:
+   (see README → "Generate the Stripe Payment Links"). Safe to commit:
    buy.stripe.com URLs are public hosted checkout pages, not secrets. */
 window.PAYMENT_LINKS = {};
