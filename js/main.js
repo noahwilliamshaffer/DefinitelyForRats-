@@ -27,13 +27,18 @@
     return (window.PAYMENT_LINKS && window.PAYMENT_LINKS[v.id]) || v.buyUrl || "";
   }
 
-  // The Buy control is an <a> when the variant has a Payment Link and a
-  // disabled <button> when it doesn't (links come from the generator script).
+  // Every variant is addable to the cart. When a variant also has a hosted
+  // Payment Link, a secondary "Buy now" skips the cart entirely.
   function buyHtml(v) {
     var url = linkFor(v);
-    return url
-      ? '<a class="btn buy" data-buy href="' + esc(url) + '" target="_blank" rel="noopener">Buy for your rat</a>'
-      : '<button class="btn buy" data-buy disabled title="Checkout link pending — run scripts/create-stripe-payment-links.mjs">Buy for your rat</button>';
+    return (
+      '<div class="card-actions" data-buy>' +
+      '<button class="btn add" data-add="' + esc(v.id) + '">Add to cart</button>' +
+      (url
+        ? '<a class="btn btn-ghost buynow" href="' + esc(url) + '">Buy now</a>'
+        : "") +
+      "</div>"
+    );
   }
 
   function card(p) {

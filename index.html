@@ -9,6 +9,42 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <!-- Cart trigger -->
+  <button class="cart-fab" data-cart-open aria-label="Cart, 0 items" aria-controls="cart">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M4 5h2.2l2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.55L21 8H7"
+            fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="10.5" cy="20" r="1.4" fill="currentColor"/>
+      <circle cx="17.5" cy="20" r="1.4" fill="currentColor"/>
+    </svg>
+    <span class="cart-fab-count" data-cart-count hidden>0</span>
+  </button>
+
+  <!-- Cart drawer -->
+  <div class="cart" id="cart" aria-hidden="true">
+    <div class="cart-overlay" data-cart-overlay></div>
+    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <header class="cart-head">
+        <h2 id="cart-title">Your rat&rsquo;s cart</h2>
+        <button class="cart-close" data-cart-close aria-label="Close cart">&times;</button>
+      </header>
+
+      <div class="cart-body" data-cart-body></div>
+
+      <footer class="cart-foot" data-cart-foot hidden>
+        <p class="cart-shipping" data-cart-shipping hidden></p>
+        <div class="cart-subtotal">
+          <span>Subtotal</span>
+          <strong data-cart-subtotal>$0</strong>
+        </div>
+        <p class="cart-status" data-cart-status hidden></p>
+        <button class="btn cart-checkout" data-checkout>Checkout</button>
+        <p class="cart-fine">Taxes and shipping calculated at checkout. Payments are processed by Stripe.</p>
+      </footer>
+    </aside>
+  </div>
+
   <main>
     <!-- Hero -->
     <section class="hero">
@@ -30,6 +66,7 @@
     <!-- Products -->
     <section id="products" class="products">
       <div class="wrap">
+        <p class="order-note" data-order-note hidden role="status"></p>
         <div class="grid" id="product-grid"></div>
       </div>
     </section>
@@ -47,5 +84,6 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
 </body>
 </html>

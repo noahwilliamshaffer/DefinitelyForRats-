@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 340" role="img" aria-label="Cross-section of the vial closure: flip-off cap, aluminium crimp, rubber stopper">
+  <g fill="none" stroke="#1A1917" stroke-width="2" stroke-linejoin="round">
+    <!-- flip-off cap -->
+    <rect x="162" y="52" width="76" height="42" rx="5"/>
+    <!-- aluminium crimp -->
+    <rect x="142" y="94" width="116" height="60" rx="5"/>
+    <path d="M148 108h104M148 122h104M148 136h104" stroke-width="1" stroke-opacity=".35"/>
+    <!-- rubber stopper, seated in the neck -->
+    <path d="M160 152h80v30q0 8-8 8h-64q-8 0-8-8Z" fill="#1A1917" fill-opacity=".12"/>
+    <!-- neck and shoulder falling away to the body -->
+    <path d="M152 154v18c0 16-38 24-38 42v78"/>
+    <path d="M248 154v18c0 16 38 24 38 42v78"/>
+    <path d="M114 292h172" stroke-dasharray="5 6" stroke-width="1.25" stroke-opacity=".4"/>
+  </g>
+
+  <!-- callout leaders -->
+  <g stroke="#1A1917" stroke-width="1" stroke-opacity=".5">
+    <path d="M238 66h68M258 116h48M242 168h64M152 190h-46M114 246H68"/>
+  </g>
+  <g fill="#1A1917" fill-opacity=".72"
+     font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+     font-size="9" letter-spacing="1.15">
+    <text x="312" y="69">FLIP-OFF CAP</text>
+    <text x="312" y="119">ALUMINIUM CRIMP</text>
+    <text x="312" y="171">RUBBER STOPPER</text>
+    <text x="100" y="193" text-anchor="end">NECK</text>
+    <text x="62" y="249" text-anchor="end">SHOULDER</text>
+  </g>
+</svg>

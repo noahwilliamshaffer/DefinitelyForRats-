@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" role="img" aria-label="Kit of ten sealed vials">
+  <defs>
+    <g id="v">
+      <path d="M8 74C8 62 22 56 22 44V34h16v10c0 12 14 18 14 30v116q0 10-10 10H18q-10 0-10-10Z"
+            fill="none" stroke="#1A1917" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="18" y="12" width="24" height="24" rx="3" fill="none" stroke="#1A1917" stroke-width="2"/>
+      <rect x="8" y="112" width="44" height="42" fill="#1A1917" fill-opacity=".05" stroke="#1A1917" stroke-width="1.25"/>
+      <path d="M14 122h32M14 128h20" stroke="#1A1917" stroke-width="1" stroke-opacity=".3"/>
+      <path d="M10 176c14-4 28 4 42 0v14q0 10-10 10H20q-10 0-10-10Z" fill="#1A1917" fill-opacity=".1"/>
+    </g>
+  </defs>
+
+  <!-- back row, five vials, held back in weight -->
+  <g opacity=".38">
+    <use href="#v" x="80" y="52"/><use href="#v" x="160" y="52"/><use href="#v" x="240" y="52"/>
+    <use href="#v" x="320" y="52"/><use href="#v" x="400" y="52"/>
+  </g>
+
+  <!-- front row, five vials -->
+  <use href="#v" x="40" y="92"/><use href="#v" x="120" y="92"/><use href="#v" x="200" y="92"/>
+  <use href="#v" x="280" y="92"/><use href="#v" x="360" y="92"/>
+
+  <path d="M28 296h424" stroke="#1A1917" stroke-width="1.25" stroke-opacity=".32"/>
+  <text x="240" y="322" text-anchor="middle" fill="#1A1917" fill-opacity=".58"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+        font-size="11" letter-spacing="2.4">10 VIALS / KIT</text>
+</svg>

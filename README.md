@@ -16,13 +16,44 @@ once per session.
 ├── index.html              # the entire site
 ├── css/styles.css          # all styling (CSS variables at the top)
 ├── js/
-│   ├── site-config.js      # ⭐ branding, disclaimer, age gate — edit here
+│   ├── site-config.js      # ⭐ branding, disclaimer, age gate, checkout — edit here
 │   ├── products.js         # ⭐ catalog: products + variants — edit here
 │   ├── payment-links.js    # generated variant-id → Stripe link map
-│   └── main.js             # renders cards, variant switching, age gate
-├── assets/favicon.svg
+│   ├── main.js             # renders cards, variant switching, age gate
+│   └── cart.js             # cart state, drawer, checkout handoff
+├── api/
+│   └── create-checkout-session.js   # serverless multi-item Stripe Checkout
+├── assets/                 # favicon + product illustrations
 └── scripts/create-stripe-payment-links.mjs
 ```
+
+## Cart & checkout
+
+Every variant has an **Add to cart** button. The cart lives in `localStorage`,
+survives refreshes, and opens in a drawer with quantity controls and a running
+subtotal. There are two ways it can take payment:
+
+**Mode A — multi-item checkout (recommended).** One payment for the whole cart.
+Deploy this repo to Vercel or Netlify, set `STRIPE_SECRET_KEY` in that host's
+environment variables, then set in `js/site-config.js`:
+
+```js
+payment: { checkoutEndpoint: "/api/create-checkout-session" }
+```
+
+The cart POSTs to `api/create-checkout-session.js`, which recomputes every
+price server-side from `js/products.js` (it never trusts a price from the
+browser), creates a Stripe Checkout Session, and redirects the customer to
+Stripe's hosted page. The secret key stays in the host's environment — it is
+never committed and never reaches the browser.
+
+**Mode B — hosted Payment Links (no backend).** Leave `checkoutEndpoint` empty
+and run the generator below. Each variant gets its own `buy.stripe.com` page,
+and a **Buy now** button appears beside Add to cart. This pays for one product
+at a time; a multi-item cart offers a Pay button per line.
+
+After payment Stripe returns to `/?checkout=success`, which empties the cart and
+shows a confirmation; `/?checkout=cancelled` leaves the cart untouched.
 
 ## Editing the catalog
 

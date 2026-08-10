@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" role="img" aria-label="Insulin syringe, 31 gauge, half millilitre">
+  <g fill="none" stroke="#1A1917" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <!-- needle and hub -->
+    <path d="M26 100h72"/>
+    <path d="M98 88l24 6v12l-24 6z"/>
+
+    <!-- barrel -->
+    <path d="M122 76h248v48H122z"/>
+
+    <!-- graduations along the barrel -->
+    <g stroke-width="1.15" stroke-opacity=".45">
+      <path d="M140 76v13M160 76v8M180 76v8M200 76v8M220 76v13M240 76v8M260 76v8M280 76v8M300 76v13M320 76v8M340 76v8"/>
+    </g>
+
+    <!-- plunger stopper inside the barrel -->
+    <path d="M344 78h22v44h-22z" fill="#1A1917" fill-opacity=".12"/>
+
+    <!-- finger flange, rod, thumb rest -->
+    <path d="M370 66h11v68h-11z"/>
+    <path d="M381 94h58M381 106h58" stroke-width="1.6"/>
+    <path d="M439 62h13v76h-13z"/>
+  </g>
+
+  <text x="240" y="168" text-anchor="middle" fill="#1A1917" fill-opacity=".55"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+        font-size="11" letter-spacing="2.4">31G · 0.5 mL · STERILE</text>
+</svg>
