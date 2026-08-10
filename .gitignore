@@ -15,3 +15,6 @@ dist/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Unrelated local projects folder — never commit
+MISC/
