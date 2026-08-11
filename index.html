@@ -6,77 +6,62 @@
   <title>DEFINITELY FOR RATS — Research Peptides for Laboratory Rats</title>
   <meta name="description" content="Retatrutide research kits, bacteriostatic water, and insulin syringes, sold for laboratory research use only. Definitely for rats." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <!-- Cart trigger -->
-  <button class="cart-fab" data-cart-open aria-label="Cart, 0 items" aria-controls="cart">
-    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-      <path d="M4 5h2.2l2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.55L21 8H7"
-            fill="none" stroke="currentColor" stroke-width="1.9"
-            stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="10.5" cy="20" r="1.4" fill="currentColor"/>
-      <circle cx="17.5" cy="20" r="1.4" fill="currentColor"/>
-    </svg>
-    <span class="cart-fab-count" data-cart-count hidden>0</span>
-  </button>
-
-  <!-- Cart drawer -->
-  <div class="cart" id="cart" aria-hidden="true">
-    <div class="cart-overlay" data-cart-overlay></div>
-    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
-      <header class="cart-head">
-        <h2 id="cart-title">Your rat&rsquo;s cart</h2>
-        <button class="cart-close" data-cart-close aria-label="Close cart">&times;</button>
-      </header>
-
-      <div class="cart-body" data-cart-body></div>
-
-      <footer class="cart-foot" data-cart-foot hidden>
-        <p class="cart-shipping" data-cart-shipping hidden></p>
-        <div class="cart-subtotal">
-          <span>Subtotal</span>
-          <strong data-cart-subtotal>$0</strong>
-        </div>
-        <p class="cart-status" data-cart-status hidden></p>
-        <button class="btn cart-checkout" data-checkout>Checkout</button>
-        <p class="cart-fine">Taxes and shipping calculated at checkout. Payments are processed by Stripe.</p>
-      </footer>
-    </aside>
-  </div>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html">Definitely For Rats</a>
+      <p class="eyebrow">Research use only</p>
+    </div>
+  </header>
 
   <main>
-    <!-- Hero -->
+    <!-- Hero. Sits under 85vh so the disclaimer strip is visible at the fold. -->
     <section class="hero">
       <div class="wrap">
-        <p class="wordmark">Definitely For Rats</p>
+        <p class="eyebrow hero-eyebrow"><span>Research peptides &amp; laboratory supply</span></p>
         <h1>And remember: it&rsquo;s definitely for&nbsp;rats.</h1>
-        <p class="subhead">Research peptides for the discerning laboratory rat. One compound, two supplies, zero ambiguity about who they&rsquo;re for.</p>
-        <a class="btn cta" href="#products">Shop for your rat &rarr;</a>
+        <p class="lede">Research peptides for the discerning laboratory rat. One compound, two supplies, zero ambiguity about who they&rsquo;re for.</p>
+        <div class="hero-actions">
+          <a class="btn btn-accent" href="#catalog">Shop for your rat &rarr;</a>
+          <p class="eyebrow">Three items in the catalogue.<br />All of them for rats.</p>
+        </div>
       </div>
     </section>
 
-    <!-- Persistent disclaimer, directly under the hero -->
+    <!-- Persistent disclaimer, directly under the hero. Load-bearing: it is the
+         compliance notice and the punchline at the same time. -->
     <div class="disclaimer-strip">
       <div class="wrap">
-        <p>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+        <p class="eyebrow">Notice</p>
+        <p data-disclaimer>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
       </div>
     </div>
 
-    <!-- Products -->
-    <section id="products" class="products">
+    <section id="catalog" class="catalog">
       <div class="wrap">
-        <p class="order-note" data-order-note hidden role="status"></p>
+        <div class="section-head">
+          <p class="eyebrow">The catalogue</p>
+          <h2>One compound, two supplies.</h2>
+          <p class="note">CAT. NO. 001 &ndash; 003</p>
+        </div>
         <div class="grid" id="product-grid"></div>
       </div>
     </section>
   </main>
 
-  <!-- Footer: disclaimer + copyright, nothing else -->
   <footer class="site-foot">
     <div class="wrap">
-      <p class="foot-disclaimer">Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
-      <p class="foot-copy">&copy; <span data-year>2026</span> Definitely For Rats. All rights reserved.</p>
+      <a class="brand" href="index.html">Definitely For Rats</a>
+      <p class="foot-disclaimer" data-disclaimer>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+      <div class="foot-meta">
+        <span>&copy; <span data-year>2026</span> Definitely For Rats</span>
+        <span>Research use only</span>
+      </div>
     </div>
   </footer>
 
@@ -84,6 +69,5 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/cart.js"></script>
 </body>
 </html>

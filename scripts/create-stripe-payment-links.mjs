@@ -78,9 +78,14 @@ for (const v of variants) {
       unit_amount: String(Math.round(v.price * 100)),
       "product_data[name]": v.name
     });
+    // The site ships a Buy button only — no quantity stepper — so quantity is
+    // adjusted on the Stripe-hosted checkout page instead.
     const link = await stripe("payment_links", {
       "line_items[0][price]": price.id,
-      "line_items[0][quantity]": "1"
+      "line_items[0][quantity]": "1",
+      "line_items[0][adjustable_quantity][enabled]": "true",
+      "line_items[0][adjustable_quantity][minimum]": "1",
+      "line_items[0][adjustable_quantity][maximum]": "99"
     });
     out[v.id] = link.url;
     created++;
