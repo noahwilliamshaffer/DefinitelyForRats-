@@ -88,7 +88,10 @@
       "</div></div>" +
 
       '<div class="buy-slot">' +
-      '<button type="button" class="btn btn-accent btn-block" disabled>Buy now</button>' +
+      '<div class="buy-actions">' +
+      '<button type="button" class="btn btn-ghost" data-add disabled>Add to cart</button>' +
+      '<button type="button" class="btn btn-accent" disabled>Buy now</button>' +
+      "</div>" +
       '<p class="eyebrow" data-buyhint>Choose an option to continue</p>' +
       "</div>" +
 
@@ -99,14 +102,19 @@
 
       '<ul class="trust">' + trust + "</ul>";
 
-    var slot = root.querySelector(".buy-slot");
+    var slot = root.querySelector(".buy-actions");
     var hint = root.querySelector("[data-buyhint]");
 
     R.initPills(root.querySelector("[data-pills]"), function (variantId) {
       var v = R.variantOf(p, variantId);
       if (!v) return;
       R.setPrice(root.querySelector("[data-price]"), R.money(v.price));
-      slot.querySelector(".btn").outerHTML = R.buyHtml(v, "Buy now", "btn-block");
+      // Replace only the Buy control; the Add to cart button just gets enabled
+      // and re-pointed at the newly selected variant.
+      slot.querySelector(".btn-accent").outerHTML = R.buyHtml(v, "Buy now");
+      var addBtn = slot.querySelector("[data-add]");
+      addBtn.disabled = false;
+      addBtn.setAttribute("data-add", v.id);
       if (hint) hint.hidden = true;
     });
   }

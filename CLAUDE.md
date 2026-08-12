@@ -4,11 +4,12 @@ Static site: plain HTML + CSS + vanilla JS. **No build step, no dependencies,
 no package.json, no test suite.** Deploys as-is to GitHub Pages via
 `.github/workflows/deploy-pages.yml` on push to `main`.
 
-Two pages, and that is the entire map — main page ⇄ product page ⇄ Stripe:
+Three pages — main page ⇄ product page ⇄ checkout ⇄ Stripe:
 
 - `index.html` — hero → disclaimer strip → three product cards → footer.
 - `retatrutide.html` — the one product page (gallery, buy box, 01-04
   accordions, Description / Additional information tabs).
+- `checkout.html` — the cart: lines, quantity steppers, subtotal, Pay.
 
 Bacteriostatic water and syringes are bought straight from their cards; only
 the peptide gets a page. There are no other pages — no About/Wholesale/
@@ -27,14 +28,25 @@ Keep the copy deadpan; never let it wink at the reader.
 | `js/payment-links.js` | `window.PAYMENT_LINKS` — **generated** variant-id → Stripe link map, do not hand-edit. Written by `scripts/create-stripe-payment-links.mjs`. |
 | `js/main.js` | `window.RATS` shared helpers, the product grid, and the age gate. Loaded by both pages. |
 | `js/product-page.js` | Product-page only: gallery, buy box, accordions, tabs. Reads `<body data-product="…">`. |
+| `js/cart.js` | Cart state, Add to cart buttons, checkout page. Loaded by all three pages. |
+| `api/create-checkout-session.js` | Serverless multi-item Stripe Checkout. Recomputes prices server-side — never trusts the client. |
 | `css/styles.css` | All styling. Tokens at the top, numbered sections below. |
 | `assets/*.svg` | Monochrome line-art product renderings. |
 
-`js/cart.js`, `api/create-checkout-session.js`, and the
-`payment.checkoutEndpoint` / `payment.freeShippingOver` keys in
-`js/site-config.js` are **orphaned** leftovers from an earlier cart build —
-nothing loads or reads them. The store ships Buy-now only; quantity is
-adjusted on Stripe's hosted checkout. Don't re-wire a cart without being asked.
+`js/cart.js` holds cart state (localStorage, key `dfr-cart-v1`), the
+`[data-add]` buttons, and the checkout page. It loads on every page so the
+topbar count stays in sync.
+
+**Checkout has two modes**, chosen by `payment.checkoutEndpoint` in
+`js/site-config.js`:
+
+- Set → the cart POSTs to `api/create-checkout-session.js`, which recomputes
+  every price server-side and returns a Stripe Checkout Session URL: one
+  payment for the whole cart. Needs a host that runs functions (Vercel,
+  Netlify). **GitHub Pages cannot.**
+- Empty → falls back to the per-variant hosted Payment Links. These always
+  open at quantity 1, so the fallback must never print a line total — it would
+  promise a charge the link will not make.
 
 ## Conventions
 

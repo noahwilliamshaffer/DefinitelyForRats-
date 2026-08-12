@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retatrutide — DEFINITELY FOR RATS</title>
-  <meta name="description" content="Retatrutide research kits and single vials, lyophilized, sold for laboratory research use only. Definitely for rats." />
+  <title>Cart — DEFINITELY FOR RATS</title>
+  <meta name="description" content="Your cart. Products are sold for laboratory research use only. Definitely for rats." />
+  <meta name="robots" content="noindex" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<!-- data-product picks the entry from window.PRODUCTS that fills this page. -->
-<body data-product="retatrutide">
+<body>
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="index.html">Definitely For Rats</a>
@@ -31,41 +31,50 @@
         <ol>
           <li><a href="index.html">Home</a></li>
           <li><a href="index.html#catalog">Shop</a></li>
-          <li><span aria-current="page" data-crumb>Retatrutide</span></li>
+          <li><span aria-current="page">Cart</span></li>
         </ol>
       </nav>
     </div>
 
-    <section class="pdp">
+    <section class="checkout">
       <div class="wrap">
-        <!-- Gallery and buy box are rendered from js/products.js. -->
-        <div class="pdp-main">
-          <div class="gallery" id="pdp-gallery"></div>
-          <div class="buybox" id="pdp-buybox"></div>
+        <div class="section-head">
+          <p class="eyebrow">Order</p>
+          <h1>Your rat&rsquo;s cart</h1>
         </div>
 
-        <!-- 01-04: handling, storage, and closure information. -->
-        <section class="tabs" aria-labelledby="notes-heading">
-          <div class="section-head">
-            <p class="eyebrow">Laboratory information</p>
-            <h2 id="notes-heading">Handling &amp; storage</h2>
-          </div>
-          <div class="notes" id="pdp-notes"></div>
-        </section>
+        <!-- Shown when returning from Stripe. -->
+        <p class="order-note" data-order-note hidden></p>
 
-        <section class="tabs">
-          <h2 class="visually-hidden">Product details</h2>
-          <div class="tablist" role="tablist" aria-label="Product details" id="pdp-tablist">
-            <button type="button" class="tab" role="tab" id="tab-description"
-                    aria-controls="panel-description" aria-selected="true" tabindex="0">Description</button>
-            <button type="button" class="tab" role="tab" id="tab-additional"
-                    aria-controls="panel-additional" aria-selected="false" tabindex="-1">Additional information</button>
+        <div class="checkout-grid">
+          <div>
+            <ul class="clines" data-cart-lines></ul>
+
+            <p class="cart-empty" data-cart-empty>
+              The cart is empty.<br />
+              <a href="index.html#catalog">Back to the catalogue &rarr;</a>
+            </p>
           </div>
-          <div class="tabpanel" role="tabpanel" id="panel-description"
-               aria-labelledby="tab-description" tabindex="0"></div>
-          <div class="tabpanel" role="tabpanel" id="panel-additional"
-               aria-labelledby="tab-additional" tabindex="0" hidden></div>
-        </section>
+
+          <aside class="summary" data-cart-summary hidden aria-label="Order summary">
+            <p class="eyebrow">Summary</p>
+            <div class="summary-row">
+              <span data-cart-itemcount>0 items</span>
+              <span class="price" data-cart-subtotal>$0</span>
+            </div>
+            <p class="summary-fine">Shipping and any taxes are calculated on the secure checkout page.</p>
+
+            <button type="button" class="btn btn-accent btn-block" data-checkout disabled>Checkout</button>
+
+            <p class="cart-status" data-cart-status hidden></p>
+            <ul class="paylinks" data-paylinks hidden></ul>
+
+            <div class="notice">
+              <p class="eyebrow">Important product notice</p>
+              <p data-disclaimer>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
@@ -85,7 +94,6 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/product-page.js"></script>
   <script src="js/cart.js"></script>
 </body>
 </html>

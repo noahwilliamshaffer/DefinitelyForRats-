@@ -25,17 +25,16 @@ window.SITE = {
     provider: "stripe",
     currency: "usd",
 
-    // Multi-item checkout. When set, the cart POSTs to this endpoint, which
-    // creates a Stripe Checkout Session server-side and returns its URL — one
-    // payment for the whole cart. Deploy /api/create-checkout-session.js
-    // (included) to Vercel or Netlify and set STRIPE_SECRET_KEY in that host's
-    // environment variables. The secret key NEVER goes in this repo.
+    // Multi-item checkout — ONE payment for the whole cart. When set, the cart
+    // POSTs here and gets back a Stripe Checkout Session URL. Deploy
+    // /api/create-checkout-session.js (included) to a host that runs functions
+    // — Vercel or Netlify — and set STRIPE_SECRET_KEY in that host's
+    // environment. The secret key NEVER goes in this repo.
     //   e.g. "/api/create-checkout-session"
-    checkoutEndpoint: "",
-
-    // Fallback when checkoutEndpoint is empty: each cart line opens its own
-    // hosted Stripe Payment Link (from js/payment-links.js). Works with no
-    // backend at all, but pays one product at a time.
-    freeShippingOver: 200
+    //
+    // GitHub Pages cannot run functions, so leave this empty when deploying
+    // there. The cart then falls back to the per-variant hosted Payment Links
+    // in js/payment-links.js, which pay one product at a time.
+    checkoutEndpoint: ""
   }
 };

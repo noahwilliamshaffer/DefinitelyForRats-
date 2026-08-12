@@ -155,7 +155,8 @@
       ? '<a href="' + esc(p.href) + '">' + esc(p.name) + "</a>"
       : esc(p.name);
 
-    // Products with a page send you there to choose; supplies are bought here.
+    // Products with a page send you there to choose; supplies are bought here,
+    // either straight to Stripe or into the cart.
     var foot = hasPage
       ? '<div class="card-buy">' +
         '<p class="price">' + priceRange(p) + "</p>" +
@@ -165,6 +166,9 @@
         pillsHtml(p, v0.id) + "</div>" +
         '<div class="card-buy">' +
         '<p class="price" data-price>' + money(v0.price) + "</p>" +
+        "</div>" +
+        '<div class="card-actions">' +
+        '<button type="button" class="btn btn-ghost" data-add="' + esc(v0.id) + '">Add to cart</button>' +
         buyHtml(v0, "Buy", "card-cta") +
         "</div>";
 
@@ -195,6 +199,7 @@
           if (!v) return;
           setPrice(host.querySelector("[data-price]"), money(v.price));
           host.querySelector(".card-cta").outerHTML = buyHtml(v, "Buy", "card-cta");
+          host.querySelector("[data-add]").setAttribute("data-add", v.id);
         });
       })(groups[g]);
     }

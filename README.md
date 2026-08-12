@@ -30,23 +30,50 @@ in on it.
 .
 ├── index.html              # main page: hero, disclaimer, product grid
 ├── retatrutide.html        # the one product page
+├── checkout.html           # the cart page
 ├── css/styles.css          # all styling (tokens at the top)
 ├── js/
-│   ├── site-config.js      # ⭐ branding, disclaimer, age gate — edit here
+│   ├── site-config.js      # ⭐ branding, disclaimer, age gate, checkout mode
 │   ├── products.js         # ⭐ catalog: products, variants, page content
 │   ├── payment-links.js    # generated variant-id → Stripe link map
 │   ├── main.js             # window.RATS helpers, product grid, age gate
-│   └── product-page.js     # gallery, buy box, accordions, tabs
+│   ├── product-page.js     # gallery, buy box, accordions, tabs
+│   └── cart.js             # cart state, Add to cart, checkout page
+├── api/
+│   └── create-checkout-session.js   # serverless multi-item Stripe Checkout
 ├── assets/                 # favicon + monochrome product renderings (SVG)
 └── scripts/create-stripe-payment-links.mjs
 ```
 
-**Orphaned files.** `js/cart.js` and `api/create-checkout-session.js` are left
-over from an earlier cart build. Neither page loads them, and the brief rules
-out a cart drawer and quantity steppers — quantity is adjusted on Stripe's own
-checkout page instead. The `payment.checkoutEndpoint` and
-`payment.freeShippingOver` keys in `js/site-config.js` are read by nothing.
-They are safe to delete once you're sure you don't want the cart back.
+## Cart and checkout
+
+Every purchasable variant has **Add to cart** beside **Buy**. The cart lives in
+`localStorage`, survives refreshes, shows a count in the topbar on every page,
+and opens as a full page at `checkout.html` with quantity steppers, per-line
+removal, and a subtotal. Checkout has two modes:
+
+**Mode A — one payment for the whole cart (recommended).** Deploy to Vercel or
+Netlify, set `STRIPE_SECRET_KEY` in that host's environment, then set in
+`js/site-config.js`:
+
+```js
+payment: { checkoutEndpoint: "/api/create-checkout-session" }
+```
+
+The cart POSTs to `api/create-checkout-session.js`, which recomputes every
+price server-side from `js/products.js` — it never trusts a price from the
+browser — creates a Stripe Checkout Session, and redirects to Stripe's hosted
+page. The secret key stays in the host's environment.
+
+**Mode B — hosted Payment Links (no backend).** Leave `checkoutEndpoint` empty.
+This is the only mode that works on **GitHub Pages, which cannot run
+functions.** Each cart line gets its own Pay button. Note that a Payment Link
+always opens at **quantity 1** — the cart's quantity does not carry across, so
+these buttons deliberately show no line total, and the buyer sets quantity on
+Stripe's page (adjustable quantity is enabled on every link).
+
+After payment Stripe returns to `/?checkout=success`, which empties the cart and
+confirms; `/?checkout=cancelled` leaves the cart untouched.
 
 Scripts attach to `window.*` globals via plain `<script>` tags — there is no
 module system. Load order matters: `site-config` → `products` →
