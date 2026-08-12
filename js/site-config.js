@@ -35,6 +35,6 @@ window.SITE = {
     // GitHub Pages cannot run functions, so leave this empty when deploying
     // there. The cart then falls back to the per-variant hosted Payment Links
     // in js/payment-links.js, which pay one product at a time.
-    checkoutEndpoint: ""
+    checkoutEndpoint: "/api/create-checkout-session"
   }
 };
