@@ -4,15 +4,18 @@ Static site: plain HTML + CSS + vanilla JS. **No build step, no dependencies,
 no package.json, no test suite.** Deploys as-is to GitHub Pages via
 `.github/workflows/deploy-pages.yml` on push to `main`.
 
-Three pages — main page ⇄ product page ⇄ checkout ⇄ Stripe:
+Five pages — main page ⇄ product page ⇄ checkout ⇄ Stripe:
 
 - `index.html` — hero → disclaimer strip → three product cards → footer.
-- `retatrutide.html` — the one product page (gallery, buy box, 01-04
-  accordions, Description / Additional information tabs).
+- `retatrutide.html`, `bacteriostatic-water.html`, `insulin-syringes.html` —
+  one product page per catalogue item (gallery, buy box, 01-04 accordions,
+  Description / Additional information tabs). All three are the same template
+  driven by `<body data-product="…">`; the only differences are the title,
+  the meta description, and that attribute.
 - `checkout.html` — the cart: lines, quantity steppers, subtotal, Pay.
 
-Bacteriostatic water and syringes are bought straight from their cards; only
-the peptide gets a page. There are no other pages — no About/Wholesale/
+Every product gets a page and a "Select options" button — nothing is bought
+directly from a card. There are no other pages — no About/Wholesale/
 Contact/COA — and nothing should link to one.
 
 The joke and the compliance posture are the same sentence: every product is
@@ -58,7 +61,10 @@ topbar count stays in sync.
   link generator. Don't hardcode product markup into HTML — both pages render
   their content from the catalog.
 - A product with an `href` gets a page and a "Select options" button; one
-  without is bought on its card. That flag is the only switch.
+  without is bought on its card. That flag is the only switch — all three
+  currently have one. Adding a product means adding its `href`, copying an
+  existing product page, and changing `data-product`, `<title>`, and the meta
+  description.
 - Use the spacing scale (`--s-1`…`--s-10`) and the existing tokens. No ad-hoc
   margins, no second accent colour.
 

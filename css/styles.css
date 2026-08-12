@@ -710,10 +710,32 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .checkout { padding-block-end: var(--s-10); }
 .checkout-grid { display: grid; gap: var(--s-7); align-items: start; }
 @media (min-width: 900px) {
-  .checkout-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: var(--s-8); }
+  .checkout-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: var(--s-8); }
+  /* The summary follows you down a long cart. */
+  .summary { position: sticky; top: var(--s-5); }
+}
+
+/* Column headings over the lines, in the catalogue's register. */
+.clines-head {
+  display: none;
+  padding-block-end: var(--s-3);
+  border-bottom: 1px solid var(--ink);
+}
+@media (min-width: 560px) {
+  .clines-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    gap: var(--s-5);
+    align-items: baseline;
+  }
+  .clines-head span:nth-child(2) { width: 132px; text-align: center; }
+  .clines-head span:nth-child(3) { width: 72px; text-align: end; }
+  /* Spacer matching the Remove column. */
+  .clines-head::after { content: ""; width: 58px; }
 }
 
 .clines { border-top: 1px solid var(--line); }
+@media (min-width: 560px) { .clines { border-top: 0; } }
 .cline {
   display: grid;
   grid-template-areas: "id id" "qty price" "rm rm";
@@ -726,9 +748,11 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 @media (min-width: 560px) {
   .cline {
     grid-template-areas: "id qty price rm";
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    /* Fixed tracks so the rows line up under .clines-head. */
+    grid-template-columns: minmax(0, 1fr) 132px 72px 58px;
     gap: var(--s-5);
   }
+  .qty { justify-self: center; }
 }
 .cline-id { grid-area: id; min-width: 0; }
 .cline-name { font-size: 17px; font-weight: 500; letter-spacing: -.01em; }
@@ -803,17 +827,26 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   border: 1px solid var(--line);
   border-radius: 3px;
 }
+.summary-rows { display: grid; }
 .summary-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-4);
   padding-block: var(--s-3);
-  border-block: 1px solid var(--line);
+  border-top: 1px solid var(--line);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 12.5px;
+  letter-spacing: .04em;
   color: var(--muted);
 }
+.summary-total {
+  padding-block-end: 0;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+.summary-total .price { font-size: 26px; }
 .summary-fine { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
 
 .cart-status {

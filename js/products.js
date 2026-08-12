@@ -106,16 +106,69 @@ window.PRODUCTS = [
     name: "Bacteriostatic Water",
     tagline: "the unsung hero",
     badge: null,
-    href: null,
+    href: "bacteriostatic-water.html",
     copy: "Peptides arrive freeze-dried, as a powder. This sterile water is what turns the powder back into something a laboratory can actually use. Your rat cannot do anything with powder. Every kit on this page needs this. Buy it with the peptides; thank us later.",
+    detail: "Supplied in sealed glass vials with 0.9% benzyl alcohol, which is the bacteriostatic part: it is what allows a vial to be entered more than once. Sold as 10mL and 30mL vials and in multi-vial packs. Often stacked with a syringe order, for reasons that become obvious the moment the powder arrives.",
     images: [
-      { src: "assets/bac-water.svg", alt: "Vial of bacteriostatic water" }
+      { src: "assets/bac-water.svg", alt: "Vial of bacteriostatic water" },
+      { src: "assets/reta-cap.svg",  alt: "Cross-section of the vial closure: flip-off cap, aluminium crimp, rubber stopper" }
     ],
     variants: [
       { id: "bac-water-10ml",   label: "10mL vial",     price: 9 },
       { id: "bac-water-30ml",   label: "30mL vial",     price: 18 },
       { id: "bac-water-30ml-3", label: "30mL — 3-pack", price: 45 },
       { id: "bac-water-30ml-5", label: "30mL — 5-pack", price: 65 }
+    ],
+    trust: ["Ships promptly", "Sealed sterile vials", "Definitely for rats"],
+    spec: [
+      ["Contents", "Sterile water with 0.9% benzyl alcohol"],
+      ["Form", "Solution"],
+      ["Volume", "10mL or 30mL per vial, by option"],
+      ["Presentation", "Glass vial, rubber stopper, aluminium crimp, flip-off cap"],
+      ["Used for", "Reconstituting lyophilized peptides"],
+      ["Storage", "Room temperature and dark; see section 03"],
+      ["Intended use", "Laboratory research. Definitely for rats."]
+    ],
+    notes: [
+      {
+        n: "01",
+        title: "Preparation & Handling",
+        body: [
+          "Swab the stopper with alcohol and let it dry before every entry. Use a fresh sterile syringe each time.",
+          "When reconstituting a lyophilized peptide, run the diluent slowly down the inside wall of the vial rather than firing it straight onto the powder cake.",
+          "Let the vial stand until the cake has dissolved, swirling gently if needed. Do not shake.",
+          "Mark the vial with the date of first entry."
+        ]
+      },
+      {
+        n: "02",
+        title: "What Bacteriostatic Water Is",
+        body: [
+          "Bacteriostatic water is sterile water containing 0.9% benzyl alcohol. The benzyl alcohol is a bacteriostatic agent — it inhibits bacterial growth rather than killing what is already there.",
+          "That is the practical difference from sterile water for injection, which carries no preservative and is intended for a single entry. The preservative is what allows a bacteriostatic vial to be entered more than once.",
+          "It is a diluent. It does nothing on its own — it exists to put freeze-dried material back into solution."
+        ]
+      },
+      {
+        n: "03",
+        title: "Storage Recommendations",
+        body: [
+          "Unopened vials: room temperature, out of direct light, in the original packaging.",
+          "After first entry: refrigerate, keep protected from light, and note the date on the vial.",
+          "Do not freeze.",
+          "Set aside any vial whose contents are cloudy, discoloured, or carrying visible particles, and any vial whose seal is not intact."
+        ]
+      },
+      {
+        n: "04",
+        title: "Vial Cap Instructions",
+        body: [
+          "Each vial is closed with a rubber stopper, held down by an aluminium crimp, covered by a coloured plastic flip-off disc.",
+          "Lift the plastic disc away with a thumb. That part is meant to come off. The aluminium crimp underneath is not.",
+          "Do not pry off the crimp or dig out the stopper — the vial is designed to be accessed through the stopper, and stays sterile that way.",
+          "Swab the exposed stopper with alcohol and let it dry before each entry."
+        ]
+      }
     ]
   },
   {
@@ -124,8 +177,9 @@ window.PRODUCTS = [
     name: "Insulin Syringes",
     tagline: "for measuring tiny things precisely",
     badge: null,
-    href: null,
+    href: "insulin-syringes.html",
     copy: "Sterile, single-use, and very thin, because the entire job is measuring very small amounts very accurately. A laboratory essential. Your rat will barely look up from his wheel.",
+    detail: "Sterile single-use syringes with a fixed 31-gauge needle and a half-millilitre barrel graduated in units. Sold in packs of 10, 50, 100, and 300. Often stacked with bacteriostatic water, since neither one is much use to a laboratory without the other.",
     images: [
       { src: "assets/syringe.svg", alt: "Insulin syringe, 31 gauge, half millilitre" }
     ],
@@ -134,6 +188,55 @@ window.PRODUCTS = [
       { id: "insulin-syr-31g-50",  label: "31G 0.5mL, 50-pack",  price: 15 },
       { id: "insulin-syr-31g-100", label: "31G 0.5mL, 100-pack", price: 24 },
       { id: "insulin-syr-31g-300", label: "31G 0.5mL, 300-pack", price: 59 }
+    ],
+    trust: ["Ships promptly", "Individually sealed, single use", "Definitely for rats"],
+    spec: [
+      ["Contents", "Sterile syringes with fixed needle"],
+      ["Gauge", "31G"],
+      ["Barrel volume", "0.5 mL"],
+      ["Graduations", "Unit markings along the barrel"],
+      ["Pack size", "10, 50, 100, or 300, by option"],
+      ["Sterility", "Individually sealed, single use"],
+      ["Intended use", "Laboratory research. Definitely for rats."]
+    ],
+    notes: [
+      {
+        n: "01",
+        title: "Handling",
+        body: [
+          "Each syringe is sterile until its wrapper is opened, and is intended for a single use. Do not re-sterilise or re-use one.",
+          "Check the wrapper before opening. Set aside anything that arrived torn, damp, or already opened.",
+          "Do not touch the needle or the plunger shaft, and leave the cap on until the moment of use.",
+          "Do not attempt to recap a used needle — that is where most sharps injuries happen. Go straight to the sharps container."
+        ]
+      },
+      {
+        n: "02",
+        title: "Gauge & Graduations",
+        body: [
+          "31G describes the needle's outside diameter. The gauge number runs backwards: the higher the number, the thinner the needle.",
+          "The barrel holds half a millilitre and is graduated in units along its length, which is what makes small volumes readable rather than guessed at.",
+          "Draw slowly, and read the graduation at the leading edge of the plunger stopper with the barrel at eye level."
+        ]
+      },
+      {
+        n: "03",
+        title: "Storage Recommendations",
+        body: [
+          "Store in a cool, dry place in the original packaging, out of direct light.",
+          "Keep wrappers sealed until use — an opened wrapper is an unsterile syringe.",
+          "Keep away from heat sources; the barrel and plunger are plastic."
+        ]
+      },
+      {
+        n: "04",
+        title: "Disposal",
+        body: [
+          "Used syringes are sharps waste. They belong in a rigid, puncture-resistant sharps container, never in ordinary waste or recycling.",
+          "Do not overfill the container, and seal it before it is full.",
+          "Disposal of sharps is governed by local regulations. Follow whatever applies in your jurisdiction."
+        ]
+      }
     ]
   }
 ];

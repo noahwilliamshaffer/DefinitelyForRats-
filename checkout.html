@@ -48,6 +48,12 @@
 
         <div class="checkout-grid">
           <div>
+            <div class="clines-head" aria-hidden="true">
+              <span class="eyebrow">Item</span>
+              <span class="eyebrow">Qty</span>
+              <span class="eyebrow">Amount</span>
+            </div>
+
             <ul class="clines" data-cart-lines></ul>
 
             <p class="cart-empty" data-cart-empty>
@@ -58,9 +64,15 @@
 
           <aside class="summary" data-cart-summary hidden aria-label="Order summary">
             <p class="eyebrow">Summary</p>
-            <div class="summary-row">
-              <span data-cart-itemcount>0 items</span>
-              <span class="price" data-cart-subtotal>$0</span>
+            <div class="summary-rows">
+              <div class="summary-row">
+                <span>Items</span>
+                <span data-cart-itemcount>0 items</span>
+              </div>
+              <div class="summary-row summary-total">
+                <span>Subtotal</span>
+                <span class="price" data-cart-subtotal>$0</span>
+              </div>
             </div>
             <p class="summary-fine">Shipping and any taxes are calculated on the secure checkout page.</p>
 

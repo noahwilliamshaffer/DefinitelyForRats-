@@ -5,12 +5,16 @@ entirely in terms of what each product does for your rat. Plain static site
 (HTML + CSS + vanilla JS) — no build step, no dependencies, deploys anywhere
 (GitHub Pages, Netlify, Vercel, any host).
 
-Two pages, and that is the whole map:
+The whole map:
 
 - **`index.html`** — hero → disclaimer strip → three product cards → footer.
-  Bacteriostatic water and syringes are bought straight from their cards.
-- **`retatrutide.html`** — the peptide's product page: gallery, buy box with
-  option pills, numbered handling/storage sections, and detail tabs.
+  Every card carries a price range and a **Select options** button.
+- **`retatrutide.html`**, **`bacteriostatic-water.html`**,
+  **`insulin-syringes.html`** — one product page per catalogue item: gallery,
+  buy box with option pills, Add to cart and Buy now, numbered
+  handling/storage sections, and detail tabs. All three are the same template,
+  driven by `<body data-product="…">`.
+- **`checkout.html`** — the cart.
 
 Checkout is a Stripe-hosted Payment Link per variant. A 21+ age gate shows once
 per session and carries across both pages.
@@ -29,7 +33,9 @@ in on it.
 ```
 .
 ├── index.html              # main page: hero, disclaimer, product grid
-├── retatrutide.html        # the one product page
+├── retatrutide.html        # product page  ┐
+├── bacteriostatic-water.html  #            ├ same template, data-product
+├── insulin-syringes.html   # product page  ┘
 ├── checkout.html           # the cart page
 ├── css/styles.css          # all styling (tokens at the top)
 ├── js/
@@ -81,15 +87,19 @@ module system. Load order matters: `site-config` → `products` →
 
 ## Editing the catalog
 
-Everything on both pages derives from `js/products.js`. Each product has
+Everything on every page derives from `js/products.js`. Each product has
 `variants` — separately purchasable amounts, each with its own id, label,
 price, and Stripe Payment Link. A product with an `href` gets a product page
-and a **Select options** button on its card; a product without one is bought
-directly from the card with a **Buy** button.
+and a **Select options** button on its card; a product without one would be
+bought directly from its card instead. All three currently have one.
 
 Products with a page also carry `images`, `spec`, `notes` (the numbered 01-04
 accordions), `trust`, and `detail`. Add a variant object and re-run the
 generator below; pills, price, and buy links follow automatically.
+
+To add a product: add its entry with an `href`, copy any existing product page
+to that filename, and change `<body data-product="…">`, the `<title>`, and the
+meta description. Nothing else is per-product.
 
 ## Generate the Stripe Payment Links
 
