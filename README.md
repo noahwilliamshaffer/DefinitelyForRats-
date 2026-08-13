@@ -53,10 +53,12 @@ in on it.
 
 ## Cart and checkout
 
-Every purchasable variant has **Add to cart** beside **Buy**. The cart lives in
+Each product page has **Add to cart** beside **Buy now**. Both route through the
+cart — Buy now adds the selected variant and goes straight to `checkout.html` —
+so a buyer always pays for the whole order in one place. The cart lives in
 `localStorage`, survives refreshes, shows a count in the topbar on every page,
-and opens as a full page at `checkout.html` with quantity steppers, per-line
-removal, and a subtotal. Checkout has two modes:
+and opens as a full page with quantity steppers, per-line removal, and a
+subtotal. Checkout has two modes:
 
 **Mode A — one payment for the whole cart (recommended).** Deploy to Vercel or
 Netlify, set `STRIPE_SECRET_KEY` in that host's environment, then set in
@@ -77,6 +79,12 @@ functions.** Each cart line gets its own Pay button. Note that a Payment Link
 always opens at **quantity 1** — the cart's quantity does not carry across, so
 these buttons deliberately show no line total, and the buyer sets quantity on
 Stripe's page (adjustable quantity is enabled on every link).
+
+**This mode is also the safety net.** If `checkoutEndpoint` is set but the host
+has no such route (a static host answers with an HTML 404), or the endpoint
+returns an error, checkout falls back to these links rather than showing the
+buyer a raw parse error. So the store keeps taking money wherever it is hosted;
+only the *one payment for everything* part needs a backend.
 
 After payment Stripe returns to `/?checkout=success`, which empties the cart and
 confirms; `/?checkout=cancelled` leaves the cart untouched.

@@ -90,7 +90,7 @@
       '<div class="buy-slot">' +
       '<div class="buy-actions">' +
       '<button type="button" class="btn btn-ghost" data-add disabled>Add to cart</button>' +
-      '<button type="button" class="btn btn-accent" disabled>Buy now</button>' +
+      '<button type="button" class="btn btn-accent" data-buy-now disabled>Buy now</button>' +
       "</div>" +
       '<p class="eyebrow" data-buyhint>Choose an option to continue</p>' +
       "</div>" +
@@ -109,12 +109,14 @@
       var v = R.variantOf(p, variantId);
       if (!v) return;
       R.setPrice(root.querySelector("[data-price]"), R.money(v.price));
-      // Replace only the Buy control; the Add to cart button just gets enabled
-      // and re-pointed at the newly selected variant.
-      slot.querySelector(".btn-accent").outerHTML = R.buyHtml(v, "Buy now");
-      var addBtn = slot.querySelector("[data-add]");
-      addBtn.disabled = false;
-      addBtn.setAttribute("data-add", v.id);
+      // Both controls just get enabled and re-pointed at the selected variant.
+      // Buy now adds to the cart and goes to checkout (see js/cart.js), so the
+      // whole order is paid for in one go rather than per item.
+      ["[data-add]", "[data-buy-now]"].forEach(function (sel) {
+        var btn = slot.querySelector(sel);
+        btn.disabled = false;
+        btn.setAttribute(sel.slice(1, -1), v.id);
+      });
       if (hint) hint.hidden = true;
     });
   }

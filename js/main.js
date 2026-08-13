@@ -47,23 +47,6 @@
     return (window.PAYMENT_LINKS && window.PAYMENT_LINKS[v.id]) || v.buyUrl || "";
   }
 
-  // Buy is a real link when the variant has a Payment Link, and a disabled
-  // button when it doesn't — never a control that looks live but goes nowhere.
-  function buyHtml(v, label, cls) {
-    var extra = cls ? " " + cls : "";
-    if (!v) {
-      return '<button class="btn btn-accent' + extra + '" disabled>' + esc(label) + "</button>";
-    }
-    var url = linkFor(v);
-    if (!url) {
-      return '<button class="btn btn-accent' + extra + '" disabled ' +
-        'title="Checkout link pending — run scripts/create-stripe-payment-links.mjs">' +
-        esc(label) + "</button>";
-    }
-    return '<a class="btn btn-accent' + extra + '" href="' + esc(url) +
-      '" target="_blank" rel="noopener">' + esc(label) + "</a>";
-  }
-
   // Price updates land on the same frame; only the fade is animated.
   function setPrice(el, text) {
     if (!el || el.textContent === text) return;
@@ -132,7 +115,6 @@
     priceRange: priceRange,
     variantOf: variantOf,
     linkFor: linkFor,
-    buyHtml: buyHtml,
     setPrice: setPrice,
     pillsHtml: pillsHtml,
     initPills: initPills
@@ -169,7 +151,7 @@
         "</div>" +
         '<div class="card-actions">' +
         '<button type="button" class="btn btn-ghost" data-add="' + esc(v0.id) + '">Add to cart</button>' +
-        buyHtml(v0, "Buy", "card-cta") +
+        '<button type="button" class="btn btn-accent" data-buy-now="' + esc(v0.id) + '">Buy now</button>' +
         "</div>";
 
     return (
@@ -198,8 +180,8 @@
           var v = variantOf(p, variantId);
           if (!v) return;
           setPrice(host.querySelector("[data-price]"), money(v.price));
-          host.querySelector(".card-cta").outerHTML = buyHtml(v, "Buy", "card-cta");
           host.querySelector("[data-add]").setAttribute("data-add", v.id);
+          host.querySelector("[data-buy-now]").setAttribute("data-buy-now", v.id);
         });
       })(groups[g]);
     }

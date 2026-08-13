@@ -171,36 +171,12 @@
     return (window.PAYMENT_LINKS && window.PAYMENT_LINKS[variantId]) || "";
   }
 
-  function checkout() {
-    if (!lines.length) return;
-    var btn = document.querySelector("[data-checkout]");
-    var endpoint = S.payment && S.payment.checkoutEndpoint;
-
-    // Mode 1 — one payment for the whole cart, via the serverless endpoint.
-    if (endpoint) {
-      if (btn) { btn.disabled = true; btn.textContent = "Starting checkout…"; }
-      setStatus("");
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: lines.map(function (l) { return { variantId: l.variantId, qty: l.qty }; })
-        })
-      })
-        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
-        .then(function (res) {
-          if (res.ok && res.j && res.j.url) { window.location.href = res.j.url; return; }
-          throw new Error((res.j && res.j.error) || "Checkout could not be started.");
-        })
-        .catch(function (err) {
-          setStatus(err.message + " Please try again.", true);
-          if (btn) { btn.disabled = false; btn.textContent = "Checkout"; }
-        });
-      return;
-    }
-
-    // Mode 2 — hosted Payment Links. A variant without a link is never
-    // presented as payable.
+  /* Mode 2 — hosted Payment Links, one product at a time. This is also the
+     safety net whenever the endpoint is absent or unhappy: a buyer must never
+     be dead-ended at the last step, and must never be shown a raw parse error
+     from a host that answered with an HTML 404 instead of JSON. */
+  function payWithLinks(note) {
+    // A variant without a link is never presented as payable.
     var missing = lines.filter(function (l) { return !linkFor(l.variantId); });
     if (missing.length) {
       setStatus("Checkout is not set up yet for: " + missing.map(function (l) {
@@ -222,13 +198,61 @@
     // line total on these buttons: the cart quantity does not carry across, so
     // showing one would promise a charge the link will not make. Quantity is
     // adjustable on Stripe's page.
-    setStatus("Hosted links pay for one product at a time. Each button below opens " +
+    setStatus((note ? note + " " : "") +
+      "Hosted links pay for one product at a time. Each button below opens " +
       "that item's checkout at quantity 1 — set the quantity you want there.", false);
     box.hidden = false;
     box.innerHTML = lines.map(function (l) {
       return '<li><a class="btn btn-ghost btn-block" href="' + esc(linkFor(l.variantId)) +
         '">Pay for ' + esc(l.name) + " " + esc(l.label) + " &rarr;</a></li>";
     }).join("");
+  }
+
+  function checkout() {
+    if (!lines.length) return;
+    var btn = document.querySelector("[data-checkout]");
+    var endpoint = S.payment && S.payment.checkoutEndpoint;
+
+    // No endpoint configured — hosted links are the only route.
+    if (!endpoint) { payWithLinks(); return; }
+
+    function restore() {
+      if (btn) { btn.disabled = false; btn.textContent = "Checkout"; }
+    }
+
+    if (btn) { btn.disabled = true; btn.textContent = "Starting checkout…"; }
+    setStatus("");
+
+    // Mode 1 — one payment for the whole cart, via the serverless endpoint.
+    fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: lines.map(function (l) { return { variantId: l.variantId, qty: l.qty }; })
+      })
+    })
+      .then(function (r) {
+        // Read as text first: a host without this route answers with an HTML
+        // error page, and r.json() would throw something meaningless at the
+        // buyer instead of letting us fall back.
+        return r.text().then(function (body) {
+          var parsed = null;
+          try { parsed = JSON.parse(body); } catch (e) { /* not JSON */ }
+          return { ok: r.ok, json: parsed };
+        });
+      })
+      .then(function (res) {
+        if (res.ok && res.json && res.json.url) {
+          window.location.href = res.json.url;
+          return;
+        }
+        restore();
+        payWithLinks("Checkout for the whole cart is unavailable right now.");
+      })
+      .catch(function () {
+        restore();
+        payWithLinks("Checkout for the whole cart is unavailable right now.");
+      });
   }
 
   /* ---- Events ------------------------------------------------------------- */
@@ -255,6 +279,17 @@
         addBtn.textContent = was;
         addBtn.classList.remove("is-added");
       }, 1200);
+      return;
+    }
+
+    // Buy now is Add to cart plus a trip to the cart page — one checkout for
+    // the whole order, never a separate payment per item.
+    var buyNow = t.closest("[data-buy-now]");
+    if (buyNow && !buyNow.disabled) {
+      var buyId = selectedVariant(buyNow) || buyNow.getAttribute("data-buy-now");
+      if (!buyId) return;
+      add(buyId, 1);
+      window.location.href = "checkout.html";
       return;
     }
 

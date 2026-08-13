@@ -51,6 +51,16 @@ topbar count stays in sync.
   open at quantity 1, so the fallback must never print a line total — it would
   promise a charge the link will not make.
 
+If the endpoint is set but unreachable, or answers with anything that is not a
+usable JSON `{url}` (a static host returns an HTML 404 for it), checkout falls
+back to the hosted links instead of failing. **Never surface a raw fetch or
+JSON-parse error to a buyer, and never leave them dead-ended at the last step.**
+
+**Add to cart** and **Buy now** both route through the cart: Buy now adds the
+selected variant and goes to `checkout.html`, so one payment covers the whole
+order. Nothing links straight to a per-variant Payment Link any more — those
+are used only by the fallback above.
+
 ## Conventions
 
 - Scripts attach to `window.*` globals via plain `<script>` tags. No module
@@ -99,8 +109,8 @@ For visual checks, open `index.html` directly — no server needed.
 - **Never commit a Stripe secret key** (`sk_...`). It lives only in the
   `STRIPE_SECRET_KEY` env var when running the generator. Every `js/` file
   ships to the browser.
-- A variant with no payment link renders as a **disabled** button, never as a
-  live-looking control that goes nowhere.
+- A variant with no payment link is never offered as payable in the checkout
+  fallback — no live-looking control that goes nowhere.
 - Product copy is research-use framing. Effect sentences stay about THE RAT —
   no "you"/"your results", no percentages, timeframes, dosing, or
   testimonials. "Often stacked with" (descriptive) is allowed; "works better
