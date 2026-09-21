@@ -4,7 +4,7 @@ Static site: plain HTML + CSS + vanilla JS. **No build step, no dependencies,
 no package.json, no test suite.** Deploys as-is to GitHub Pages via
 `.github/workflows/deploy-pages.yml` on push to `main`.
 
-Five pages — main page ⇄ product page ⇄ checkout ⇄ Stripe:
+Five pages — main page ⇄ product page ⇄ checkout ⇄ hosted payment page:
 
 - `index.html` — hero → disclaimer strip → three product cards → footer.
 - `retatrutide.html`, `bacteriostatic-water.html`, `insulin-syringes.html` —
@@ -32,7 +32,9 @@ Keep the copy deadpan; never let it wink at the reader.
 | `js/main.js` | `window.RATS` shared helpers, the product grid, and the age gate. Loaded by both pages. |
 | `js/product-page.js` | Product-page only: gallery, buy box, accordions, tabs. Reads `<body data-product="…">`. |
 | `js/cart.js` | Cart state, Add to cart buttons, checkout page. Loaded by all three pages. |
-| `api/create-checkout-session.js` | Serverless multi-item Stripe Checkout. Recomputes prices server-side — never trusts the client. |
+| `api/authorize-net-checkout.js` | **Active** serverless checkout: Authorize.net Accept Hosted token for the whole cart. Recomputes prices server-side — never trusts the client. |
+| `api/create-checkout-session.js` | Inactive Stripe Checkout alternative. |
+| `api/_catalog.js` | Shared catalogue/price loader for both functions (underscore = not deployed as an endpoint). |
 | `css/styles.css` | All styling. Tokens at the top, numbered sections below. |
 | `assets/*.svg` | Monochrome line-art product renderings. |
 
@@ -40,21 +42,22 @@ Keep the copy deadpan; never let it wink at the reader.
 `[data-add]` buttons, and the checkout page. It loads on every page so the
 topbar count stays in sync.
 
-**Checkout has two modes**, chosen by `payment.checkoutEndpoint` in
-`js/site-config.js`:
+**Checkout provider** is `payment.provider` in `js/site-config.js`:
 
-- Set → the cart POSTs to `api/create-checkout-session.js`, which recomputes
-  every price server-side and returns a Stripe Checkout Session URL: one
-  payment for the whole cart. Needs a host that runs functions (Vercel,
-  Netlify). **GitHub Pages cannot.**
-- Empty → falls back to the per-variant hosted Payment Links. These always
-  open at quantity 1, so the fallback must never print a line total — it would
-  promise a charge the link will not make.
+- `"authorizenet"` (active) — the cart POSTs to
+  `api/authorize-net-checkout.js`, gets `{url, token}`, and form-POSTs the
+  token to Authorize.net's hosted page (a redirect will not work). Stripe and
+  other mainstream processors prohibit research peptides; this runs through a
+  high-risk processor. Keys live only in `AUTHNET_*` host env vars. If the
+  endpoint fails, the buyer gets a plain retry message — there is no fallback,
+  and it must never fall back to Stripe links.
+- `"stripe"` (inactive) — POSTs to `api/create-checkout-session.js` for
+  `{url}`; if that is unreachable, falls back to the per-variant Payment Links
+  in `js/payment-links.js`. These always open at quantity 1, so the fallback
+  must never print a line total.
 
-If the endpoint is set but unreachable, or answers with anything that is not a
-usable JSON `{url}` (a static host returns an HTML 404 for it), checkout falls
-back to the hosted links instead of failing. **Never surface a raw fetch or
-JSON-parse error to a buyer, and never leave them dead-ended at the last step.**
+Both functions need a host that runs functions (Vercel, Netlify). **GitHub
+Pages cannot.** **Never surface a raw fetch or JSON-parse error to a buyer.**
 
 **Add to cart** and **Buy now** both route through the cart: Buy now adds the
 selected variant and goes to `checkout.html`, so one payment covers the whole
@@ -106,9 +109,9 @@ For visual checks, open `index.html` directly — no server needed.
 
 ## Hard rules
 
-- **Never commit a Stripe secret key** (`sk_...`). It lives only in the
-  `STRIPE_SECRET_KEY` env var when running the generator. Every `js/` file
-  ships to the browser.
+- **Never commit a secret key** — a Stripe `sk_...` key or an Authorize.net
+  transaction key. They live only in host env vars (`STRIPE_SECRET_KEY`,
+  `AUTHNET_*`). Every `js/` file ships to the browser.
 - A variant with no payment link is never offered as payable in the checkout
   fallback — no live-looking control that goes nowhere.
 - Product copy is research-use framing. Effect sentences stay about THE RAT —

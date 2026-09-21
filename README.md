@@ -16,8 +16,9 @@ The whole map:
   driven by `<body data-product="…">`.
 - **`checkout.html`** — the cart.
 
-Checkout is a Stripe-hosted Payment Link per variant. A 21+ age gate shows once
-per session and carries across both pages.
+Checkout is one hosted payment page for the whole cart — Authorize.net, via a
+high-risk merchant processor (see below). A 21+ age gate shows once per session
+and carries across both pages.
 
 ## Design
 
@@ -46,7 +47,9 @@ in on it.
 │   ├── product-page.js     # gallery, buy box, accordions, tabs
 │   └── cart.js             # cart state, Add to cart, checkout page
 ├── api/
-│   └── create-checkout-session.js   # serverless multi-item Stripe Checkout
+│   ├── authorize-net-checkout.js    # serverless checkout — Authorize.net (active)
+│   ├── create-checkout-session.js   # serverless checkout — Stripe (inactive)
+│   └── _catalog.js                  # shared price lookup for both
 ├── assets/                 # favicon + monochrome product renderings (SVG)
 └── scripts/create-stripe-payment-links.mjs
 ```
@@ -60,34 +63,38 @@ so a buyer always pays for the whole order in one place. The cart lives in
 and opens as a full page with quantity steppers, per-line removal, and a
 subtotal. Checkout has two modes:
 
-**Mode A — one payment for the whole cart (recommended).** Deploy to Vercel or
-Netlify, set `STRIPE_SECRET_KEY` in that host's environment, then set in
-`js/site-config.js`:
+**Authorize.net (active).** Stripe, PayPal, Square and Shopify Payments all
+prohibit research peptides, so the store takes cards through a **high-risk
+merchant processor** that underwrites this category knowingly, on the
+Authorize.net gateway most of them board onto. Apply with an accurate
+description of what is sold — a processor that approves you knowing the
+catalogue will not freeze you for it later.
 
-```js
-payment: { checkoutEndpoint: "/api/create-checkout-session" }
-```
+1. Get Authorize.net credentials — a free sandbox account at
+   developer.authorize.net to test, then the live account your processor sets
+   up. Both are under **Account → Settings → API Credentials & Keys**.
+2. Deploy to Vercel or Netlify and set, in that host's environment:
+   `AUTHNET_API_LOGIN_ID`, `AUTHNET_TRANSACTION_KEY`, and `AUTHNET_ENV`
+   (`sandbox` or `production`).
+3. In the Authorize.net merchant interface, turn on **Email Receipt** so the
+   buyer gets the receipt the confirmation message promises.
 
-The cart POSTs to `api/create-checkout-session.js`, which recomputes every
-price server-side from `js/products.js` — it never trusts a price from the
-browser — creates a Stripe Checkout Session, and redirects to Stripe's hosted
-page. The secret key stays in the host's environment.
+The cart POSTs to `api/authorize-net-checkout.js`, which recomputes every price
+from `js/products.js` — it never trusts a price from the browser — and gets a
+one-time token. The cart form-POSTs that token to Authorize.net's hosted page,
+where the buyer enters card, billing and shipping details; no card data touches
+this site. Afterwards Authorize.net returns to `checkout.html?checkout=success`
+(cart emptied, confirmation shown) or `?checkout=cancelled` (cart untouched).
 
-**Mode B — hosted Payment Links (no backend).** Leave `checkoutEndpoint` empty.
-This is the only mode that works on **GitHub Pages, which cannot run
-functions.** Each cart line gets its own Pay button. Note that a Payment Link
-always opens at **quantity 1** — the cart's quantity does not carry across, so
-these buttons deliberately show no line total, and the buyer sets quantity on
-Stripe's page (adjustable quantity is enabled on every link).
+If checkout cannot start, the buyer sees a plain "try again" message with their
+cart intact — never a raw error, and never a detour to a Stripe link.
 
-**This mode is also the safety net.** If `checkoutEndpoint` is set but the host
-has no such route (a static host answers with an HTML 404), or the endpoint
-returns an error, checkout falls back to these links rather than showing the
-buyer a raw parse error. So the store keeps taking money wherever it is hosted;
-only the *one payment for everything* part needs a backend.
+**Stripe (inactive).** Set `provider: "stripe"` and
+`checkoutEndpoint: "/api/create-checkout-session"` in `js/site-config.js` to
+switch back. That mode falls back to the per-variant Payment Links in
+`js/payment-links.js` (quantity 1 each) when its endpoint is unreachable.
 
-After payment Stripe returns to `/?checkout=success`, which empties the cart and
-confirms; `/?checkout=cancelled` leaves the cart untouched.
+GitHub Pages cannot run functions, so checkout needs Vercel or Netlify.
 
 Scripts attach to `window.*` globals via plain `<script>` tags — there is no
 module system. Load order matters: `site-config` → `products` →

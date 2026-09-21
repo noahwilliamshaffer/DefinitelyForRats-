@@ -16,39 +16,9 @@
    Prices are recomputed here from js/products.js — the server never trusts a
    price sent by the client.
    ========================================================================== */
-const fs = require("fs");
-const path = require("path");
+const { loadVariants } = require("./_catalog");
 
 const CURRENCY = "usd";
-
-/* Locate js/products.js. Serverless bundles do not always run with the repo
-   root as cwd, so try there first and fall back to a path relative to this
-   file. vercel.json's includeFiles is what gets the catalogue into the
-   bundle in the first place — without it this throws ENOENT at runtime. */
-function catalogPath() {
-  const candidates = [
-    path.join(process.cwd(), "js", "products.js"),
-    path.join(__dirname, "..", "js", "products.js")
-  ];
-  for (const p of candidates) {
-    if (fs.existsSync(p)) return p;
-  }
-  throw new Error("Catalogue not found — check includeFiles in vercel.json.");
-}
-
-/* Load window.PRODUCTS from js/products.js without a module system. */
-function loadVariants() {
-  const src = fs.readFileSync(catalogPath(), "utf8");
-  const win = {};
-  new Function("window", src)(win);
-  const map = {};
-  (win.PRODUCTS || []).forEach((p) => {
-    (p.variants || []).forEach((v) => {
-      map[v.id] = { name: `${p.name} — ${v.label}`, price: v.price };
-    });
-  });
-  return map;
-}
 
 async function stripe(endpoint, params, key) {
   const res = await fetch("https://api.stripe.com/v1/" + endpoint, {
@@ -96,7 +66,7 @@ module.exports = async function handler(req, res) {
       }
       const qty = Math.min(Math.max(parseInt(item.qty, 10) || 1, 1), 99);
       params[`line_items[${n}][price_data][currency]`] = CURRENCY;
-      params[`line_items[${n}][price_data][product_data][name]`] = v.name;
+      params[`line_items[${n}][price_data][product_data][name]`] = `${v.product} — ${v.label}`;
       params[`line_items[${n}][price_data][unit_amount]`] = String(Math.round(v.price * 100));
       params[`line_items[${n}][quantity]`] = String(qty);
       n++;

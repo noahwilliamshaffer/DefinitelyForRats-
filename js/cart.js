@@ -10,13 +10,18 @@
 
    Checkout has two modes, chosen by SITE.payment.checkoutEndpoint:
 
-     1. Endpoint set   — POST the cart to a serverless function that creates a
-        Stripe Checkout Session and returns { url }: one payment for the whole
-        cart. See api/create-checkout-session.js. Needs a host that runs
-        functions (Vercel/Netlify) — GitHub Pages cannot.
+     1. Endpoint set   — POST the cart to a serverless function and get back
+        one hosted payment page for the whole cart:
+          Authorize.net → { url, token }, form-POSTed to Authorize.net
+                          (api/authorize-net-checkout.js)
+          Stripe        → { url }, a plain redirect
+                          (api/create-checkout-session.js)
+        Needs a host that runs functions (Vercel/Netlify) — GitHub Pages
+        cannot.
 
-     2. Endpoint empty — fall back to the per-variant hosted Payment Links in
-        js/payment-links.js. No backend, but one product at a time.
+     2. Endpoint empty — Stripe only: fall back to the per-variant hosted
+        Payment Links in js/payment-links.js, one product at a time. Other
+        providers have no fallback and ask the buyer to retry.
 
    No secret key is ever used here — this file ships to the browser.
    ========================================================================== */
@@ -214,7 +219,7 @@
     var endpoint = S.payment && S.payment.checkoutEndpoint;
 
     // No endpoint configured — hosted links are the only route.
-    if (!endpoint) { payWithLinks(); return; }
+    if (!endpoint) { unavailable(); return; }
 
     function restore() {
       if (btn) { btn.disabled = false; btn.textContent = "Checkout"; }
@@ -243,16 +248,46 @@
       })
       .then(function (res) {
         if (res.ok && res.json && res.json.url) {
-          window.location.href = res.json.url;
+          if (res.json.token) postToken(res.json.url, res.json.token);
+          else window.location.href = res.json.url;
           return;
         }
         restore();
-        payWithLinks("Checkout for the whole cart is unavailable right now.");
+        unavailable();
       })
       .catch(function () {
         restore();
-        payWithLinks("Checkout for the whole cart is unavailable right now.");
+        unavailable();
       });
+  }
+
+  /* Authorize.net's hosted page only accepts its token by form POST — a plain
+     redirect with the token in the URL is refused. */
+  function postToken(url, token) {
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = url;
+    form.hidden = true;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "token";
+    input.value = token;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  /* The endpoint is absent or unhappy. Stripe falls back to its hosted
+     Payment Links. Any other provider has no second route, and sending the
+     buyer to Stripe instead would put money through a processor this store
+     has left — so say so plainly and leave Checkout ready to retry. */
+  function unavailable() {
+    if ((S.payment && S.payment.provider) === "stripe") {
+      payWithLinks("Checkout for the whole cart is unavailable right now.");
+      return;
+    }
+    setStatus("Checkout could not start. Your cart is saved — please try " +
+      "Checkout again in a moment.", true);
   }
 
   /* ---- Events ------------------------------------------------------------- */
@@ -313,7 +348,7 @@
     if (rm) { remove(rm.getAttribute("data-remove")); setStatus(""); return; }
   });
 
-  // Returning from Stripe: ?checkout=success empties the cart and confirms;
+  // Returning from the payment page: ?checkout=success empties the cart and confirms;
   // ?checkout=cancelled leaves the cart exactly as it was.
   function handleReturn() {
     var q = new URLSearchParams(location.search).get("checkout");

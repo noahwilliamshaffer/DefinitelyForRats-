@@ -3,6 +3,9 @@
   "functions": {
     "api/create-checkout-session.js": {
       "includeFiles": "js/**"
+    },
+    "api/authorize-net-checkout.js": {
+      "includeFiles": "js/**"
     }
   }
 }
