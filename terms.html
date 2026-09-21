@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retatrutide — Your Brand Research</title>
-  <meta name="description" content="Retatrutide (LY3437943), lyophilized, in single vials and ten-vial kits with a batch certificate of analysis. For laboratory research use only." />
+  <title>Terms &amp; Conditions — Your Brand Research</title>
+  <meta name="description" content="Terms and conditions of sale, including research-use-only requirements." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body data-product="retatrutide">
+<body>
   <!-- Header and footer are repeated verbatim in every page; keep them in sync. -->
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="index.html" data-brand>Your Brand Research</a>
       <nav class="mainnav" aria-label="Main">
-        <a href="index.html#catalog" aria-current="page">Shop</a>
+        <a href="index.html#catalog">Shop</a>
         <a href="about.html">Our Company</a>
         <a href="coa.html">COA</a>
         <a href="contact.html">Contact</a>
@@ -33,42 +33,46 @@
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#catalog">Shop</a></li>
-          <li><span aria-current="page" data-crumb>Retatrutide</span></li>
+          <li><span aria-current="page">Terms &amp; Conditions</span></li>
         </ol>
       </nav>
     </div>
 
-    <section class="pdp">
+    <section class="page">
       <div class="wrap">
-        <!-- Gallery and buy box are rendered from js/products.js. -->
-        <div class="pdp-main">
-          <div class="gallery" id="pdp-gallery"></div>
-          <div class="buybox" id="pdp-buybox"></div>
+        <div class="section-head">
+          <p class="eyebrow">Policies</p>
+          <h1>Terms &amp; Conditions</h1>
         </div>
+        <!-- TEMPLATE: have a lawyer review this page before going live. -->
+        <div class="prose">
+          <p>These terms govern every purchase from <span data-legal-name>[Your Brand Research LLC]</span> (&ldquo;we&rdquo;, &ldquo;us&rdquo;) through this website. By placing an order you agree to them.</p>
 
-        <!-- 01-04: identity, form, storage, and closure information. -->
-        <section class="tabs" aria-labelledby="notes-heading">
-          <div class="section-head">
-            <p class="eyebrow">Technical information</p>
-            <h2 id="notes-heading">Product information</h2>
-          </div>
-          <div class="notes" id="pdp-notes"></div>
-        </section>
+          <h2>1. Research use only</h2>
+          <p>All products are sold strictly for laboratory, academic, and institutional research and identification purposes. They are not intended for human dosing, injection, or ingestion, and are not for human or animal consumption. They are not drugs, food, cosmetics, or dietary supplements, and are not intended to diagnose, treat, cure, or prevent any disease.</p>
+          <p>By purchasing, you represent that you are at least 21 years old, that you are purchasing for research purposes only, that you have the training and facilities to handle the products safely, and that you will not use, resell, or supply any product for human or animal consumption. We may cancel any order where we have reason to believe these conditions are not met.</p>
 
-        <section class="tabs">
-          <h2 class="visually-hidden">Product details</h2>
-          <div class="tablist" role="tablist" aria-label="Product details" id="pdp-tablist">
-            <button type="button" class="tab" role="tab" id="tab-description"
-                    aria-controls="panel-description" aria-selected="true" tabindex="0">Description</button>
-            <button type="button" class="tab" role="tab" id="tab-additional"
-                    aria-controls="panel-additional" aria-selected="false" tabindex="-1">Additional information</button>
-          </div>
-          <div class="tabpanel" role="tabpanel" id="panel-description"
-               aria-labelledby="tab-description" tabindex="0"></div>
-          <div class="tabpanel" role="tabpanel" id="panel-additional"
-               aria-labelledby="tab-additional" tabindex="0" hidden></div>
-        </section>
+          <h2>2. No guidance</h2>
+          <p>Product information on this site is technical and descriptive. We do not provide, and nothing on this site constitutes, dosing, usage, medical, or protocol advice.</p>
+
+          <h2>3. Orders and pricing</h2>
+          <p>All prices are in US dollars. We accept payment by card through our secure hosted checkout. An order is accepted when payment is authorised and we send confirmation; we may decline or cancel an order before shipment, in which case any payment is refunded in full.</p>
+
+          <h2>4. Shipping, returns, and refunds</h2>
+          <p>Shipping is described in our <a href="shipping.html">Shipping Policy</a>, and returns and refunds in our <a href="refunds.html">Returns &amp; Refunds Policy</a>. Both form part of these terms.</p>
+
+          <h2>5. Compliance with law</h2>
+          <p>You are responsible for ensuring that purchasing, possessing, and using the products is lawful where you are. We do not ship to jurisdictions where a product may not lawfully be sold.</p>
+
+          <h2>6. Limitation of liability</h2>
+          <p>Products are supplied as described in their specifications and certificate of analysis. To the fullest extent permitted by law, our liability for any claim relating to an order is limited to the amount paid for that order, and we are not liable for any loss arising from use of a product contrary to these terms.</p>
+
+          <h2>7. Governing law</h2>
+          <p>These terms are governed by the laws of the State of <span data-jurisdiction>[State]</span>, United States.</p>
+
+          <h2>8. Contact</h2>
+          <p>Questions about these terms: <a data-contact="email" href="contact.html">[support@yourdomain.com]</a> or <a data-contact="phone" href="contact.html">[(555) 555-0100]</a>.</p>
+        </div>
       </div>
     </section>
   </main>
@@ -118,7 +122,6 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/product-page.js"></script>
   <script src="js/cart.js"></script>
 </body>
 </html>

@@ -1,14 +1,17 @@
 /* ============================================================================
-   MAIN — shared across index.html and retatrutide.html.
+   MAIN — shared by every page.
 
    Responsibilities:
-     · exposes window.RATS, the small shared toolkit (escaping, money, variant
-       lookup, payment links, buy buttons, pill groups) used by product-page.js
-     · stamps SITE.disclaimer into every [data-disclaimer] element and the year
-       into [data-year], so js/site-config.js stays the single source of truth
-     · renders the catalogue cards into #product-grid (index.html only)
+     · exposes window.STORE, the small shared toolkit (escaping, money, variant
+       lookup, payment links, pill groups) used by product-page.js
+     · stamps js/site-config.js into the page, so it stays the single source
+       of truth: [data-brand], [data-legal-name], [data-disclaimer],
+       [data-foot-disclaimer], [data-fda], [data-contact="email|phone|hours|
+       address"], [data-jurisdiction], [data-policy="…"], [data-year]
+     · renders the catalogue cards into #product-grid (index.html) and the
+       certificate table into #coa-table (coa.html)
      · runs the 21+ age gate once per session (sessionStorage), so moving
-       between the main page and the product page never re-prompts
+       between pages never re-prompts
    ========================================================================== */
 (function () {
   var S = window.SITE;
@@ -107,7 +110,7 @@
     });
   }
 
-  window.RATS = {
+  window.STORE = {
     products: PRODUCTS,
     byId: byId,
     esc: esc,
@@ -137,8 +140,8 @@
       ? '<a href="' + esc(p.href) + '">' + esc(p.name) + "</a>"
       : esc(p.name);
 
-    // Products with a page send you there to choose; supplies are bought here,
-    // either straight to Stripe or into the cart.
+    // Products with a page send you there to choose; one without is bought
+    // here, into the cart.
     var foot = hasPage
       ? '<div class="card-buy">' +
         '<p class="price">' + priceRange(p) + "</p>" +
@@ -159,9 +162,11 @@
       panel +
       '<div class="card-body">' +
       '<h3 class="card-name">' + name + "</h3>" +
-      '<p class="eyebrow card-tag">' + esc(p.tagline) + "</p>" +
+      '<p class="eyebrow card-tag">' + esc(p.category) + "</p>" +
       '<p class="card-copy">' + esc(p.copy) + "</p>" +
-      '<div class="card-foot">' + foot + "</div>" +
+      '<div class="card-foot">' + foot +
+      '<p class="card-notice">' + esc(S.disclaimer) + "</p>" +
+      "</div>" +
       "</div></article>"
     );
   }
@@ -185,6 +190,63 @@
         });
       })(groups[g]);
     }
+  }
+
+  /* ---- Certificates of analysis (coa.html) -------------------------------- */
+  function renderCoa(table) {
+    var rows = "";
+    for (var i = 0; i < PRODUCTS.length; i++) {
+      var p = PRODUCTS[i], c = p.coa;
+      // A pending certificate is stated as pending — never a link that goes
+      // nowhere.
+      var doc = c && c.file
+        ? '<a href="' + esc(c.file) + '">View certificate (PDF)</a>'
+        : '<span class="coa-pending">Pending publication</span>';
+      rows +=
+        '<tr id="coa-' + esc(p.id) + '">' +
+        '<th scope="row"><a href="' + esc(p.href) + '">' + esc(p.name) + "</a></th>" +
+        "<td>" + (c ? esc(c.batch) : "&mdash;") + "</td>" +
+        "<td>" + (c ? esc(c.date) : "&mdash;") + "</td>" +
+        "<td>" + doc + "</td></tr>";
+    }
+    table.querySelector("tbody").innerHTML = rows;
+  }
+
+  /* ---- Site config into the page ------------------------------------------ */
+  function each(sel, fn) {
+    var els = document.querySelectorAll(sel);
+    for (var i = 0; i < els.length; i++) fn(els[i]);
+  }
+
+  function stampConfig() {
+    var C = S.contact || {};
+    each("[data-brand]", function (el) { el.textContent = S.brand; });
+    each("[data-legal-name]", function (el) { el.textContent = S.legalName; });
+    each("[data-disclaimer]", function (el) { el.textContent = S.disclaimer; });
+    each("[data-foot-disclaimer]", function (el) { el.textContent = S.footerDisclaimer; });
+    each("[data-fda]", function (el) { el.textContent = S.fdaDisclaimer; });
+    each("[data-jurisdiction]", function (el) { el.textContent = S.jurisdiction; });
+    each("[data-policy]", function (el) {
+      var v = S.policy && S.policy[el.getAttribute("data-policy")];
+      if (v) el.textContent = v;
+    });
+    each("[data-contact]", function (el) {
+      var k = el.getAttribute("data-contact");
+      if (k === "address") {
+        el.innerHTML = (C.address || []).map(esc).join("<br />");
+        return;
+      }
+      var v = C[k];
+      if (!v) return;
+      el.textContent = v;
+      // Links only when the value is real, not a [placeholder].
+      if (el.tagName === "A" && v.charAt(0) !== "[") {
+        if (k === "email") el.href = "mailto:" + v;
+        if (k === "phone") el.href = "tel:" + v.replace(/[^\d+]/g, "");
+      }
+    });
+    var y = document.querySelector("[data-year]");
+    if (y) y.textContent = new Date().getFullYear();
   }
 
   /* ---- Age gate ----------------------------------------------------------- */
@@ -244,14 +306,13 @@
 
   /* ---- Boot --------------------------------------------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
-    var d = document.querySelectorAll("[data-disclaimer]");
-    for (var i = 0; i < d.length; i++) d[i].textContent = S.disclaimer;
-
-    var y = document.querySelector("[data-year]");
-    if (y) y.textContent = new Date().getFullYear();
+    stampConfig();
 
     var grid = document.getElementById("product-grid");
     if (grid) renderGrid(grid);
+
+    var coa = document.getElementById("coa-table");
+    if (coa) renderCoa(coa);
 
     if (!verified()) openAgeGate();
   });

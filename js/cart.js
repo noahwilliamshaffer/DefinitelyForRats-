@@ -359,7 +359,7 @@
       note.hidden = false;
       note.classList.toggle("is-cancelled", q === "cancelled");
       note.textContent = q === "success"
-        ? "Order received. Your rat thanks you. A receipt is on its way by email."
+        ? "Order received. Thank you — a receipt is on its way by email."
         : "Checkout cancelled — your cart is exactly where you left it.";
     }
     history.replaceState({}, "", location.pathname);

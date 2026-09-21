@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retatrutide — Your Brand Research</title>
-  <meta name="description" content="Retatrutide (LY3437943), lyophilized, in single vials and ten-vial kits with a batch certificate of analysis. For laboratory research use only." />
+  <title>Our Company — Your Brand Research</title>
+  <meta name="description" content="About our company: a supplier of research peptides and laboratory supplies, documented by batch, for research use only." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body data-product="retatrutide">
+<body>
   <!-- Header and footer are repeated verbatim in every page; keep them in sync. -->
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="index.html" data-brand>Your Brand Research</a>
       <nav class="mainnav" aria-label="Main">
-        <a href="index.html#catalog" aria-current="page">Shop</a>
-        <a href="about.html">Our Company</a>
+        <a href="index.html#catalog">Shop</a>
+        <a href="about.html" aria-current="page">Our Company</a>
         <a href="coa.html">COA</a>
         <a href="contact.html">Contact</a>
       </nav>
@@ -33,42 +33,42 @@
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#catalog">Shop</a></li>
-          <li><span aria-current="page" data-crumb>Retatrutide</span></li>
+          <li><span aria-current="page">Our Company</span></li>
         </ol>
       </nav>
     </div>
 
-    <section class="pdp">
+    <section class="page">
       <div class="wrap">
-        <!-- Gallery and buy box are rendered from js/products.js. -->
-        <div class="pdp-main">
-          <div class="gallery" id="pdp-gallery"></div>
-          <div class="buybox" id="pdp-buybox"></div>
+        <div class="section-head">
+          <p class="eyebrow">Our company</p>
+          <h1>A research supplier, run like a laboratory.</h1>
+          <p class="page-lede">Research peptides and laboratory supplies, specified precisely and documented by batch.</p>
         </div>
+        <div class="page-cols">
+          <div class="prose">
+            <h2>Who we are</h2>
+            <p><span data-brand>Your Brand Research</span> supplies research peptides and supporting laboratory materials to researchers, laboratories, and academic and institutional buyers. We keep the catalogue deliberately small, so that every item on it can be specified, documented, and supported properly.</p>
 
-        <!-- 01-04: identity, form, storage, and closure information. -->
-        <section class="tabs" aria-labelledby="notes-heading">
-          <div class="section-head">
-            <p class="eyebrow">Technical information</p>
-            <h2 id="notes-heading">Product information</h2>
-          </div>
-          <div class="notes" id="pdp-notes"></div>
-        </section>
+            <h2>Our mission</h2>
+            <p>To make research material straightforward to source: clearly specified, consistently packaged, and published with the documentation a laboratory needs to verify what it has received.</p>
 
-        <section class="tabs">
-          <h2 class="visually-hidden">Product details</h2>
-          <div class="tablist" role="tablist" aria-label="Product details" id="pdp-tablist">
-            <button type="button" class="tab" role="tab" id="tab-description"
-                    aria-controls="panel-description" aria-selected="true" tabindex="0">Description</button>
-            <button type="button" class="tab" role="tab" id="tab-additional"
-                    aria-controls="panel-additional" aria-selected="false" tabindex="-1">Additional information</button>
+            <h2>Quality and documentation</h2>
+            <p>Every product is listed with its technical specifications and a certificate of analysis for the batch currently in stock. Certificates report identity and purity and the methods used to determine them, and are published on our <a href="coa.html">Certificates of Analysis</a> page, matched to each product by name.</p>
+            <p>Lyophilized peptides are supplied in sealed glass vials under vacuum, the standard form for stable storage and transport.</p>
+
+            <h2>Research use only</h2>
+            <p>All products are sold strictly for laboratory, academic, and institutional research. They are not intended for human dosing, injection, or ingestion, and are not for human or animal consumption. We do not provide dosing, usage, or protocol guidance of any kind, and we do not make medical or health claims about any product.</p>
+            <p>Purchasers must be 21 or older and agree to our <a href="terms.html">Terms &amp; Conditions</a>, which confirm research-only use.</p>
+
+            <h2>Customer service</h2>
+            <p>Questions about an order, a specification, or a certificate are answered by our customer-service team. See <a href="contact.html">Contact</a> for our phone number, email, and hours.</p>
           </div>
-          <div class="tabpanel" role="tabpanel" id="panel-description"
-               aria-labelledby="tab-description" tabindex="0"></div>
-          <div class="tabpanel" role="tabpanel" id="panel-additional"
-               aria-labelledby="tab-additional" tabindex="0" hidden></div>
-        </section>
+            <div class="notice">
+              <p class="eyebrow">Important product notice</p>
+              <p data-disclaimer>All products currently listed on this site are for research purposes only.</p>
+            </div>
+        </div>
       </div>
     </section>
   </main>
@@ -118,7 +118,6 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/product-page.js"></script>
   <script src="js/cart.js"></script>
 </body>
 </html>

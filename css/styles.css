@@ -1,12 +1,10 @@
 /* ============================================================================
-   DEFINITELY FOR RATS — stylesheet
+   Stylesheet — shared by every page. Mobile-first.
 
-   International Typographic Style, applied with a straight face: warm paper,
-   near-black ink, one accent (safety orange) reserved for prices and CTAs.
+   International Typographic Style: warm paper, near-black ink, one accent
+   (safety orange) reserved for prices, primary buttons, and focus rings.
    Hierarchy is carried by size and weight, never by colour. Hairlines and
    monospace marginalia do the rest.
-
-   Shared by index.html and retatrutide.html. Mobile-first.
 
    Contents
      1  Tokens            8  Product grid + cards
@@ -17,6 +15,7 @@
      6  Hero             13  Footer
      7  Disclaimer       14  Age gate
                          15  Reduced motion
+     4b Main navigation  12c Standards, content pages, contact, COA
    ========================================================================== */
 
 /* ---- 1. Tokens ------------------------------------------------------------ */
@@ -149,9 +148,10 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 }
 .topbar .wrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s-4);
+  column-gap: var(--s-5);
   min-height: 56px;
 }
 .brand {
@@ -167,9 +167,6 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   text-decoration: none;
 }
 .brand:hover { color: var(--accent); }
-.topbar-end { display: flex; align-items: center; gap: var(--s-5); }
-.topbar .eyebrow { display: none; }
-@media (min-width: 768px) { .topbar .eyebrow { display: block; } }
 
 .cart-link {
   display: inline-flex;
@@ -198,6 +195,36 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
+.cart-count[hidden] { display: none; }
+
+/* ---- 4b. Main navigation ------------------------------------------------- */
+/* Below 900px the links drop to their own full-width row under the brand. */
+.mainnav {
+  order: 3;
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--s-5);
+  border-top: 1px solid var(--line);
+}
+@media (min-width: 900px) {
+  .mainnav { order: 0; flex: 0 1 auto; margin-inline-start: auto; border-top: 0; }
+}
+.mainnav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.mainnav a:hover { color: var(--accent); }
+.mainnav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
 
 /* ---- 5. Buttons ----------------------------------------------------------- */
 .btn {
@@ -411,6 +438,14 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .card-name a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .card-name a:hover { color: var(--accent); }
 .card-tag { margin-block-start: calc(var(--s-1) * -1); }
+/* Per-product research notice. Required on every product; never below 12px. */
+.card-notice {
+  padding-block-start: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
 .card-copy {
   font-size: 15px;
   line-height: 1.6;
@@ -605,6 +640,14 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   color: var(--ink-soft);
 }
 .trust svg { flex: none; width: 15px; height: 15px; color: var(--accent); }
+.coa-line a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .06em;
+}
 
 /* ---- 11. Numbered accordions ---------------------------------------------- */
 .notes { border-top: 1px solid var(--line); }
@@ -873,6 +916,53 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 }
 .order-note.is-cancelled { border-color: var(--line-firm); border-inline-start-color: var(--line-firm); }
 
+/* ---- 12c. Standards, content pages, contact, COA -------------------------- */
+.standards { padding-block: 0 var(--s-10); }
+.standards-grid { display: grid; gap: var(--s-6); }
+@media (min-width: 768px) { .standards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.standards-grid li { display: grid; gap: var(--s-2); align-content: start; padding-block-start: var(--s-4); border-top: 1px solid var(--ink); }
+.standards-grid h3 { font-size: 20px; font-weight: 500; letter-spacing: -.01em; }
+.standards-grid p:last-child { font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+
+.page { padding-block: var(--s-4) var(--s-10); }
+.page .section-head h1 {
+  max-width: 22ch;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.page-lede { max-width: 60ch; font-size: 18px; line-height: 1.55; color: var(--ink-soft); }
+.page .notice { margin-block-start: var(--s-7); max-width: 72ch; }
+.page-cols { display: grid; gap: var(--s-7); align-items: start; }
+@media (min-width: 1024px) {
+  .page-cols { grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: var(--s-8); }
+  .page-cols > .notice { margin-block-start: 0; position: sticky; top: var(--s-5); }
+}
+.prose h2 {
+  margin-block-start: var(--s-5);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.prose h2:first-child { margin-block-start: 0; }
+.prose address, .contact-list address { font-style: normal; }
+
+.contact-list { display: grid; gap: var(--s-5); margin: 0; }
+.contact-list > div { display: grid; gap: var(--s-2); padding-block-end: var(--s-5); border-bottom: 1px solid var(--line); }
+.contact-list dd { margin: 0; font-size: 18px; line-height: 1.5; }
+.contact-list a { display: inline-flex; align-items: center; min-height: 44px; }
+
+.table-scroll { overflow-x: auto; margin-block-start: var(--s-6); }
+.coa-table { max-width: none; min-width: 560px; }
+.coa-table thead th { border-bottom-color: var(--ink); }
+.coa-table tbody th { width: auto; font-family: var(--sans); font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.coa-table tbody th a { color: inherit; }
+.coa-pending { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
 /* ---- 13. Footer ----------------------------------------------------------- */
 .site-foot {
   padding-block: var(--s-8);
@@ -882,6 +972,23 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .site-foot .wrap { display: grid; gap: var(--s-5); }
 .site-foot .brand { color: #f3efe6; }
 .site-foot .brand:hover { color: #fff; }
+.foot-grid { display: grid; gap: var(--s-6); }
+@media (min-width: 640px)  { .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .foot-grid { grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 640px) and (max-width: 1023px) { .foot-brand { grid-column: 1 / -1; } }
+.foot-brand { display: grid; gap: var(--s-4); align-content: start; }
+.foot-col { display: grid; gap: var(--s-1); align-content: start; font-size: 14px; }
+.foot-col .eyebrow { margin-block-end: var(--s-2); color: #a9a294; }   /* 5.1:1 on --ink */
+.foot-col a, .foot-col span { display: inline-flex; align-items: center; min-height: 32px; color: #d8d2c6; text-decoration: none; overflow-wrap: anywhere; }
+.foot-col a:hover { color: #fff; text-decoration: underline; }
+.foot-fda {
+  max-width: 84ch;
+  padding-block-start: var(--s-5);
+  border-top: 1px solid rgba(216, 210, 198, .22);
+  font-size: 13px;
+  line-height: 1.65;
+  color: #d8d2c6;   /* 11.6:1 on --ink */
+}
 .foot-disclaimer {
   max-width: 84ch;
   font-size: 13px;

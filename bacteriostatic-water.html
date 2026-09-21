@@ -3,25 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bacteriostatic Water — DEFINITELY FOR RATS</title>
-  <meta name="description" content="Bacteriostatic water for reconstituting lyophilized peptides, sold for laboratory research use only. Definitely for rats." />
+  <title>Bacteriostatic Water — Your Brand Research</title>
+  <meta name="description" content="Bacteriostatic water, sterile with 0.9% benzyl alcohol, in 10mL and 30mL vials. A laboratory diluent sold for research use only." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<!-- data-product picks the entry from window.PRODUCTS that fills this page. -->
 <body data-product="bac-water">
+  <!-- Header and footer are repeated verbatim in every page; keep them in sync. -->
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="index.html">Definitely For Rats</a>
-      <div class="topbar-end">
-        <p class="eyebrow">Research use only</p>
-        <a class="cart-link" href="checkout.html" data-cart-link>
-          Cart <span class="cart-count" data-cart-count hidden>0</span>
-        </a>
-      </div>
+      <a class="brand" href="index.html" data-brand>Your Brand Research</a>
+      <nav class="mainnav" aria-label="Main">
+        <a href="index.html#catalog" aria-current="page">Shop</a>
+        <a href="about.html">Our Company</a>
+        <a href="coa.html">COA</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a class="cart-link" href="checkout.html" data-cart-link>
+        Cart <span class="cart-count" data-cart-count hidden>0</span>
+      </a>
     </div>
   </header>
 
@@ -44,11 +47,11 @@
           <div class="buybox" id="pdp-buybox"></div>
         </div>
 
-        <!-- 01-04: handling, storage, and closure information. -->
+        <!-- 01-04: identity, form, storage, and closure information. -->
         <section class="tabs" aria-labelledby="notes-heading">
           <div class="section-head">
-            <p class="eyebrow">Laboratory information</p>
-            <h2 id="notes-heading">Handling &amp; storage</h2>
+            <p class="eyebrow">Technical information</p>
+            <h2 id="notes-heading">Product information</h2>
           </div>
           <div class="notes" id="pdp-notes"></div>
         </section>
@@ -72,11 +75,41 @@
 
   <footer class="site-foot">
     <div class="wrap">
-      <a class="brand" href="index.html">Definitely For Rats</a>
-      <p class="foot-disclaimer" data-disclaimer>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a class="brand" href="index.html" data-brand>Your Brand Research</a>
+          <p class="foot-disclaimer" data-foot-disclaimer>All products sold on this website are intended for research and identification purposes only. These products are not intended for human dosing, injection, or ingestion. Not for human or animal consumption.</p>
+        </div>
+        <nav class="foot-col" aria-label="Shop">
+          <p class="eyebrow">Shop</p>
+          <a href="retatrutide.html">Retatrutide</a>
+          <a href="bacteriostatic-water.html">Bacteriostatic Water</a>
+          <a href="lab-syringes.html">Laboratory Syringes</a>
+        </nav>
+        <nav class="foot-col" aria-label="Company">
+          <p class="eyebrow">Company</p>
+          <a href="about.html">Our Company</a>
+          <a href="coa.html">Certificates of Analysis</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="foot-col" aria-label="Policies">
+          <p class="eyebrow">Policies</p>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <a href="refunds.html">Returns &amp; Refunds</a>
+          <a href="shipping.html">Shipping</a>
+          <a href="privacy.html">Privacy</a>
+        </nav>
+        <div class="foot-col">
+          <p class="eyebrow">Customer service</p>
+          <a data-contact="phone" href="contact.html">[(555) 555-0100]</a>
+          <a data-contact="email" href="contact.html">[support@yourdomain.com]</a>
+          <span data-contact="hours">[Monday–Friday, 9am–5pm ET]</span>
+        </div>
+      </div>
+      <p class="foot-fda" data-fda>These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease.</p>
       <div class="foot-meta">
-        <span>&copy; <span data-year>2026</span> Definitely For Rats</span>
-        <span>Research use only</span>
+        <span>&copy; <span data-year>2026</span> <span data-legal-name>[Your Brand Research LLC]</span></span>
+        <span>Research use only &middot; 21+</span>
       </div>
     </div>
   </footer>

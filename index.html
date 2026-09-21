@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DEFINITELY FOR RATS — Research Peptides for Laboratory Rats</title>
-  <meta name="description" content="Retatrutide research kits, bacteriostatic water, and insulin syringes, sold for laboratory research use only. Definitely for rats." />
+  <title>Your Brand Research — Research Peptides &amp; Laboratory Supply</title>
+  <meta name="description" content="Lyophilized retatrutide, bacteriostatic water, and laboratory syringes, documented by batch and sold for laboratory research use only." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,15 +12,19 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <!-- Header and footer are repeated verbatim in every page; keep them in sync. -->
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="index.html">Definitely For Rats</a>
-      <div class="topbar-end">
-        <p class="eyebrow">Research use only</p>
-        <a class="cart-link" href="checkout.html" data-cart-link>
-          Cart <span class="cart-count" data-cart-count hidden>0</span>
-        </a>
-      </div>
+      <a class="brand" href="index.html" data-brand>Your Brand Research</a>
+      <nav class="mainnav" aria-label="Main">
+        <a href="index.html#catalog">Shop</a>
+        <a href="about.html">Our Company</a>
+        <a href="coa.html">COA</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a class="cart-link" href="checkout.html" data-cart-link>
+        Cart <span class="cart-count" data-cart-count hidden>0</span>
+      </a>
     </div>
   </header>
 
@@ -29,43 +33,99 @@
     <section class="hero">
       <div class="wrap">
         <p class="eyebrow hero-eyebrow"><span>Research peptides &amp; laboratory supply</span></p>
-        <h1>And remember: it&rsquo;s definitely for&nbsp;rats.</h1>
-        <p class="lede">Research peptides for the discerning laboratory rat. One compound, two supplies, zero ambiguity about who they&rsquo;re for.</p>
+        <h1>Research compounds, documented by batch.</h1>
+        <p class="lede">Lyophilized peptides and supporting laboratory supplies for qualified research use. Every product is listed with its specifications and a certificate of analysis for the current batch.</p>
         <div class="hero-actions">
-          <a class="btn btn-accent" href="#catalog">Shop for your rat &rarr;</a>
-          <p class="eyebrow">Three items in the catalogue.<br />All of them for rats.</p>
+          <a class="btn btn-accent" href="#catalog">View the catalogue &rarr;</a>
+          <a class="btn btn-ghost" href="coa.html">Certificates of analysis</a>
         </div>
       </div>
     </section>
 
-    <!-- Persistent disclaimer, directly under the hero. Load-bearing: it is the
-         compliance notice and the punchline at the same time. -->
+    <!-- Persistent research-use notice, directly under the hero. Required by
+         the processor's compliance checklist; never collapse or hide it. -->
     <div class="disclaimer-strip">
       <div class="wrap">
         <p class="eyebrow">Notice</p>
-        <p data-disclaimer>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+        <p data-disclaimer>All products currently listed on this site are for research purposes only.</p>
       </div>
     </div>
 
     <section id="catalog" class="catalog">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">The catalogue</p>
-          <h2>One compound, two supplies.</h2>
+          <p class="eyebrow">Catalogue</p>
+          <h2>Research compounds &amp; supplies</h2>
           <p class="note">CAT. NO. 001 &ndash; 003</p>
         </div>
         <div class="grid" id="product-grid"></div>
+      </div>
+    </section>
+
+    <section class="standards" aria-labelledby="standards-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Our standards</p>
+          <h2 id="standards-heading">How we supply research material</h2>
+        </div>
+        <ol class="standards-grid">
+          <li>
+            <p class="eyebrow">01</p>
+            <h3>Batch documentation</h3>
+            <p>Each product is published with a certificate of analysis for the batch currently in stock, reporting identity and purity.</p>
+          </li>
+          <li>
+            <p class="eyebrow">02</p>
+            <h3>Research use only</h3>
+            <p>Products are supplied exclusively for laboratory, academic, and institutional research. They are not for human or animal consumption.</p>
+          </li>
+          <li>
+            <p class="eyebrow">03</p>
+            <h3>Direct support</h3>
+            <p>Questions about an order, a specification, or a certificate go to a named customer-service team by phone or email.</p>
+          </li>
+        </ol>
       </div>
     </section>
   </main>
 
   <footer class="site-foot">
     <div class="wrap">
-      <a class="brand" href="index.html">Definitely For Rats</a>
-      <p class="foot-disclaimer" data-disclaimer>Products are sold for laboratory research use only and are not for human consumption. Effects described refer to laboratory rodent research. They are definitely for rats.</p>
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a class="brand" href="index.html" data-brand>Your Brand Research</a>
+          <p class="foot-disclaimer" data-foot-disclaimer>All products sold on this website are intended for research and identification purposes only. These products are not intended for human dosing, injection, or ingestion. Not for human or animal consumption.</p>
+        </div>
+        <nav class="foot-col" aria-label="Shop">
+          <p class="eyebrow">Shop</p>
+          <a href="retatrutide.html">Retatrutide</a>
+          <a href="bacteriostatic-water.html">Bacteriostatic Water</a>
+          <a href="lab-syringes.html">Laboratory Syringes</a>
+        </nav>
+        <nav class="foot-col" aria-label="Company">
+          <p class="eyebrow">Company</p>
+          <a href="about.html">Our Company</a>
+          <a href="coa.html">Certificates of Analysis</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="foot-col" aria-label="Policies">
+          <p class="eyebrow">Policies</p>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <a href="refunds.html">Returns &amp; Refunds</a>
+          <a href="shipping.html">Shipping</a>
+          <a href="privacy.html">Privacy</a>
+        </nav>
+        <div class="foot-col">
+          <p class="eyebrow">Customer service</p>
+          <a data-contact="phone" href="contact.html">[(555) 555-0100]</a>
+          <a data-contact="email" href="contact.html">[support@yourdomain.com]</a>
+          <span data-contact="hours">[Monday–Friday, 9am–5pm ET]</span>
+        </div>
+      </div>
+      <p class="foot-fda" data-fda>These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease.</p>
       <div class="foot-meta">
-        <span>&copy; <span data-year>2026</span> Definitely For Rats</span>
-        <span>Research use only</span>
+        <span>&copy; <span data-year>2026</span> <span data-legal-name>[Your Brand Research LLC]</span></span>
+        <span>Research use only &middot; 21+</span>
       </div>
     </div>
   </footer>

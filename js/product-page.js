@@ -10,10 +10,10 @@
      copy, option pills, Buy now, notice callout, trust rows) · numbered 01-04
      accordions · Description / Additional information tabs.
 
-   Loads after js/main.js and uses window.RATS for the shared helpers.
+   Loads after js/main.js and uses window.STORE for the shared helpers.
    ========================================================================== */
 (function () {
-  var R = window.RATS;
+  var R = window.STORE;
   var S = window.SITE;
   if (!R) return;
 
@@ -73,7 +73,7 @@
 
     root.innerHTML =
       '<div class="buybox-head">' +
-      '<p class="eyebrow">' + esc(p.tagline) + "</p>" +
+      '<p class="eyebrow">' + esc(p.category) + "</p>" +
       "<h1>" + esc(p.name) + "</h1>" +
       "</div>" +
 
@@ -100,7 +100,9 @@
       "<p data-disclaimer>" + esc(S.disclaimer) + "</p>" +
       "</div>" +
 
-      '<ul class="trust">' + trust + "</ul>";
+      '<ul class="trust">' + trust + "</ul>" +
+
+      '<p class="coa-line"><a href="coa.html#coa-' + esc(p.id) + '">Certificate of analysis &rarr;</a></p>';
 
     var slot = root.querySelector(".buy-actions");
     var hint = root.querySelector("[data-buyhint]");

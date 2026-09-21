@@ -20,7 +20,7 @@
    form-POSTs that token to the url — Authorize.net requires a POST, a plain
    redirect will not work.
    ========================================================================== */
-const { loadVariants } = require("./_catalog");
+const { loadVariants, loadBrand } = require("./_catalog");
 
 const ENDPOINTS = {
   sandbox: {
@@ -34,7 +34,6 @@ const ENDPOINTS = {
 };
 
 const MAX_LINES = 30;          // Authorize.net's limit on lineItems
-const MERCHANT_NAME = "Definitely For Rats";
 
 // Authorize.net caps itemId and name at 31 characters.
 function clip(s, n) {
@@ -111,7 +110,7 @@ module.exports = async function handler(req, res) {
           transactionType: "authCaptureTransaction",
           amount: dollars(totalCents),
           order: {
-            invoiceNumber: "DFR" + Date.now().toString(36).toUpperCase(),
+            invoiceNumber: "ORD" + Date.now().toString(36).toUpperCase(),
             description: "Research supplies"
           },
           lineItems: { lineItem }
@@ -126,7 +125,7 @@ module.exports = async function handler(req, res) {
               cancelUrlText: "Back to cart"
             }),
             setting("hostedPaymentButtonOptions", { text: "Pay" }),
-            setting("hostedPaymentOrderOptions", { show: true, merchantName: MERCHANT_NAME }),
+            setting("hostedPaymentOrderOptions", { show: true, merchantName: loadBrand() }),
             setting("hostedPaymentPaymentOptions", {
               cardCodeRequired: true, showCreditCard: true, showBankAccount: false
             }),
@@ -146,7 +145,7 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify(payload)
     });
     // Authorize.net prefixes its JSON with a byte-order mark.
-    const text = (await r.text()).replace(/^﻿/, "");
+    const text = (await r.text()).replace(/^\uFEFF/, "");
     const json = JSON.parse(text);
 
     if (!json.token || !json.messages || json.messages.resultCode !== "Ok") {

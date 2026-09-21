@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retatrutide — Your Brand Research</title>
-  <meta name="description" content="Retatrutide (LY3437943), lyophilized, in single vials and ten-vial kits with a batch certificate of analysis. For laboratory research use only." />
+  <title>Returns &amp; Refunds — Your Brand Research</title>
+  <meta name="description" content="Returns and refunds policy." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body data-product="retatrutide">
+<body>
   <!-- Header and footer are repeated verbatim in every page; keep them in sync. -->
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="index.html" data-brand>Your Brand Research</a>
       <nav class="mainnav" aria-label="Main">
-        <a href="index.html#catalog" aria-current="page">Shop</a>
+        <a href="index.html#catalog">Shop</a>
         <a href="about.html">Our Company</a>
         <a href="coa.html">COA</a>
         <a href="contact.html">Contact</a>
@@ -33,42 +33,36 @@
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#catalog">Shop</a></li>
-          <li><span aria-current="page" data-crumb>Retatrutide</span></li>
+          <li><span aria-current="page">Returns &amp; Refunds</span></li>
         </ol>
       </nav>
     </div>
 
-    <section class="pdp">
+    <section class="page">
       <div class="wrap">
-        <!-- Gallery and buy box are rendered from js/products.js. -->
-        <div class="pdp-main">
-          <div class="gallery" id="pdp-gallery"></div>
-          <div class="buybox" id="pdp-buybox"></div>
+        <div class="section-head">
+          <p class="eyebrow">Policies</p>
+          <h1>Returns &amp; Refunds</h1>
         </div>
+        <!-- TEMPLATE: have a lawyer review this page before going live. -->
+        <div class="prose">
+          <h2>Returns</h2>
+          <p>Unopened products in their original sealed packaging may be returned within <span data-policy="returnWindowDays">[30]</span> days of delivery. Because sterility and integrity cannot be verified once a seal is broken, opened products cannot be returned unless they arrived damaged or incorrect.</p>
+          <p>To start a return, contact us with your order number before sending anything back. We will confirm the return and provide instructions. Returns should be sent to:</p>
+          <address class="policy-address"><span data-legal-name>[Your Brand Research LLC]</span><br /><span data-contact="address">[Street address]<br />[City, State ZIP]<br />United States</span></address>
 
-        <!-- 01-04: identity, form, storage, and closure information. -->
-        <section class="tabs" aria-labelledby="notes-heading">
-          <div class="section-head">
-            <p class="eyebrow">Technical information</p>
-            <h2 id="notes-heading">Product information</h2>
-          </div>
-          <div class="notes" id="pdp-notes"></div>
-        </section>
+          <h2>Damaged or incorrect items</h2>
+          <p>If an item arrives damaged, with a broken seal, or not as ordered, contact us within 7 days of delivery with your order number and a photo. We will replace the item or refund it in full, including shipping.</p>
 
-        <section class="tabs">
-          <h2 class="visually-hidden">Product details</h2>
-          <div class="tablist" role="tablist" aria-label="Product details" id="pdp-tablist">
-            <button type="button" class="tab" role="tab" id="tab-description"
-                    aria-controls="panel-description" aria-selected="true" tabindex="0">Description</button>
-            <button type="button" class="tab" role="tab" id="tab-additional"
-                    aria-controls="panel-additional" aria-selected="false" tabindex="-1">Additional information</button>
-          </div>
-          <div class="tabpanel" role="tabpanel" id="panel-description"
-               aria-labelledby="tab-description" tabindex="0"></div>
-          <div class="tabpanel" role="tabpanel" id="panel-additional"
-               aria-labelledby="tab-additional" tabindex="0" hidden></div>
-        </section>
+          <h2>Refunds</h2>
+          <p>Approved refunds are issued to the original payment method once the return is received and inspected, or immediately for damaged or incorrect items. Card refunds typically appear within 5–10 business days, depending on the card issuer.</p>
+
+          <h2>Cancellations</h2>
+          <p>Orders can be cancelled for a full refund at any time before they ship.</p>
+
+          <h2>Contact</h2>
+          <p><a data-contact="email" href="contact.html">[support@yourdomain.com]</a> &middot; <a data-contact="phone" href="contact.html">[(555) 555-0100]</a> &middot; <span data-contact="hours">[Monday–Friday, 9am–5pm ET]</span></p>
+        </div>
       </div>
     </section>
   </main>
@@ -118,7 +112,6 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/product-page.js"></script>
   <script src="js/cart.js"></script>
 </body>
 </html>
