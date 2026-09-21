@@ -1,4 +1,4 @@
-# Research peptide storefront
+# Verity Research Labs — research peptide storefront
 
 A clinical storefront for research peptides — retatrutide today, with room to
 grow — plus two laboratory supplies. Written to pass a high-risk merchant
@@ -27,8 +27,9 @@ session.
 1. Fill in every `[bracketed]` value in `js/site-config.js`: brand, legal
    name, phone, email, hours, business address, governing-law state, and the
    processing/return-window figures. They must match the merchant application.
-2. Rename the brand: `brand` in `js/site-config.js`, then find-and-replace
-   "Your Brand Research" across `*.html` (the no-script fallback text).
+2. The brand is Verity Research Labs (`verityresearchlabs.com`). If it ever
+   changes: `brand` in `js/site-config.js`, then find-and-replace across
+   `*.html` (the no-script fallback text).
 3. Add a certificate of analysis for each product: put the PDF in
    `assets/coa/` and set `coa: { batch, date, file }` on the product in
    `js/products.js`. Certificates must be under 15 months old.

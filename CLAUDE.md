@@ -1,4 +1,4 @@
-# Research peptide storefront
+# Verity Research Labs — research peptide storefront
 
 Static site: plain HTML + CSS + vanilla JS. **No build step, no dependencies,
 no package.json, no test suite.** Checkout runs as serverless functions in

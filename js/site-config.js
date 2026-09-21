@@ -8,12 +8,12 @@
    the merchant application exactly.
 
    The brand name is also written into each HTML file as the no-script
-   fallback. After renaming here, find-and-replace "Your Brand Research"
-   across the *.html files too.
+   fallback. If it ever changes here, find-and-replace it across the *.html
+   files too.
    ========================================================================== */
 window.SITE = {
-  brand: "Your Brand Research",
-  legalName: "[Your Brand Research LLC]",
+  brand: "Verity Research Labs",
+  legalName: "Verity Research Labs LLC",
 
   contact: {
     email: "[support@yourdomain.com]",
