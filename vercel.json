@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
+    "api/crypto-checkout.js": {
+      "includeFiles": "js/**"
+    },
     "api/create-checkout-session.js": {
       "includeFiles": "js/**"
     },

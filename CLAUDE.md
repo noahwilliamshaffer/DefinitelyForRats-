@@ -20,12 +20,19 @@ is the core product; the catalogue is expected to grow.
   attribute differ.
 - `about.html` (Our Company), `coa.html` (certificates table, rendered from
   `coa` in the catalogue), `contact.html`.
-- `terms.html`, `refunds.html`, `shipping.html`, `privacy.html` — policy
-  templates. Each carries a "have a lawyer review" comment.
-- `checkout.html` — the cart: lines, quantity steppers, subtotal, Checkout.
+- `terms.html`, `refunds.html`, `chargebacks.html`, `shipping.html`,
+  `privacy.html` — policy templates. Each carries a "have a lawyer review"
+  comment. Terms §6 is the processor's ACH Web Authorization wording, kept
+  near-verbatim.
+- `account.html` — Supabase Auth: sign in, create account (company, org type,
+  research field, 21+ and research-use checkboxes), password reset, profile,
+  order history. Views are `[data-view]` sections toggled by `js/account.js`.
+- `checkout.html` — the cart: lines, quantity steppers, subtotal, the order
+  details form (signed-in only), the two acknowledgement checkboxes, and
+  Place Order.
 
 **The header and footer are repeated verbatim in every HTML file** (there is
-no build step to include them). Change one, change all twelve. Adding a
+no build step to include them). Change one, change all fourteen. Adding a
 product means adding it to the footer's Shop column too.
 
 ## Where things live
@@ -37,8 +44,13 @@ product means adding it to the footer's Shop column too.
 | `js/payment-links.js` | `window.PAYMENT_LINKS` — **generated** variant-id → Stripe link map, used only by the inactive Stripe fallback. Do not hand-edit. |
 | `js/main.js` | `window.STORE` shared helpers, config stamping, product grid, COA table, age gate. |
 | `js/product-page.js` | Product-page only: gallery, buy box, accordions, tabs. |
+| `js/account.js` | `window.ACCOUNT` — Supabase client (CDN UMD build), session, profile metadata, account page. Loaded only on `account.html` and `checkout.html`, after the supabase-js script. |
 | `js/cart.js` | Cart state (localStorage `dfr-cart-v1`), Add to cart / Buy now, checkout page. Loads on every page. |
-| `api/authorize-net-checkout.js` | **Active** checkout: Authorize.net Accept Hosted token for the whole cart. |
+| `api/crypto-checkout.js` | **Active** checkout: verifies the Supabase user, validates order details, writes an `orders` row, creates a NOWPayments invoice. |
+| `api/nowpayments-ipn.js` | NOWPayments webhook: HMAC-SHA512 check, then order status. Never downgrades `paid`; amount mismatch → `review`. |
+| `api/_supabase.js` | Supabase REST helper using the service-role key (host env only). |
+| `supabase/migrations/` | `orders` table. RLS: customers may only SELECT their own rows; all writes go through the functions. |
+| `api/authorize-net-checkout.js` | Card checkout for later: Authorize.net Accept Hosted token for the whole cart. |
 | `api/create-checkout-session.js` | Inactive Stripe Checkout alternative. |
 | `api/_catalog.js` | Shared loader: prices from `js/products.js`, brand from `js/site-config.js`. Underscore = not deployed as an endpoint. |
 | `css/styles.css` | All styling. Tokens at the top, numbered sections below. |
@@ -46,7 +58,12 @@ product means adding it to the footer's Shop column too.
 
 **Checkout provider** is `payment.provider` in `js/site-config.js`:
 
-- `"authorizenet"` (active) — the cart POSTs to
+- `"nowpayments"` (active) — requires a signed-in account; the cart POSTs
+  `{items, details}` with a Bearer access token to `api/crypto-checkout.js`
+  and redirects to the returned invoice URL. 400/401/403 responses carry a
+  plain-English message the cart may show; anything else gets the generic
+  retry line.
+- `"authorizenet"` (cards, later) — the cart POSTs to
   `api/authorize-net-checkout.js`, gets `{url, token}`, and form-POSTs the
   token to Authorize.net's hosted page (a redirect will not work). Keys live
   only in `AUTHNET_*` host env vars. If the endpoint fails, the buyer gets a
@@ -115,6 +132,15 @@ can fail underwriting or get the merchant account closed.
   and the FDA disclaimer in every footer. Minimum 12px at ≥4.5:1 contrast,
   never collapsed or hover-hidden.
 - Keep the 21+ age gate and its once-per-session `sessionStorage` persistence.
+- **No guest checkout.** Purchase requires a signed-in, email-confirmed
+  account, and every order records company name, organization type, research
+  field, and timestamped research-use and terms acknowledgements. The
+  research-field and organization-type lists live only in `site-config.js`;
+  med spas, gyms, weight-loss clinics and similar are never offered as
+  organization types.
+- Never commit `SUPABASE_SERVICE_ROLE_KEY`, `NOWPAYMENTS_API_KEY`, or
+  `NOWPAYMENTS_IPN_SECRET`. The Supabase URL and anon key in `site-config.js`
+  are public by design.
 - **Claims stay keepable.** No purity percentages, delivery guarantees, review
   counts, "risk free", or urgency. Specs state only what the batch COA
   supports; retatrutide identifiers must be confirmed against the COA.

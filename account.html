@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account — Verity Research Labs</title>
+  <meta name="description" content="Sign in or create a research customer account." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Header and footer are repeated verbatim in every page; keep them in sync. -->
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html" data-brand>Verity Research Labs</a>
+      <nav class="mainnav" aria-label="Main">
+        <a href="index.html#catalog">Shop</a>
+        <a href="about.html">Our Company</a>
+        <a href="coa.html">COA</a>
+        <a href="contact.html">Contact</a>
+        <a href="account.html" aria-current="page">Account</a>
+      </nav>
+      <a class="cart-link" href="checkout.html" data-cart-link>
+        Cart <span class="cart-count" data-cart-count hidden>0</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li><span aria-current="page">Account</span></li>
+        </ol>
+      </nav>
+    </div>
+
+    <section class="page" data-account-page>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Customer account</p>
+          <h1>Your account</h1>
+          <p class="page-lede">An account is required to purchase. We sell only to researchers at laboratories, academic institutions, and research organizations.</p>
+        </div>
+
+        <!-- Shown until the account settings in js/site-config.js are filled in. -->
+        <div data-view="unconfigured" hidden>
+          <p class="cart-status">Accounts are not available yet. Please contact us to place an order.</p>
+        </div>
+
+        <!-- Signed out: sign in, or create an account. -->
+        <div class="account-grid" data-view="signed-out">
+          <form class="form" data-signin-form>
+            <h2 class="form-title">Sign in</h2>
+            <div class="field">
+              <label for="si-email">Email</label>
+              <input id="si-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="si-password">Password</label>
+              <input id="si-password" name="password" type="password" autocomplete="current-password" required />
+            </div>
+            <button type="submit" class="btn btn-accent btn-block">Sign in</button>
+            <button type="button" class="linklike" data-forgot>Forgot password</button>
+            <p class="cart-status" data-msg hidden role="status"></p>
+          </form>
+
+          <form class="form" data-signup-form>
+            <h2 class="form-title">Create an account</h2>
+            <div class="field">
+              <label for="su-name">Full name</label>
+              <input id="su-name" name="full_name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="su-company">Company or institution name</label>
+              <input id="su-company" name="company_name" autocomplete="organization" required />
+            </div>
+            <div class="field">
+              <label for="su-org">Organization type</label>
+              <select id="su-org" name="organization_type" data-options="organizationTypes" required></select>
+            </div>
+            <div class="field">
+              <label for="su-field">Research field</label>
+              <select id="su-field" name="research_field" data-options="researchFields" required></select>
+            </div>
+            <div class="field">
+              <label for="su-phone">Phone</label>
+              <input id="su-phone" name="phone" type="tel" autocomplete="tel" required />
+            </div>
+            <div class="field">
+              <label for="su-email">Email</label>
+              <input id="su-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="su-password">Password <span class="field-hint">(at least 8 characters)</span></label>
+              <input id="su-password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+            </div>
+            <label class="check">
+              <input type="checkbox" name="age" required />
+              <span>I confirm I am 21 years of age or older.</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="research_use" required />
+              <span>I confirm that I am purchasing on behalf of a research organization, and that products purchased shall not be used for human or animal therapeutic purposes and are for laboratory research purposes only. Med spas, gyms, weight-loss clinics, and similar businesses are not eligible to purchase.</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="terms" required />
+              <span>I agree to the <a href="terms.html">Terms &amp; Conditions</a> and <a href="privacy.html">Privacy Policy</a>.</span>
+            </label>
+            <button type="submit" class="btn btn-accent btn-block">Create account</button>
+            <p class="cart-status" data-msg hidden role="status"></p>
+          </form>
+        </div>
+
+        <!-- Arrived from a password-reset email. -->
+        <div data-view="recover" hidden>
+          <form class="form form-narrow" data-recover-form>
+            <h2 class="form-title">Set a new password</h2>
+            <div class="field">
+              <label for="rc-password">New password <span class="field-hint">(at least 8 characters)</span></label>
+              <input id="rc-password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+            </div>
+            <button type="submit" class="btn btn-accent btn-block">Save password</button>
+            <p class="cart-status" data-msg hidden role="status"></p>
+          </form>
+        </div>
+
+        <!-- Signed in: profile and orders. -->
+        <div data-view="signed-in" hidden>
+          <div class="account-grid">
+            <form class="form" data-profile-form>
+              <h2 class="form-title">Profile</h2>
+              <p class="summary-fine">Signed in as <strong data-account-email></strong></p>
+              <div class="field">
+                <label for="pf-name">Full name</label>
+                <input id="pf-name" name="full_name" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="pf-company">Company or institution name</label>
+                <input id="pf-company" name="company_name" autocomplete="organization" required />
+              </div>
+              <div class="field">
+                <label for="pf-org">Organization type</label>
+                <select id="pf-org" name="organization_type" data-options="organizationTypes" required></select>
+              </div>
+              <div class="field">
+                <label for="pf-field">Research field</label>
+                <select id="pf-field" name="research_field" data-options="researchFields" required></select>
+              </div>
+              <div class="field">
+                <label for="pf-phone">Phone</label>
+                <input id="pf-phone" name="phone" type="tel" autocomplete="tel" required />
+              </div>
+              <button type="submit" class="btn btn-ghost btn-block">Save profile</button>
+              <p class="cart-status" data-msg hidden role="status"></p>
+              <button type="button" class="linklike" data-signout>Sign out</button>
+            </form>
+
+            <div>
+              <h2 class="form-title">Orders</h2>
+              <div data-orders><p class="summary-fine">Loading…</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notice">
+          <p class="eyebrow">Important product notice</p>
+          <p data-disclaimer>All products currently listed on this site are for research purposes only.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a class="brand" href="index.html" data-brand>Verity Research Labs</a>
+          <p class="foot-disclaimer" data-foot-disclaimer>All products sold on this website are intended for research and identification purposes only. These products are not intended for human dosing, injection, or ingestion. Not for human or animal consumption.</p>
+        </div>
+        <nav class="foot-col" aria-label="Shop">
+          <p class="eyebrow">Shop</p>
+          <a href="retatrutide.html">Retatrutide</a>
+          <a href="bacteriostatic-water.html">Bacteriostatic Water</a>
+          <a href="lab-syringes.html">Laboratory Syringes</a>
+        </nav>
+        <nav class="foot-col" aria-label="Company">
+          <p class="eyebrow">Company</p>
+          <a href="about.html">Our Company</a>
+          <a href="coa.html">Certificates of Analysis</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="foot-col" aria-label="Policies">
+          <p class="eyebrow">Policies</p>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <a href="refunds.html">Returns &amp; Refunds</a>
+          <a href="chargebacks.html">Chargeback Policy</a>
+          <a href="shipping.html">Shipping</a>
+          <a href="privacy.html">Privacy</a>
+        </nav>
+        <div class="foot-col">
+          <p class="eyebrow">Customer service</p>
+          <a data-contact="phone" href="tel:9414519208">(941) 451-9208</a>
+          <a data-contact="email" href="mailto:support@verityresearchlabs.com">support@verityresearchlabs.com</a>
+          <span data-contact="hours">[Monday–Friday, 9am–5pm ET]</span>
+        </div>
+      </div>
+      <p class="foot-fda" data-fda>These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+      <div class="foot-meta">
+        <span>&copy; <span data-year>2026</span> <span data-legal-name>Verity Research Labs LLC</span></span>
+        <span>Research use only &middot; 21+</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site-config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/payment-links.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>

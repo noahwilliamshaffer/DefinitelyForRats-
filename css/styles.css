@@ -950,6 +950,8 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 }
 .prose h2:first-child { margin-block-start: 0; }
 .prose address, .contact-list address { font-style: normal; }
+/* Warranty and liability disclaimers are set in capitals to be conspicuous. */
+.prose .caps { font-size: 14px; letter-spacing: .02em; text-transform: uppercase; }
 
 .contact-list { display: grid; gap: var(--s-5); margin: 0; }
 .contact-list > div { display: grid; gap: var(--s-2); padding-block-end: var(--s-5); border-bottom: 1px solid var(--line); }
@@ -962,6 +964,75 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .coa-table tbody th { width: auto; font-family: var(--sans); font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .coa-table tbody th a { color: inherit; }
 .coa-pending { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+/* ---- 12d. Forms: account, order details --------------------------------- */
+.form { display: grid; gap: var(--s-4); align-content: start; }
+.form[hidden], [data-view][hidden] { display: none; }
+.form-narrow { max-width: 420px; }
+.form-title { font-size: 22px; font-weight: 500; letter-spacing: -.01em; line-height: 1.25; }
+.form fieldset { display: grid; gap: var(--s-4); margin: 0; padding: 0; border: 0; min-width: 0; }
+.form legend { padding: 0 0 var(--s-2); }
+.form fieldset + fieldset { padding-block-start: var(--s-5); border-top: 1px solid var(--line); }
+
+.field { display: grid; gap: var(--s-2); min-width: 0; }
+.field label {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.field-hint { text-transform: none; letter-spacing: 0; color: var(--muted); }
+.field input, .field select {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--line-firm);
+  border-radius: 2px;
+  background: var(--card);
+  font-size: 16px;   /* 16px stops iOS zooming on focus */
+}
+.field input:focus-visible, .field select:focus-visible, .check input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.field-row { display: grid; gap: var(--s-4); }
+@media (min-width: 560px) { .field-row { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); } }
+
+.check {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-3);
+  align-items: start;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--accent); }
+
+.linklike {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.linklike:hover { color: var(--accent); }
+
+.account-grid { display: grid; gap: var(--s-8); align-items: start; }
+@media (min-width: 900px) { .account-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.order-details { margin-block-start: var(--s-7); padding-block-start: var(--s-6); border-top: 1px solid var(--ink); }
+.order-details[hidden] { display: none; }
+.order-gate { display: grid; gap: var(--s-4); justify-items: start; max-width: 60ch; }
+.order-gate[hidden] { display: none; }
+.order-gate p:not(.eyebrow) { font-size: 16px; line-height: 1.6; color: var(--ink-soft); }
 
 /* ---- 13. Footer ----------------------------------------------------------- */
 .site-foot {
