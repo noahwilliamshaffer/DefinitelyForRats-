@@ -77,8 +77,8 @@ window.SITE = {
   // are public by design and safe here; the secret key is NOT, and lives
   // only in the host's SUPABASE_SECRET_KEY env var.
   accounts: {
-    supabaseUrl: "[https://YOUR-PROJECT.supabase.co]",
-    supabaseAnonKey: "[sb_publishable_…]"
+    supabaseUrl: "https://elgrprgmzmnvdcctnjps.supabase.co",
+    supabaseAnonKey: "sb_publishable_Uy9Wfgn9o02ChPiku4fx1g_3CYiB-rD"
   },
 
   // Asked at sign-up and on every order. The values are what the server
