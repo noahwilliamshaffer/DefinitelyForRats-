@@ -116,13 +116,13 @@ Setup:
    `supabase db push`). Under Authentication → URL Configuration set the Site
    URL to the live domain and add `https://<domain>/account.html` to the
    redirect URLs. Keep "Confirm email" on. Put the project URL and the
-   anon/publishable key in `accounts` in `js/site-config.js` (both are
+   publishable key in `accounts` in `js/site-config.js` (both are
    public by design).
 2. **NOWPayments** — create an account, add payout wallets, create an API key
    and an IPN secret. Use the sandbox (`account-sandbox.nowpayments.io`) first.
 3. **Vercel env vars** — `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_IPN_SECRET`,
    `NOWPAYMENTS_ENV` (`sandbox` / `production`), `SUPABASE_URL`,
-   `SUPABASE_SERVICE_ROLE_KEY` (secret — bypasses row-level security).
+   `SUPABASE_SECRET_KEY` (an `sb_secret_…` key — bypasses row-level security).
 
 **Authorize.net (cards, later).** Stripe, PayPal, Square and Shopify Payments all
 prohibit research peptides, so the store takes cards through a **high-risk

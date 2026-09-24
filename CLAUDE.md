@@ -48,7 +48,7 @@ product means adding it to the footer's Shop column too.
 | `js/cart.js` | Cart state (localStorage `dfr-cart-v1`), Add to cart / Buy now, checkout page. Loads on every page. |
 | `api/crypto-checkout.js` | **Active** checkout: verifies the Supabase user, validates order details, writes an `orders` row, creates a NOWPayments invoice. |
 | `api/nowpayments-ipn.js` | NOWPayments webhook: HMAC-SHA512 check, then order status. Never downgrades `paid`; amount mismatch → `review`. |
-| `api/_supabase.js` | Supabase REST helper using the service-role key (host env only). |
+| `api/_supabase.js` | Supabase REST helper using the secret key (host env only). |
 | `supabase/migrations/` | `orders` table. RLS: customers may only SELECT their own rows; all writes go through the functions. |
 | `api/authorize-net-checkout.js` | Card checkout for later: Authorize.net Accept Hosted token for the whole cart. |
 | `api/create-checkout-session.js` | Inactive Stripe Checkout alternative. |
@@ -138,8 +138,8 @@ can fail underwriting or get the merchant account closed.
   research-field and organization-type lists live only in `site-config.js`;
   med spas, gyms, weight-loss clinics and similar are never offered as
   organization types.
-- Never commit `SUPABASE_SERVICE_ROLE_KEY`, `NOWPAYMENTS_API_KEY`, or
-  `NOWPAYMENTS_IPN_SECRET`. The Supabase URL and anon key in `site-config.js`
+- Never commit `SUPABASE_SECRET_KEY`, `NOWPAYMENTS_API_KEY`, or
+  `NOWPAYMENTS_IPN_SECRET`. The Supabase URL and publishable key in `site-config.js`
   are public by design.
 - **Claims stay keepable.** No purity percentages, delivery guarantees, review
   counts, "risk free", or urgency. Specs state only what the batch COA

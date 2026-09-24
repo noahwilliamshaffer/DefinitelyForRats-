@@ -73,12 +73,12 @@ window.SITE = {
   },
 
   // Customer accounts (Supabase Auth). Buying requires a signed-in account —
-  // there is no guest checkout. The URL and the anon/publishable key are
-  // public by design and safe here; the service-role key is NOT, and lives
-  // only in the host's SUPABASE_SERVICE_ROLE_KEY env var.
+  // there is no guest checkout. The URL and the publishable key (sb_publishable_…)
+  // are public by design and safe here; the secret key is NOT, and lives
+  // only in the host's SUPABASE_SECRET_KEY env var.
   accounts: {
     supabaseUrl: "[https://YOUR-PROJECT.supabase.co]",
-    supabaseAnonKey: "[your-anon-or-publishable-key]"
+    supabaseAnonKey: "[sb_publishable_…]"
   },
 
   // Asked at sign-up and on every order. The values are what the server

@@ -3,7 +3,7 @@
    through the chain. NOWPayments POSTs here, sometimes several times and not
    always in order, for each status change of the invoice's payment.
 
-   Env: NOWPAYMENTS_IPN_SECRET, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
+   Env: NOWPAYMENTS_IPN_SECRET, SUPABASE_URL, SUPABASE_SECRET_KEY.
 
    Every call is authenticated: the x-nowpayments-sig header must equal
    HMAC-SHA512(IPN secret, JSON of the body with keys sorted). Anything

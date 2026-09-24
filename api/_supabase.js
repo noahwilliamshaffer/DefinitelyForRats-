@@ -4,10 +4,14 @@
 
    Env vars on the host:
 
-     SUPABASE_URL               https://<project>.supabase.co
-     SUPABASE_SERVICE_ROLE_KEY  Project Settings → API → service_role.
-                                SECRET — bypasses row-level security. Never
-                                put it in js/ or anywhere in this repo.
+     SUPABASE_URL          https://<project>.supabase.co
+     SUPABASE_SECRET_KEY   Project Settings → API Keys → Secret keys
+                           (sb_secret_…). SECRET — bypasses row-level
+                           security. Never put it in js/ or in this repo.
+
+   The legacy SUPABASE_SERVICE_ROLE_KEY (a JWT) still works as a fallback,
+   but prefer a secret key: it can be revoked on its own without rotating the
+   project's JWT secret.
 
    The leading underscore keeps Vercel from deploying this file as its own
    endpoint.
@@ -15,9 +19,23 @@
 
 function config() {
   const url = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error("SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not set.");
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error("SUPABASE_URL / SUPABASE_SECRET_KEY not set.");
   return { url, key };
+}
+
+function configured() {
+  return !!(process.env.SUPABASE_URL &&
+    (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY));
+}
+
+/* Headers for a server-privileged call. A new sb_secret_ key is not a JWT:
+   it goes in `apikey` alone and Supabase's gateway runs the request as
+   service_role. The legacy service-role JWT is also sent as the Bearer. */
+function serverHeaders(key) {
+  const h = { apikey: key };
+  if (!key.startsWith("sb_")) h.Authorization = `Bearer ${key}`;
+  return h;
 }
 
 /* The signed-in user behind a browser access token, or null. Supabase checks
@@ -38,12 +56,10 @@ async function rest(method, pathAndQuery, body) {
   const { url, key } = config();
   const r = await fetch(`${url}/rest/v1/${pathAndQuery}`, {
     method,
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
+    headers: Object.assign(serverHeaders(key), {
       "Content-Type": "application/json",
       Prefer: "return=representation"
-    },
+    }),
     body: body === undefined ? undefined : JSON.stringify(body)
   });
   const text = await r.text();
@@ -66,4 +82,4 @@ async function updateOrder(id, patch) {
   return rows[0] || null;
 }
 
-module.exports = { getUser, insertOrder, getOrder, updateOrder };
+module.exports = { configured, getUser, insertOrder, getOrder, updateOrder };

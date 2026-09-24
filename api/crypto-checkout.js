@@ -13,7 +13,7 @@
                                 (used by nowpayments-ipn.js)
      NOWPAYMENTS_ENV            "sandbox" while testing, "production" when live
      SUPABASE_URL               see api/_supabase.js
-     SUPABASE_SERVICE_ROLE_KEY  see api/_supabase.js
+     SUPABASE_SECRET_KEY        see api/_supabase.js
 
    None of these go in this repo — every js/ file ships to the browser.
 
@@ -24,7 +24,7 @@
    records the order, asks NOWPayments for an invoice, and answers { url }.
    ========================================================================== */
 const { loadVariants, loadSite } = require("./_catalog");
-const { getUser, insertOrder, updateOrder } = require("./_supabase");
+const { configured, getUser, insertOrder, updateOrder } = require("./_supabase");
 
 const API = {
   sandbox: "https://api-sandbox.nowpayments.io/v1",
@@ -65,7 +65,7 @@ module.exports = async function handler(req, res) {
 
   const apiKey = process.env.NOWPAYMENTS_API_KEY;
   const api = API[process.env.NOWPAYMENTS_ENV === "production" ? "production" : "sandbox"];
-  if (!apiKey || !process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (!apiKey || !configured()) {
     res.status(500).json({ error: "Checkout is not configured." });
     return;
   }
