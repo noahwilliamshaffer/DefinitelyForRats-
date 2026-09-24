@@ -149,6 +149,15 @@ module.exports = async function handler(req, res) {
     const proto = (req.headers["x-forwarded-proto"] || "https").split(",")[0];
     const origin = `${proto}://${req.headers.host}`;
 
+    // Preview deployments sit behind Vercel's login wall, which would turn
+    // NOWPayments' webhook away. When "Protection Bypass for Automation" is
+    // on, Vercel provides this secret; pass it on previews only.
+    let ipnUrl = `${origin}/api/nowpayments-ipn`;
+    const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+    if (bypass && process.env.VERCEL_ENV === "preview") {
+      ipnUrl += `?x-vercel-protection-bypass=${encodeURIComponent(bypass)}`;
+    }
+
     const r = await fetch(`${api}/invoice`, {
       method: "POST",
       headers: { "x-api-key": apiKey, "Content-Type": "application/json" },
@@ -157,7 +166,7 @@ module.exports = async function handler(req, res) {
         price_currency: "usd",
         order_id: order.id,
         order_description: `${site.brand} order ${order.order_number}`,
-        ipn_callback_url: `${origin}/api/nowpayments-ipn`,
+        ipn_callback_url: ipnUrl,
         success_url: `${origin}/checkout.html?checkout=success&order=${encodeURIComponent(order.order_number)}`,
         cancel_url: `${origin}/checkout.html?checkout=cancelled`,
         partially_paid_url: `${origin}/account.html`
