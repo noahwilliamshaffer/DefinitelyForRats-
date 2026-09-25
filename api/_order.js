@@ -62,7 +62,8 @@ async function requireBuyer(req, res) {
    Returns { order, site }. Throws BadRequest for anything the buyer must fix. */
 async function createOrder(req, user, provider, status) {
   const site = loadSite();
-  if (!(site.payment && site.payment.ordersOpen)) {
+  const open = site.payment && site.payment.ordersOpen;
+  if (!(open === true || (open === "preview" && process.env.VERCEL_ENV === "preview"))) {
     throw new BadRequest("Online ordering is not open yet. Please contact us to place an order.");
   }
 

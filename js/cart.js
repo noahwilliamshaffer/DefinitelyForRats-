@@ -176,7 +176,9 @@
 
   /* ---- Account (crypto checkout requires one) ----------------------------- */
   function ordersOpen() {
-    return !(S.payment && S.payment.ordersOpen === false);
+    var o = S.payment && S.payment.ordersOpen;
+    if (o === "preview") return /\.vercel\.app$/.test(location.hostname);
+    return o !== false;
   }
   function needsAccount() {
     return (S.payment && S.payment.provider) === "nowpayments";

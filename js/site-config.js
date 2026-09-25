@@ -74,9 +74,11 @@ window.SITE = {
   payment: {
     // false shows the whole checkout (accounts, order form, acknowledgements)
     // but disables Place Order with a "contact us" note, and the checkout
-    // functions refuse orders. Flip to true once the live NOWPayments keys,
-    // BANK_TRANSFER_INSTRUCTIONS and a custom email sender are in place.
-    ordersOpen: false,
+    // functions refuse orders. "preview" opens ordering on Vercel preview
+    // deployments only (sandbox testing) and keeps the live site paused.
+    // Set true once the live NOWPayments keys, BANK_TRANSFER_INSTRUCTIONS and
+    // a custom email sender are in place.
+    ordersOpen: "preview",
     provider: "nowpayments",
     currency: "usd",
     checkoutEndpoint: "/api/crypto-checkout",
