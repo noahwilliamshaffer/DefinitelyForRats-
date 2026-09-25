@@ -25,6 +25,18 @@
   var configured = !!(window.supabase && cfg.supabaseUrl && cfg.supabaseAnonKey &&
     cfg.supabaseUrl.charAt(0) !== "[" && cfg.supabaseAnonKey.charAt(0) !== "[");
 
+  // A confirmation or reset link that failed (expired, already used, or
+  // replaced by a newer email) comes back with the reason in the URL hash.
+  // Read it before supabase-js consumes the hash.
+  var linkError = (function () {
+    var h = new URLSearchParams(location.hash.replace(/^#/, ""));
+    var code = h.get("error_code") || h.get("error");
+    if (!code) return null;
+    return code === "otp_expired"
+      ? "That email link has expired or was already used. If you signed up more than once, only the newest email works. Sign in below, or resend the confirmation email."
+      : (h.get("error_description") || "That email link did not work.").replace(/\+/g, " ");
+  })();
+
   var client = configured ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey) : null;
   var current = null;
   var recovering = false;
@@ -238,7 +250,17 @@
     if (!document.querySelector("[data-account-page]")) return;
     if (!configured) { show("unconfigured"); return; }
     if (recovering) { show("recover"); return; }
-    if (!current) { show("signed-out"); return; }
+    if (!current) {
+      show("signed-out");
+      if (linkError) {
+        var f = document.querySelector("[data-signin-form]");
+        setMsg(f && f.querySelector("[data-msg]"), linkError, true);
+        if (f) f.querySelector("[data-resend]").hidden = false;
+        linkError = null;
+        history.replaceState({}, "", location.pathname + location.search);
+      }
+      return;
+    }
     var n = nextUrl();
     if (n) { location.replace(n); return; }
     show("signed-in");
@@ -255,9 +277,33 @@
       e.preventDefault();
       var d = formData(signIn), msg = signIn.querySelector("[data-msg]");
       setMsg(msg, "Signing in…");
+      signIn.querySelector("[data-resend]").hidden = true;
       client.auth.signInWithPassword({ email: d.email, password: d.password }).then(function (r) {
-        if (r.error) { setMsg(msg, authError(r.error), true); return; }
+        if (r.error) {
+          var unconfirmed = r.error.code === "email_not_confirmed" || /not confirmed/i.test(r.error.message || "");
+          setMsg(msg, unconfirmed
+            ? "Your email address is not confirmed yet. Use the link in the newest confirmation email, or resend it."
+            : authError(r.error), true);
+          signIn.querySelector("[data-resend]").hidden = !unconfirmed;
+          return;
+        }
         setMsg(msg, "");
+      });
+    });
+
+    var resend = signIn && signIn.querySelector("[data-resend]");
+    if (resend) resend.addEventListener("click", function () {
+      var email = signIn.elements.email.value.trim();
+      var msg = signIn.querySelector("[data-msg]");
+      if (!email) { setMsg(msg, "Enter your email above, then resend.", true); return; }
+      client.auth.resend({
+        type: "signup",
+        email: email,
+        options: { emailRedirectTo: location.origin + location.pathname }
+      }).then(function (r) {
+        setMsg(msg, r.error
+          ? authError(r.error)
+          : "A new confirmation email is on its way. Only the newest link will work.", !!r.error);
       });
     });
 
@@ -285,7 +331,7 @@
       }).then(function (r) {
         if (r.error) { setMsg(msg, authError(r.error), true); return; }
         signUp.reset();
-        setMsg(msg, "Check your email to confirm your address, then sign in.");
+        setMsg(msg, "Check your email (and spam folder) to confirm your address, then sign in. If you sign up again, only the newest email's link will work.");
       });
     });
 
