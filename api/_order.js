@@ -61,6 +61,11 @@ async function requireBuyer(req, res) {
    js/products.js (never trusting the client), and record the order.
    Returns { order, site }. Throws BadRequest for anything the buyer must fix. */
 async function createOrder(req, user, provider, status) {
+  const site = loadSite();
+  if (!(site.payment && site.payment.ordersOpen)) {
+    throw new BadRequest("Online ordering is not open yet. Please contact us to place an order.");
+  }
+
   const body = parseBody(req);
   const items = Array.isArray(body.items) ? body.items : [];
   const details = body.details && typeof body.details === "object" ? body.details : {};
@@ -77,7 +82,6 @@ async function createOrder(req, user, provider, status) {
     throw new BadRequest("Agree to the Terms & Conditions to place an order.");
   }
 
-  const site = loadSite();
   const shipState = required(details, "shipState", "State", 20).toUpperCase();
   const shipZip = required(details, "shipZip", "ZIP code", 10);
   if (!/^[A-Z]{2}$/.test(shipState)) throw new BadRequest("Use the two-letter state code.");

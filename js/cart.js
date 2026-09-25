@@ -168,13 +168,16 @@
     if (details) details.hidden = lines.length === 0;
 
     var pay = document.querySelector("[data-checkout]");
-    if (pay) pay.disabled = lines.length === 0 || (needsAccount() && !signedIn());
+    if (pay) pay.disabled = lines.length === 0 || !ordersOpen() || (needsAccount() && !signedIn());
 
     var links = document.querySelector("[data-paylinks]");
     if (links) { links.innerHTML = ""; links.hidden = true; }
   }
 
   /* ---- Account (crypto checkout requires one) ----------------------------- */
+  function ordersOpen() {
+    return !(S.payment && S.payment.ordersOpen === false);
+  }
   function needsAccount() {
     return (S.payment && S.payment.provider) === "nowpayments";
   }
@@ -230,6 +233,13 @@
   function setStatus(msg, isError) {
     var el = document.querySelector("[data-cart-status]");
     if (!el) return;
+    // While ordering is paused, clearing the status brings the notice back.
+    if (!msg && !ordersOpen()) {
+      var C = S.contact || {};
+      msg = "Online ordering opens soon. To order now, contact us at " +
+        C.email + " or " + C.phone + ".";
+      isError = false;
+    }
     el.textContent = msg || "";
     el.hidden = !msg;
     el.classList.toggle("is-error", !!isError);
@@ -338,6 +348,11 @@
 
   /* Hide the bank-transfer choice when it is switched off in site-config. */
   function syncPayMethods() {
+    if (!ordersOpen()) {
+      var btn = document.querySelector("[data-checkout]");
+      if (btn) btn.textContent = "Ordering opens soon";
+      setStatus("");
+    }
     var bank = document.querySelector("[data-paymethod-bank]");
     if (!bank) return;
     var on = !!(S.payment && S.payment.bankTransferEndpoint);

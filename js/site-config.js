@@ -72,6 +72,11 @@ window.SITE = {
   // browser. Keys live only in the host's environment (Vercel/Netlify).
   // GitHub Pages cannot run functions, so checkout needs one of those hosts.
   payment: {
+    // false shows the whole checkout (accounts, order form, acknowledgements)
+    // but disables Place Order with a "contact us" note, and the checkout
+    // functions refuse orders. Flip to true once the live NOWPayments keys,
+    // BANK_TRANSFER_INSTRUCTIONS and a custom email sender are in place.
+    ordersOpen: false,
     provider: "nowpayments",
     currency: "usd",
     checkoutEndpoint: "/api/crypto-checkout",
