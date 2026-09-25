@@ -72,6 +72,8 @@ spacing scale, a 1200px container, hairline rules.
 ├── api/
 │   ├── crypto-checkout.js           # serverless checkout — NOWPayments crypto (active)
 │   ├── nowpayments-ipn.js           # NOWPayments webhook — marks orders paid
+│   ├── bank-transfer-checkout.js    # manual bank transfer — order + instructions
+│   ├── _order.js                    # shared: account check, validation, pricing, orders row
 │   ├── authorize-net-checkout.js    # serverless checkout — Authorize.net (cards, later)
 │   ├── create-checkout-session.js   # serverless checkout — Stripe (inactive)
 │   ├── _catalog.js                  # shared price/config lookup
@@ -123,6 +125,18 @@ Setup:
 3. **Vercel env vars** — `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_IPN_SECRET`,
    `NOWPAYMENTS_ENV` (`sandbox` / `production`), `SUPABASE_URL`,
    `SUPABASE_SECRET_KEY` (an `sb_secret_…` key — bypasses row-level security).
+
+**Manual bank transfer (active, alongside crypto).** At checkout the buyer
+may pick **Bank transfer** instead of crypto. `api/bank-transfer-checkout.js`
+records the order (same validation, via `api/_order.js`) with status
+`awaiting_transfer` and returns the bank details from the
+`BANK_TRANSFER_INSTRUCTIONS` env var, shown on the cart page and again on
+the Account page. The buyer sends an ACH or wire quoting the order number.
+When the money lands, open Supabase → Table editor → `orders`, find the
+order number, and set `status` to `paid` (`paid_at` fills itself in). Then
+ship. Unpaid orders: set `status` to `cancelled` after the hold period
+(`policy.transferHoldDays` in `site-config.js`, stated in the Terms). Set
+`payment.bankTransferEndpoint` to `""` to hide the option.
 
 **Authorize.net (cards, later).** Stripe, PayPal, Square and Shopify Payments all
 prohibit research peptides, so the store takes cards through a **high-risk

@@ -51,6 +51,9 @@
         <!-- Shown when returning from the payment page. -->
         <p class="order-note" data-order-note hidden></p>
 
+        <!-- Shown after a bank-transfer order is placed. -->
+        <div class="transfer" data-transfer-panel hidden tabindex="-1"></div>
+
         <div class="checkout-grid">
           <div>
             <div class="clines-head" aria-hidden="true">
@@ -144,7 +147,17 @@
                 <span class="price" data-cart-subtotal>$0</span>
               </div>
             </div>
-            <p class="summary-fine">Payment is in cryptocurrency on our payment partner&rsquo;s secure hosted page. You choose the coin there; the amount is fixed in US dollars.</p>
+            <fieldset class="paymethod" data-paymethod>
+              <legend class="eyebrow">Payment method</legend>
+              <label class="check">
+                <input type="radio" name="paymentMethod" value="crypto" form="order-form" checked />
+                <span><strong>Cryptocurrency</strong> &mdash; pay on our payment partner&rsquo;s secure hosted page. You choose the coin there; the amount is fixed in US dollars.</span>
+              </label>
+              <label class="check" data-paymethod-bank>
+                <input type="radio" name="paymentMethod" value="bank" form="order-form" />
+                <span><strong>Bank transfer</strong> &mdash; ACH or wire from your bank. Our account details and your order reference are shown after you place the order. Orders ship once the transfer arrives.</span>
+              </label>
+            </fieldset>
 
             <label class="check">
               <input type="checkbox" name="researchUseAck" form="order-form" required />

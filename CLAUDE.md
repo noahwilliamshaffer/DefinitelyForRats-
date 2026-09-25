@@ -47,6 +47,8 @@ product means adding it to the footer's Shop column too.
 | `js/account.js` | `window.ACCOUNT` — Supabase client (CDN UMD build), session, profile metadata, account page. Loaded only on `account.html` and `checkout.html`, after the supabase-js script. |
 | `js/cart.js` | Cart state (localStorage `dfr-cart-v1`), Add to cart / Buy now, checkout page. Loads on every page. |
 | `api/crypto-checkout.js` | **Active** checkout: verifies the Supabase user, validates order details, writes an `orders` row, creates a NOWPayments invoice. |
+| `api/bank-transfer-checkout.js` | Manual bank transfer: POST records an `awaiting_transfer` order and returns `BANK_TRANSFER_INSTRUCTIONS`; GET `?order=` re-serves them to that order's owner only. The owner marks orders paid by hand in Supabase. |
+| `api/_order.js` | Shared by all checkout functions: account check, order-details validation, server-side pricing, the `orders` insert. Compliance rules for orders live here only. |
 | `api/nowpayments-ipn.js` | NOWPayments webhook: HMAC-SHA512 check, then order status. Never downgrades `paid`; amount mismatch → `review`. |
 | `api/_supabase.js` | Supabase REST helper using the secret key (host env only). |
 | `supabase/migrations/` | `orders` table. RLS: customers may only SELECT their own rows; all writes go through the functions. |
@@ -138,6 +140,9 @@ can fail underwriting or get the merchant account closed.
   research-field and organization-type lists live only in `site-config.js`;
   med spas, gyms, weight-loss clinics and similar are never offered as
   organization types.
+- Bank details live only in the `BANK_TRANSFER_INSTRUCTIONS` host env var,
+  served only to a signed-in buyer's own awaiting order — never in `js/`,
+  HTML, or the repo.
 - Never commit `SUPABASE_SECRET_KEY`, `NOWPAYMENTS_API_KEY`, or
   `NOWPAYMENTS_IPN_SECRET`. The Supabase URL and publishable key in `site-config.js`
   are public by design.

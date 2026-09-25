@@ -30,6 +30,7 @@ window.SITE = {
   // the business will actually honour.
   policy: {
     processingDays: "[1–2]",       // business days before an order ships
+    transferHoldDays: "7",         // days a bank-transfer order is held unpaid
     returnWindowDays: "[30]"       // days to request a return of sealed items
   },
 
@@ -58,6 +59,10 @@ window.SITE = {
   //   "nowpayments"  → /api/crypto-checkout          (ACTIVE — crypto via a
   //                     NOWPayments hosted invoice; needs NOWPAYMENTS_* and
   //                     SUPABASE_* env vars on the host)
+  //
+  // Alongside it, bankTransferEndpoint offers manual bank transfer
+  // (api/bank-transfer-checkout.js; needs BANK_TRANSFER_INSTRUCTIONS). Set it
+  // to "" to hide that option.
   //   "authorizenet" → /api/authorize-net-checkout   (cards, for later;
   //                     needs AUTHNET_* env vars on the host)
   //   "stripe"       → /api/create-checkout-session  (needs STRIPE_SECRET_KEY;
@@ -69,7 +74,8 @@ window.SITE = {
   payment: {
     provider: "nowpayments",
     currency: "usd",
-    checkoutEndpoint: "/api/crypto-checkout"
+    checkoutEndpoint: "/api/crypto-checkout",
+    bankTransferEndpoint: "/api/bank-transfer-checkout"
   },
 
   // Customer accounts (Supabase Auth). Buying requires a signed-in account —

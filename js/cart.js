@@ -22,7 +22,10 @@
           NOWPayments   → { url }, a plain redirect to the crypto invoice
                           (api/crypto-checkout.js). This one also needs a
                           signed-in account (js/account.js) and the order
-                          details form: no account, no order.
+                          details form: no account, no order. The buyer may
+                          instead choose bank transfer
+                          (api/bank-transfer-checkout.js), which records the
+                          order and shows our bank details on this page.
 
      2. Endpoint empty — Stripe only: fall back to the per-variant hosted
         Payment Links in js/payment-links.js, one product at a time. Other
@@ -215,7 +218,7 @@
     var els = form.elements;
     for (var i = 0; i < els.length; i++) {
       var el = els[i];
-      if (!el.name) continue;
+      if (!el.name || (el.type === "radio" && !el.checked)) continue;
       d[el.name] = el.type === "checkbox" ? el.checked : el.value.trim();
     }
     // The acknowledgement boxes sit in the summary with form="order-form",
@@ -281,7 +284,7 @@
     // No endpoint configured — hosted links are the only route.
     if (!endpoint) { unavailable(); return; }
 
-    if (needsAccount()) { cryptoCheckout(endpoint, btn); return; }
+    if (needsAccount()) { placeOrder(btn); return; }
 
     function restore() {
       if (btn) { btn.disabled = false; btn.textContent = "Checkout"; }
@@ -309,6 +312,11 @@
         });
       })
       .then(function (res) {
+        if (method === "bank" && res.ok && res.json && res.json.instructions) {
+          restore();
+          showTransfer(res.json);
+          return;
+        }
         if (res.ok && res.json && res.json.url) {
           if (res.json.token) postToken(res.json.url, res.json.token);
           else window.location.href = res.json.url;
@@ -323,10 +331,43 @@
       });
   }
 
-  /* Crypto — signed-in buyers only, with the order details form complete.
-     The server re-checks everything; the browser checks first only so the
-     buyer sees which field needs attention. */
-  function cryptoCheckout(endpoint, btn) {
+  function payMethod() {
+    var picked = document.querySelector('input[name="paymentMethod"]:checked');
+    return picked ? picked.value : "crypto";
+  }
+
+  /* Hide the bank-transfer choice when it is switched off in site-config. */
+  function syncPayMethods() {
+    var bank = document.querySelector("[data-paymethod-bank]");
+    if (!bank) return;
+    var on = !!(S.payment && S.payment.bankTransferEndpoint);
+    bank.hidden = !on;
+    if (!on) {
+      var crypto = document.querySelector('input[name="paymentMethod"][value="crypto"]');
+      if (crypto) crypto.checked = true;
+    }
+  }
+
+  /* A bank-transfer order was recorded: the cart is done with, and the
+     buyer needs our bank details and their reference. */
+  function showTransfer(data) {
+    lines = []; save(); render();
+    var panel = document.querySelector("[data-transfer-panel]");
+    if (!panel || !window.ACCOUNT) return;
+    window.ACCOUNT.renderTransfer(panel, data);
+    panel.focus();
+    panel.scrollIntoView({ block: "start" });
+  }
+
+  /* Signed-in buyers only, with the order details form complete. The server
+     re-checks everything; the browser checks first only so the buyer sees
+     which field needs attention. Crypto redirects to the hosted invoice;
+     bank transfer stays here and shows the instructions. */
+  function placeOrder(btn) {
+    var method = payMethod();
+    var endpoint = method === "bank"
+      ? S.payment.bankTransferEndpoint
+      : S.payment.checkoutEndpoint;
     var form = document.querySelector("[data-order-form]");
     if (!signedIn() || !form) {
       setStatus("Sign in to your account to place an order.", true);
@@ -339,7 +380,10 @@
     function restore() {
       if (btn) { btn.disabled = false; btn.textContent = "Place Order"; }
     }
-    if (btn) { btn.disabled = true; btn.textContent = "Creating invoice…"; }
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = method === "bank" ? "Placing order…" : "Creating invoice…";
+    }
     setStatus("");
 
     window.ACCOUNT.token().then(function (token) {
@@ -495,6 +539,7 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     render();
+    syncPayMethods();
     handleReturn();
     if (window.ACCOUNT) {
       window.ACCOUNT.ready.then(syncAccount);

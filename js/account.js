@@ -14,6 +14,7 @@
      token()           Promise → access token for the checkout call, or null
      user()            the current user or null (after ready)
      saveProfile(data) merge fields into the user's metadata
+     renderTransfer(el, data)  bank-transfer instructions into el
 
    On account.html it also renders sign-in / create-account / reset forms,
    the profile, and order history, depending on [data-view] sections.
@@ -112,6 +113,7 @@
   var STATUS_LABEL = {
     pending: "Not started",
     awaiting_payment: "Awaiting payment",
+    awaiting_transfer: "Awaiting bank transfer",
     confirming: "Payment confirming",
     paid: "Paid",
     partially_paid: "Partially paid — contact us",
@@ -145,7 +147,27 @@
 
   function money(cents) {
     var n = cents / 100;
-    return S.currencySymbol + (n % 1 === 0 ? n : n.toFixed(2));
+    return S.currencySymbol + n.toFixed(2);
+  }
+
+  /* Bank-transfer instructions, from api/bank-transfer-checkout.js:
+     { orderNumber, total, instructions, holdDays }. The bank details are
+     plain text from the host's env; esc() keeps them inert. */
+  function renderTransfer(el, d) {
+    el.innerHTML =
+      '<p class="eyebrow">Order ' + esc(d.orderNumber) + " &middot; awaiting bank transfer</p>" +
+      "<h2>Send your bank transfer</h2>" +
+      "<p>Your order is reserved. Send the exact amount below from your bank by ACH or wire, " +
+      "and put the order number in the transfer&rsquo;s reference or memo so we can match it. " +
+      "We ship once the funds arrive. Unpaid orders are cancelled after " + esc(d.holdDays) + " days.</p>" +
+      '<dl class="transfer-facts">' +
+      '<div><dt class="eyebrow">Amount</dt><dd>' + money(Math.round(d.total * 100)) + " USD</dd></div>" +
+      '<div><dt class="eyebrow">Reference</dt><dd>' + esc(d.orderNumber) + "</dd></div>" +
+      "</dl>" +
+      '<pre class="transfer-bank">' + esc(d.instructions) + "</pre>" +
+      '<p class="summary-fine">These details stay on your <a href="account.html">Account</a> page until the order is paid. ' +
+      "Any fees your bank charges are yours; the amount we receive must match the order total.</p>";
+    el.hidden = false;
   }
 
   function renderOrders() {
@@ -167,14 +189,43 @@
             var items = (o.items || []).map(function (l) {
               return esc(l.product) + " " + esc(l.label) + " &times; " + l.qty;
             }).join("<br />");
+            var status = esc(STATUS_LABEL[o.status] || o.status);
+            if (o.status === "awaiting_transfer" && S.payment && S.payment.bankTransferEndpoint) {
+              status += '<br /><button type="button" class="linklike" data-transfer-order="' +
+                esc(o.order_number) + '">Payment instructions</button>';
+            }
             return "<tr><th scope=\"row\">" + esc(o.order_number) + "</th>" +
               "<td>" + esc(new Date(o.created_at).toLocaleDateString()) + "</td>" +
               "<td>" + items + "</td>" +
               "<td>" + money(o.total_cents) + (o.pay_currency ? " <span class=\"eyebrow\">" + esc(o.pay_currency) + "</span>" : "") + "</td>" +
-              "<td>" + esc(STATUS_LABEL[o.status] || o.status) + "</td></tr>";
+              "<td>" + status + "</td></tr>";
           }).join("") +
-          "</tbody></table></div>";
+          "</tbody></table></div>" +
+          '<div class="transfer" data-transfer-panel hidden tabindex="-1"></div>';
       });
+  }
+
+  function showTransfer(orderNumber) {
+    var panel = document.querySelector("[data-orders] [data-transfer-panel]");
+    if (!panel) return;
+    token().then(function (t) {
+      return fetch(S.payment.bankTransferEndpoint + "?order=" + encodeURIComponent(orderNumber), {
+        headers: { Authorization: "Bearer " + t }
+      });
+    }).then(function (r) {
+      return r.ok ? r.json() : null;
+    }).then(function (d) {
+      if (!d) {
+        panel.innerHTML = '<p class="cart-status is-error">Payment instructions could not be loaded. Please contact us.</p>';
+        panel.hidden = false;
+        return;
+      }
+      renderTransfer(panel, d);
+      panel.focus();
+    }).catch(function () {
+      panel.innerHTML = '<p class="cart-status is-error">Payment instructions could not be loaded. Please contact us.</p>';
+      panel.hidden = false;
+    });
   }
 
   function nextUrl() {
@@ -270,6 +321,12 @@
         .catch(function (err) { setMsg(msg, authError(err), true); });
     });
 
+    var orders = document.querySelector("[data-orders]");
+    if (orders) orders.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-transfer-order]");
+      if (b) showTransfer(b.getAttribute("data-transfer-order"));
+    });
+
     var out = document.querySelector("[data-signout]");
     if (out) out.addEventListener("click", function () { client.auth.signOut(); });
 
@@ -287,6 +344,7 @@
     token: token,
     user: function () { return current; },
     saveProfile: saveProfile,
-    fillSelects: fillSelects
+    fillSelects: fillSelects,
+    renderTransfer: renderTransfer
   };
 })();

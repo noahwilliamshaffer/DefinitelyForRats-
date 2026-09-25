@@ -77,9 +77,17 @@ async function getOrder(id) {
   return rows[0] || null;
 }
 
+/* One of this user's orders by its human-readable number, or null. */
+async function getUserOrder(orderNumber, userId) {
+  const rows = await rest("GET",
+    `orders?order_number=eq.${encodeURIComponent(orderNumber)}` +
+    `&user_id=eq.${encodeURIComponent(userId)}&select=*`);
+  return rows[0] || null;
+}
+
 async function updateOrder(id, patch) {
   const rows = await rest("PATCH", `orders?id=eq.${encodeURIComponent(id)}`, patch);
   return rows[0] || null;
 }
 
-module.exports = { configured, getUser, insertOrder, getOrder, updateOrder };
+module.exports = { configured, getUser, insertOrder, getOrder, getUserOrder, updateOrder };

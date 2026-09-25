@@ -9,6 +9,9 @@
     },
     "api/authorize-net-checkout.js": {
       "includeFiles": "js/**"
+    },
+    "api/bank-transfer-checkout.js": {
+      "includeFiles": "js/**"
     }
   }
 }
