@@ -14,13 +14,17 @@ The whole map:
   template driven by `<body data-product="…">`.
 - **`about.html`**, **`coa.html`**, **`contact.html`** — company, certificates
   of analysis, customer service.
-- **`terms.html`**, **`refunds.html`**, **`shipping.html`**, **`privacy.html`**
-  — policy templates. **Have a lawyer review them before going live.**
-- **`checkout.html`** — the cart.
+- **`terms.html`**, **`refunds.html`**, **`chargebacks.html`**,
+  **`shipping.html`**, **`privacy.html`** — policy templates. Terms carry the
+  processor's ACH Web Authorization wording. **Have a lawyer review them
+  before going live.**
+- **`account.html`** — sign in, create an account, profile, order history.
+- **`checkout.html`** — the cart, the order-details form, and Place Order.
 
-Checkout is one hosted payment page for the whole cart — Authorize.net, via a
-high-risk merchant processor (see below). A 21+ age gate shows once per
-session.
+Checkout is one hosted payment page for the whole cart — currently **crypto,
+via NOWPayments**; cards (Authorize.net) come later. Buying requires a
+signed-in account (Supabase Auth) — there is no guest checkout. A 21+ age
+gate shows once per session.
 
 ## Before applying to a processor
 
@@ -53,7 +57,9 @@ spacing scale, a 1200px container, hairline rules.
 ├── lab-syringes.html       # product page  ┘
 ├── about.html · coa.html · contact.html
 ├── terms.html · refunds.html · shipping.html · privacy.html
-├── checkout.html           # the cart page
+├── chargebacks.html        # chargeback policy
+├── account.html            # sign in / sign up / profile / orders
+├── checkout.html           # the cart page + order details form
 ├── css/styles.css          # all styling (tokens at the top)
 ├── js/
 │   ├── site-config.js      # ⭐ brand, contact details, disclaimers, checkout mode
@@ -61,11 +67,18 @@ spacing scale, a 1200px container, hairline rules.
 │   ├── payment-links.js    # generated variant-id → Stripe link map
 │   ├── main.js             # window.STORE helpers, config stamping, grid, COA table, age gate
 │   ├── product-page.js     # gallery, buy box, accordions, tabs
+│   ├── account.js          # Supabase Auth: accounts, profile, order history
 │   └── cart.js             # cart state, Add to cart, checkout page
 ├── api/
-│   ├── authorize-net-checkout.js    # serverless checkout — Authorize.net (active)
+│   ├── crypto-checkout.js           # serverless checkout — NOWPayments crypto (active)
+│   ├── nowpayments-ipn.js           # NOWPayments webhook — marks orders paid
+│   ├── bank-transfer-checkout.js    # manual bank transfer — order + instructions
+│   ├── _order.js                    # shared: account check, validation, pricing, orders row
+│   ├── authorize-net-checkout.js    # serverless checkout — Authorize.net (cards, later)
 │   ├── create-checkout-session.js   # serverless checkout — Stripe (inactive)
-│   └── _catalog.js                  # shared price lookup for both
+│   ├── _catalog.js                  # shared price/config lookup
+│   └── _supabase.js                 # shared Supabase REST helper (service role)
+├── supabase/migrations/    # orders table + row-level security
 ├── assets/                 # favicon + monochrome product renderings (SVG)
 └── scripts/create-stripe-payment-links.mjs
 ```
@@ -77,9 +90,55 @@ cart — Buy now adds the selected variant and goes straight to `checkout.html` 
 so a buyer always pays for the whole order in one place. The cart lives in
 `localStorage`, survives refreshes, shows a count in the topbar on every page,
 and opens as a full page with quantity steppers, per-line removal, and a
-subtotal. Checkout has two modes:
+subtotal. Checkout has these modes:
 
-**Authorize.net (active).** Stripe, PayPal, Square and Shopify Payments all
+**Crypto via NOWPayments (active).** The buyer must be signed in. Under the
+cart they fill in the order details — name, company or institution,
+organization type, research field, phone, US shipping address — and tick the
+research-use acknowledgement and the Terms box (which includes the Web
+Authorization language) before **Place Order**.
+
+The cart POSTs `{ items, details }` to `api/crypto-checkout.js` with the
+buyer's Supabase access token. The function verifies the account (email must
+be confirmed), validates the details against the lists in `site-config.js`,
+recomputes prices from `js/products.js`, writes an `orders` row (with the
+acknowledgement timestamps, IP and user agent as the compliance record), and
+creates a NOWPayments invoice fixed in USD. The buyer picks a coin and pays on
+NOWPayments' hosted page. NOWPayments then calls `api/nowpayments-ipn.js`,
+which checks the HMAC-SHA512 signature and moves the order through
+`awaiting_payment → confirming → paid`. An order is only marked `paid` when
+the invoiced amount matches the recorded total; otherwise it goes to
+`review`. Buyers see status on `account.html`; you see every order in the
+Supabase table editor.
+
+Setup:
+
+1. **Supabase** — create a project, run
+   `supabase/migrations/20260924000000_orders.sql` (SQL editor or
+   `supabase db push`). Under Authentication → URL Configuration set the Site
+   URL to the live domain and add `https://<domain>/account.html` to the
+   redirect URLs. Keep "Confirm email" on. Put the project URL and the
+   publishable key in `accounts` in `js/site-config.js` (both are
+   public by design).
+2. **NOWPayments** — create an account, add payout wallets, create an API key
+   and an IPN secret. Use the sandbox (`account-sandbox.nowpayments.io`) first.
+3. **Vercel env vars** — `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_IPN_SECRET`,
+   `NOWPAYMENTS_ENV` (`sandbox` / `production`), `SUPABASE_URL`,
+   `SUPABASE_SECRET_KEY` (an `sb_secret_…` key — bypasses row-level security).
+
+**Manual bank transfer (active, alongside crypto).** At checkout the buyer
+may pick **Bank transfer** instead of crypto. `api/bank-transfer-checkout.js`
+records the order (same validation, via `api/_order.js`) with status
+`awaiting_transfer` and returns the bank details from the
+`BANK_TRANSFER_INSTRUCTIONS` env var, shown on the cart page and again on
+the Account page. The buyer sends an ACH or wire quoting the order number.
+When the money lands, open Supabase → Table editor → `orders`, find the
+order number, and set `status` to `paid` (`paid_at` fills itself in). Then
+ship. Unpaid orders: set `status` to `cancelled` after the hold period
+(`policy.transferHoldDays` in `site-config.js`, stated in the Terms). Set
+`payment.bankTransferEndpoint` to `""` to hide the option.
+
+**Authorize.net (cards, later).** Stripe, PayPal, Square and Shopify Payments all
 prohibit research peptides, so the store takes cards through a **high-risk
 merchant processor** that underwrites this category knowingly, on the
 Authorize.net gateway most of them board onto. Apply with an accurate
@@ -117,7 +176,7 @@ module system. Load order matters: `site-config` → `products` →
 `payment-links` → `main` → `product-page` → `cart`.
 
 The header and footer are repeated in every HTML file — there is no build
-step to include them — so a change to either goes into all twelve.
+step to include them — so a change to either goes into all fourteen.
 
 ## Editing the catalog
 

@@ -22,6 +22,7 @@
         <a href="about.html">Our Company</a>
         <a href="coa.html">COA</a>
         <a href="contact.html">Contact</a>
+        <a href="account.html">Account</a>
       </nav>
       <a class="cart-link" href="checkout.html" data-cart-link>
         Cart <span class="cart-count" data-cart-count hidden>0</span>
@@ -50,6 +51,9 @@
         <!-- Shown when returning from the payment page. -->
         <p class="order-note" data-order-note hidden></p>
 
+        <!-- Shown after a bank-transfer order is placed. -->
+        <div class="transfer" data-transfer-panel hidden tabindex="-1"></div>
+
         <div class="checkout-grid">
           <div>
             <div class="clines-head" aria-hidden="true">
@@ -64,6 +68,71 @@
               The cart is empty.<br />
               <a href="index.html#catalog">Back to the catalogue &rarr;</a>
             </p>
+
+            <!-- Order details. An account is required: there is no guest
+                 checkout. js/account.js decides which block shows. -->
+            <div class="order-details" data-order-details hidden>
+              <div class="order-gate" data-order-signedout hidden>
+                <p class="eyebrow">Account required</p>
+                <p>An account is required to purchase. We sell only to researchers at laboratories, academic institutions, and research organizations.</p>
+                <a class="btn btn-accent" href="account.html?next=checkout.html">Sign in or create an account</a>
+              </div>
+
+              <form class="form" id="order-form" data-order-form hidden>
+                <h2 class="form-title">Order details</h2>
+                <p class="summary-fine">Signed in as <strong data-account-email></strong> &middot; <a href="account.html">Account</a></p>
+
+                <fieldset>
+                  <legend class="eyebrow">Research customer</legend>
+                  <div class="field">
+                    <label for="co-name">Full name</label>
+                    <input id="co-name" name="contactName" autocomplete="name" required />
+                  </div>
+                  <div class="field">
+                    <label for="co-company">Company or institution name</label>
+                    <input id="co-company" name="companyName" autocomplete="organization" required />
+                  </div>
+                  <div class="field">
+                    <label for="co-org">Organization type</label>
+                    <select id="co-org" name="organizationType" data-options="organizationTypes" required></select>
+                  </div>
+                  <div class="field">
+                    <label for="co-field">Research field</label>
+                    <select id="co-field" name="researchField" data-options="researchFields" required></select>
+                  </div>
+                  <div class="field">
+                    <label for="co-phone">Phone</label>
+                    <input id="co-phone" name="phone" type="tel" autocomplete="tel" required />
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend class="eyebrow">Ship to (United States only)</legend>
+                  <div class="field">
+                    <label for="co-line1">Street address</label>
+                    <input id="co-line1" name="shipLine1" autocomplete="address-line1" required />
+                  </div>
+                  <div class="field">
+                    <label for="co-line2">Suite, building, lab <span class="field-hint">(optional)</span></label>
+                    <input id="co-line2" name="shipLine2" autocomplete="address-line2" />
+                  </div>
+                  <div class="field-row">
+                    <div class="field">
+                      <label for="co-city">City</label>
+                      <input id="co-city" name="shipCity" autocomplete="address-level2" required />
+                    </div>
+                    <div class="field">
+                      <label for="co-state">State</label>
+                      <input id="co-state" name="shipState" autocomplete="address-level1" maxlength="2" pattern="[A-Za-z]{2}" placeholder="FL" required />
+                    </div>
+                    <div class="field">
+                      <label for="co-zip">ZIP</label>
+                      <input id="co-zip" name="shipZip" autocomplete="postal-code" inputmode="numeric" pattern="\d{5}(-\d{4})?" required />
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
           </div>
 
           <aside class="summary" data-cart-summary hidden aria-label="Order summary">
@@ -78,9 +147,28 @@
                 <span class="price" data-cart-subtotal>$0</span>
               </div>
             </div>
-            <p class="summary-fine">Shipping and any taxes are calculated on the secure checkout page. By checking out you confirm you are 21 or older and agree to our <a href="terms.html">Terms &amp; Conditions</a>, including research-only use.</p>
+            <fieldset class="paymethod" data-paymethod>
+              <legend class="eyebrow">Payment method</legend>
+              <label class="check">
+                <input type="radio" name="paymentMethod" value="crypto" form="order-form" checked />
+                <span><strong>Cryptocurrency</strong> &mdash; pay on our payment partner&rsquo;s secure hosted page. You choose the coin there; the amount is fixed in US dollars.</span>
+              </label>
+              <label class="check" data-paymethod-bank>
+                <input type="radio" name="paymentMethod" value="bank" form="order-form" />
+                <span><strong>Bank transfer</strong> &mdash; ACH or wire from your bank. Our account details and your order reference are shown after you place the order. Orders ship once the transfer arrives.</span>
+              </label>
+            </fieldset>
 
-            <button type="button" class="btn btn-accent btn-block" data-checkout disabled>Checkout</button>
+            <label class="check">
+              <input type="checkbox" name="researchUseAck" form="order-form" required />
+              <span>I acknowledge that the products purchased shall not be used for human therapeutic purposes, human or animal dosing, injection, or ingestion, and are for laboratory research purposes only.</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="termsAccepted" form="order-form" required />
+              <span>I agree to the <a href="terms.html">Terms &amp; Conditions</a>, including the Web Authorization terms, and the <a href="shipping.html">Shipping</a>, <a href="refunds.html">Returns &amp; Refunds</a>, <a href="chargebacks.html">Chargeback</a>, and <a href="privacy.html">Privacy</a> policies. I confirm I am 21 or older.</span>
+            </label>
+
+            <button type="button" class="btn btn-accent btn-block" data-checkout disabled>Place Order</button>
 
             <p class="cart-status" data-cart-status hidden></p>
             <ul class="paylinks" data-paylinks hidden></ul>
@@ -118,13 +206,14 @@
           <p class="eyebrow">Policies</p>
           <a href="terms.html">Terms &amp; Conditions</a>
           <a href="refunds.html">Returns &amp; Refunds</a>
+          <a href="chargebacks.html">Chargeback Policy</a>
           <a href="shipping.html">Shipping</a>
           <a href="privacy.html">Privacy</a>
         </nav>
         <div class="foot-col">
           <p class="eyebrow">Customer service</p>
-          <a data-contact="phone" href="contact.html">[(555) 555-0100]</a>
-          <a data-contact="email" href="contact.html">[support@yourdomain.com]</a>
+          <a data-contact="phone" href="tel:9414519208">(941) 451-9208</a>
+          <a data-contact="email" href="mailto:support@verityresearchlabs.com">support@verityresearchlabs.com</a>
           <span data-contact="hours">[Monday–Friday, 9am–5pm ET]</span>
         </div>
       </div>
@@ -140,6 +229,8 @@
   <script src="js/products.js"></script>
   <script src="js/payment-links.js"></script>
   <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/account.js"></script>
   <script src="js/cart.js"></script>
 </body>
 </html>

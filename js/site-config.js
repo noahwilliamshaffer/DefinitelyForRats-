@@ -16,20 +16,21 @@ window.SITE = {
   legalName: "Verity Research Labs LLC",
 
   contact: {
-    email: "[support@yourdomain.com]",
-    phone: "[(555) 555-0100]",
+    email: "support@verityresearchlabs.com",
+    phone: "(941) 451-9208",
     hours: "[Monday–Friday, 9am–5pm ET]",
     // One line per array entry. Must match the merchant application.
-    address: ["[Street address]", "[City, State ZIP]", "United States"]
+    address: ["2400 West Tharpe Street", "Tallahassee, FL 32303", "United States"]
   },
 
   // Governing-law state for the Terms page.
-  jurisdiction: "[State]",
+  jurisdiction: "Florida",
 
   // Policy figures quoted on the Shipping and Refunds pages. Only state what
   // the business will actually honour.
   policy: {
     processingDays: "[1–2]",       // business days before an order ships
+    transferHoldDays: "7",         // days a bank-transfer order is held unpaid
     returnWindowDays: "[30]"       // days to request a return of sealed items
   },
 
@@ -55,8 +56,15 @@ window.SITE = {
   // POSTs to; each one recomputes prices server-side and returns a hosted
   // payment page for the whole cart.
   //
-  //   "authorizenet" → /api/authorize-net-checkout   (high-risk processor via
-  //                     Authorize.net; needs AUTHNET_* env vars on the host)
+  //   "nowpayments"  → /api/crypto-checkout          (ACTIVE — crypto via a
+  //                     NOWPayments hosted invoice; needs NOWPAYMENTS_* and
+  //                     SUPABASE_* env vars on the host)
+  //
+  // Alongside it, bankTransferEndpoint offers manual bank transfer
+  // (api/bank-transfer-checkout.js; needs BANK_TRANSFER_INSTRUCTIONS). Set it
+  // to "" to hide that option.
+  //   "authorizenet" → /api/authorize-net-checkout   (cards, for later;
+  //                     needs AUTHNET_* env vars on the host)
   //   "stripe"       → /api/create-checkout-session  (needs STRIPE_SECRET_KEY;
   //                     falls back to js/payment-links.js if unreachable)
   //
@@ -64,8 +72,48 @@ window.SITE = {
   // browser. Keys live only in the host's environment (Vercel/Netlify).
   // GitHub Pages cannot run functions, so checkout needs one of those hosts.
   payment: {
-    provider: "authorizenet",
+    // false shows the whole checkout (accounts, order form, acknowledgements)
+    // but disables Place Order with a "contact us" note, and the checkout
+    // functions refuse orders. Flip to true once the live NOWPayments keys,
+    // BANK_TRANSFER_INSTRUCTIONS and a custom email sender are in place.
+    ordersOpen: false,
+    provider: "nowpayments",
     currency: "usd",
-    checkoutEndpoint: "/api/authorize-net-checkout"
-  }
+    checkoutEndpoint: "/api/crypto-checkout",
+    bankTransferEndpoint: "/api/bank-transfer-checkout"
+  },
+
+  // Customer accounts (Supabase Auth). Buying requires a signed-in account —
+  // there is no guest checkout. The URL and the publishable key (sb_publishable_…)
+  // are public by design and safe here; the secret key is NOT, and lives
+  // only in the host's SUPABASE_SECRET_KEY env var.
+  accounts: {
+    supabaseUrl: "https://elgrprgmzmnvdcctnjps.supabase.co",
+    supabaseAnonKey: "sb_publishable_Uy9Wfgn9o02ChPiku4fx1g_3CYiB-rD"
+  },
+
+  // Asked at sign-up and on every order. The values are what the server
+  // accepts (api/crypto-checkout.js reads this list), so edit here only.
+  researchFields: [
+    "Molecular Biology",
+    "Biochemistry",
+    "Peptide Chemistry",
+    "Chemical Biology",
+    "Biotechnology Research",
+    "Pharmacology Research",
+    "Analytical Chemistry",
+    "Academic Research"
+  ],
+
+  // Organisation types we sell to. Med spas, gyms, weight-loss clinics and
+  // similar consumer-facing businesses are deliberately absent — the
+  // processor does not accept them as customers.
+  organizationTypes: [
+    "University or academic institution",
+    "Contract research organization",
+    "Biotechnology or pharmaceutical company",
+    "Independent research laboratory",
+    "Government or institutional laboratory",
+    "Analytical testing laboratory"
+  ]
 };

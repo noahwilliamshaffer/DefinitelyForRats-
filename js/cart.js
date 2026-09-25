@@ -19,6 +19,14 @@
         Needs a host that runs functions (Vercel/Netlify) — GitHub Pages
         cannot.
 
+          NOWPayments   → { url }, a plain redirect to the crypto invoice
+                          (api/crypto-checkout.js). This one also needs a
+                          signed-in account (js/account.js) and the order
+                          details form: no account, no order. The buyer may
+                          instead choose bank transfer
+                          (api/bank-transfer-checkout.js), which records the
+                          order and shows our bank details on this page.
+
      2. Endpoint empty — Stripe only: fall back to the per-variant hosted
         Payment Links in js/payment-links.js, one product at a time. Other
         providers have no fallback and ask the buyer to retry.
@@ -156,17 +164,82 @@
     var cnt = document.querySelector("[data-cart-itemcount]");
     if (cnt) cnt.textContent = n === 1 ? "1 item" : n + " items";
 
+    var details = document.querySelector("[data-order-details]");
+    if (details) details.hidden = lines.length === 0;
+
     var pay = document.querySelector("[data-checkout]");
-    if (pay) pay.disabled = lines.length === 0;
+    if (pay) pay.disabled = lines.length === 0 || !ordersOpen() || (needsAccount() && !signedIn());
 
     var links = document.querySelector("[data-paylinks]");
     if (links) { links.innerHTML = ""; links.hidden = true; }
+  }
+
+  /* ---- Account (crypto checkout requires one) ----------------------------- */
+  function ordersOpen() {
+    return !(S.payment && S.payment.ordersOpen === false);
+  }
+  function needsAccount() {
+    return (S.payment && S.payment.provider) === "nowpayments";
+  }
+  function signedIn() {
+    return !!(window.ACCOUNT && window.ACCOUNT.user());
+  }
+
+  // Profile metadata key → order form field.
+  var PREFILL = {
+    full_name: "contactName", company_name: "companyName",
+    organization_type: "organizationType", research_field: "researchField",
+    phone: "phone", ship_line1: "shipLine1", ship_line2: "shipLine2",
+    ship_city: "shipCity", ship_state: "shipState", ship_zip: "shipZip"
+  };
+
+  /* Show the sign-in prompt or the order form, and prefill the form from the
+     account the first time it appears. Fields the buyer has typed in are
+     never overwritten. */
+  function syncAccount() {
+    var form = document.querySelector("[data-order-form]");
+    var gate = document.querySelector("[data-order-signedout]");
+    if (!form || !gate) return;
+    var user = window.ACCOUNT && window.ACCOUNT.user();
+    gate.hidden = !!user;
+    form.hidden = !user;
+    if (user) {
+      var meta = user.user_metadata || {};
+      var email = form.querySelector("[data-account-email]");
+      if (email) email.textContent = user.email;
+      window.ACCOUNT.fillSelects(form, {});
+      Object.keys(PREFILL).forEach(function (k) {
+        var el = form.elements[PREFILL[k]];
+        if (el && !el.value && meta[k]) el.value = meta[k];
+      });
+    }
+    render();
+  }
+
+  function orderDetails(form) {
+    var d = {};
+    var els = form.elements;
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (!el.name || (el.type === "radio" && !el.checked)) continue;
+      d[el.name] = el.type === "checkbox" ? el.checked : el.value.trim();
+    }
+    // The acknowledgement boxes sit in the summary with form="order-form",
+    // so they are part of form.elements too.
+    return d;
   }
 
   /* ---- Checkout ----------------------------------------------------------- */
   function setStatus(msg, isError) {
     var el = document.querySelector("[data-cart-status]");
     if (!el) return;
+    // While ordering is paused, clearing the status brings the notice back.
+    if (!msg && !ordersOpen()) {
+      var C = S.contact || {};
+      msg = "Online ordering opens soon. To order now, contact us at " +
+        C.email + " or " + C.phone + ".";
+      isError = false;
+    }
     el.textContent = msg || "";
     el.hidden = !msg;
     el.classList.toggle("is-error", !!isError);
@@ -221,6 +294,8 @@
     // No endpoint configured — hosted links are the only route.
     if (!endpoint) { unavailable(); return; }
 
+    if (needsAccount()) { placeOrder(btn); return; }
+
     function restore() {
       if (btn) { btn.disabled = false; btn.textContent = "Checkout"; }
     }
@@ -247,6 +322,11 @@
         });
       })
       .then(function (res) {
+        if (method === "bank" && res.ok && res.json && res.json.instructions) {
+          restore();
+          showTransfer(res.json);
+          return;
+        }
         if (res.ok && res.json && res.json.url) {
           if (res.json.token) postToken(res.json.url, res.json.token);
           else window.location.href = res.json.url;
@@ -254,6 +334,109 @@
         }
         restore();
         unavailable();
+      })
+      .catch(function () {
+        restore();
+        unavailable();
+      });
+  }
+
+  function payMethod() {
+    var picked = document.querySelector('input[name="paymentMethod"]:checked');
+    return picked ? picked.value : "crypto";
+  }
+
+  /* Hide the bank-transfer choice when it is switched off in site-config. */
+  function syncPayMethods() {
+    if (!ordersOpen()) {
+      var btn = document.querySelector("[data-checkout]");
+      if (btn) btn.textContent = "Ordering opens soon";
+      setStatus("");
+    }
+    var bank = document.querySelector("[data-paymethod-bank]");
+    if (!bank) return;
+    var on = !!(S.payment && S.payment.bankTransferEndpoint);
+    bank.hidden = !on;
+    if (!on) {
+      var crypto = document.querySelector('input[name="paymentMethod"][value="crypto"]');
+      if (crypto) crypto.checked = true;
+    }
+  }
+
+  /* A bank-transfer order was recorded: the cart is done with, and the
+     buyer needs our bank details and their reference. */
+  function showTransfer(data) {
+    lines = []; save(); render();
+    var panel = document.querySelector("[data-transfer-panel]");
+    if (!panel || !window.ACCOUNT) return;
+    window.ACCOUNT.renderTransfer(panel, data);
+    panel.focus();
+    panel.scrollIntoView({ block: "start" });
+  }
+
+  /* Signed-in buyers only, with the order details form complete. The server
+     re-checks everything; the browser checks first only so the buyer sees
+     which field needs attention. Crypto redirects to the hosted invoice;
+     bank transfer stays here and shows the instructions. */
+  function placeOrder(btn) {
+    var method = payMethod();
+    var endpoint = method === "bank"
+      ? S.payment.bankTransferEndpoint
+      : S.payment.checkoutEndpoint;
+    var form = document.querySelector("[data-order-form]");
+    if (!signedIn() || !form) {
+      setStatus("Sign in to your account to place an order.", true);
+      return;
+    }
+    if (!form.reportValidity()) return;
+
+    var details = orderDetails(form);
+
+    function restore() {
+      if (btn) { btn.disabled = false; btn.textContent = "Place Order"; }
+    }
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = method === "bank" ? "Placing order…" : "Creating invoice…";
+    }
+    setStatus("");
+
+    window.ACCOUNT.token().then(function (token) {
+      if (!token) throw new Error("signed out");
+      return fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+        body: JSON.stringify({
+          items: lines.map(function (l) { return { variantId: l.variantId, qty: l.qty }; }),
+          details: details
+        })
+      });
+    })
+      .then(function (r) {
+        return r.text().then(function (body) {
+          var parsed = null;
+          try { parsed = JSON.parse(body); } catch (e) { /* not JSON */ }
+          return { ok: r.ok, status: r.status, json: parsed };
+        });
+      })
+      .then(function (res) {
+        if (res.ok && res.json && res.json.url) {
+          // Remember the address for next time; never let it block payment.
+          var save = {};
+          Object.keys(PREFILL).forEach(function (k) { save[k] = details[PREFILL[k]] || ""; });
+          window.ACCOUNT.saveProfile(save).catch(function () {}).then(function () {
+            window.location.href = res.json.url;
+          });
+          return;
+        }
+        restore();
+        // 400/401/403 carry our own plain-English message (a missing field,
+        // an unconfirmed email). Anything else gets the generic retry line.
+        if (res.json && res.json.error && [400, 401, 403].indexOf(res.status) !== -1) {
+          setStatus(res.json.error, true);
+        } else {
+          unavailable();
+        }
       })
       .catch(function () {
         restore();
@@ -358,16 +541,25 @@
     if (note) {
       note.hidden = false;
       note.classList.toggle("is-cancelled", q === "cancelled");
-      note.textContent = q === "success"
-        ? "Order received. Thank you — a receipt is on its way by email."
-        : "Checkout cancelled — your cart is exactly where you left it.";
+      var order = new URLSearchParams(location.search).get("order");
+      note.textContent = q !== "success"
+        ? "Checkout cancelled — your cart is exactly where you left it."
+        : needsAccount()
+          ? "Payment submitted" + (order ? " for order " + order : "") + ". Crypto payments " +
+            "are confirmed on-chain, which can take a few minutes; the status is shown on your Account page."
+          : "Order received. Thank you — a receipt is on its way by email.";
     }
     history.replaceState({}, "", location.pathname);
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     render();
+    syncPayMethods();
     handleReturn();
+    if (window.ACCOUNT) {
+      window.ACCOUNT.ready.then(syncAccount);
+      document.addEventListener("account:change", syncAccount);
+    }
   });
 
   window.CART = {

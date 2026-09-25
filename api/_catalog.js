@@ -1,7 +1,7 @@
 /* ============================================================================
    Shared by the checkout functions: loads the catalogue from js/products.js
    so prices are always recomputed server-side, never taken from the client,
-   and the brand name from js/site-config.js.
+   and the brand name and account settings from js/site-config.js.
 
    The leading underscore keeps Vercel from deploying this file as its own
    endpoint.
@@ -44,9 +44,14 @@ function loadVariants() {
   return map;
 }
 
-/* The brand name from js/site-config.js, for the hosted payment page. */
-function loadBrand() {
-  return loadWindow("site-config.js").SITE.brand;
+/* The whole window.SITE from js/site-config.js. */
+function loadSite() {
+  return loadWindow("site-config.js").SITE;
 }
 
-module.exports = { loadVariants, loadBrand };
+/* The brand name from js/site-config.js, for the hosted payment page. */
+function loadBrand() {
+  return loadSite().brand;
+}
+
+module.exports = { loadVariants, loadSite, loadBrand };
