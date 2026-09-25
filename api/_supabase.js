@@ -21,7 +21,22 @@ function config() {
   const url = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
   const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("SUPABASE_URL / SUPABASE_SECRET_KEY not set.");
+  // A publishable or anon key can check logins but cannot write orders, so
+  // it fails later with a bare 401. Name the mistake here instead.
+  if (key.startsWith("sb_publishable_") || jwtRole(key) === "anon") {
+    throw new Error("SUPABASE_SECRET_KEY holds a publishable/anon key. Use the sb_secret_ key.");
+  }
   return { url, key };
+}
+
+/* The role claim of a legacy JWT key, or null for anything else. */
+function jwtRole(key) {
+  if (!key.startsWith("eyJ")) return null;
+  try {
+    return JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString("utf8")).role || null;
+  } catch (e) {
+    return null;
+  }
 }
 
 function configured() {
