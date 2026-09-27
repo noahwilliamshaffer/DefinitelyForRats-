@@ -138,6 +138,11 @@ ship. Unpaid orders: set `status` to `cancelled` after the hold period
 (`policy.transferHoldDays` in `site-config.js`, stated in the Terms). Set
 `payment.bankTransferEndpoint` to `""` to hide the option.
 
+**Zelle (active).** Same flow and endpoint, with `method: "zelle"` and the
+`ZELLE_INSTRUCTIONS` env var (Zelle email/phone and the name it's
+registered to). Orders are recorded with `payment_provider = 'zelle'`.
+Set `payment.zelle` to `false` to hide it.
+
 **Authorize.net (cards, later).** Stripe, PayPal, Square and Shopify Payments all
 prohibit research peptides, so the store takes cards through a **high-risk
 merchant processor** that underwrites this category knowingly, on the

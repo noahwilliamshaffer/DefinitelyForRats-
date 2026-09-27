@@ -82,7 +82,9 @@ window.SITE = {
     provider: "nowpayments",
     currency: "usd",
     checkoutEndpoint: "/api/crypto-checkout",
-    bankTransferEndpoint: "/api/bank-transfer-checkout"
+    bankTransferEndpoint: "/api/bank-transfer-checkout",
+    // Offer Zelle too (same endpoint; needs ZELLE_INSTRUCTIONS on the host).
+    zelle: true
   },
 
   // Customer accounts (Supabase Auth). Buying requires a signed-in account —

@@ -125,7 +125,7 @@
   var STATUS_LABEL = {
     pending: "Not started",
     awaiting_payment: "Awaiting payment",
-    awaiting_transfer: "Awaiting bank transfer",
+    awaiting_transfer: "Awaiting payment",
     confirming: "Payment confirming",
     paid: "Paid",
     partially_paid: "Partially paid — contact us",
@@ -166,11 +166,13 @@
      { orderNumber, total, instructions, holdDays }. The bank details are
      plain text from the host's env; esc() keeps them inert. */
   function renderTransfer(el, d) {
+    var zelle = d.method === "zelle";
     el.innerHTML =
-      '<p class="eyebrow">Order ' + esc(d.orderNumber) + " &middot; awaiting bank transfer</p>" +
-      "<h2>Send your bank transfer</h2>" +
-      "<p>Your order is reserved. Send the exact amount below from your bank by ACH or wire, " +
-      "and put the order number in the transfer&rsquo;s reference or memo so we can match it. " +
+      '<p class="eyebrow">Order ' + esc(d.orderNumber) + " &middot; awaiting " + (zelle ? "Zelle payment" : "bank transfer") + "</p>" +
+      "<h2>" + (zelle ? "Send your Zelle payment" : "Send your bank transfer") + "</h2>" +
+      "<p>Your order is reserved. " + (zelle
+        ? "Send the exact amount below with Zelle from your bank&rsquo;s app, and put the order number in the memo so we can match it. "
+        : "Send the exact amount below from your bank by ACH or wire, and put the order number in the transfer&rsquo;s reference or memo so we can match it. ") +
       "We ship once the funds arrive. Unpaid orders are cancelled after " + esc(d.holdDays) + " days.</p>" +
       '<dl class="transfer-facts">' +
       '<div><dt class="eyebrow">Amount</dt><dd>' + money(Math.round(d.total * 100)) + " USD</dd></div>" +
