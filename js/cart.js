@@ -324,7 +324,7 @@
         });
       })
       .then(function (res) {
-        if (method === "bank" && res.ok && res.json && res.json.instructions) {
+        if (manual && res.ok && res.json && res.json.instructions) {
           restore();
           showTransfer(res.json);
           return;
@@ -348,25 +348,29 @@
     return picked ? picked.value : "crypto";
   }
 
-  /* Hide the bank-transfer choice when it is switched off in site-config. */
+  /* Hide the bank-transfer and Zelle choices when switched off in site-config. */
   function syncPayMethods() {
     if (!ordersOpen()) {
       var btn = document.querySelector("[data-checkout]");
       if (btn) btn.textContent = "Ordering opens soon";
       setStatus("");
     }
-    var bank = document.querySelector("[data-paymethod-bank]");
-    if (!bank) return;
-    var on = !!(S.payment && S.payment.bankTransferEndpoint);
-    bank.hidden = !on;
-    if (!on) {
-      var crypto = document.querySelector('input[name="paymentMethod"][value="crypto"]');
-      if (crypto) crypto.checked = true;
-    }
+    var manual = !!(S.payment && S.payment.bankTransferEndpoint);
+    var show = { bank: manual, zelle: manual && !!S.payment.zelle };
+    Object.keys(show).forEach(function (m) {
+      var label = document.querySelector("[data-paymethod-" + m + "]");
+      if (!label) return;
+      label.hidden = !show[m];
+      var input = label.querySelector("input");
+      if (!show[m] && input && input.checked) {
+        var crypto = document.querySelector('input[name="paymentMethod"][value="crypto"]');
+        if (crypto) crypto.checked = true;
+      }
+    });
   }
 
-  /* A bank-transfer order was recorded: the cart is done with, and the
-     buyer needs our bank details and their reference. */
+  /* A bank-transfer or Zelle order was recorded: the cart is done with, and
+     the buyer needs our payment details and their reference. */
   function showTransfer(data) {
     lines = []; save(); render();
     var panel = document.querySelector("[data-transfer-panel]");
@@ -382,9 +386,8 @@
      bank transfer stays here and shows the instructions. */
   function placeOrder(btn) {
     var method = payMethod();
-    var endpoint = method === "bank"
-      ? S.payment.bankTransferEndpoint
-      : S.payment.checkoutEndpoint;
+    var manual = method === "bank" || method === "zelle";
+    var endpoint = manual ? S.payment.bankTransferEndpoint : S.payment.checkoutEndpoint;
     var form = document.querySelector("[data-order-form]");
     if (!signedIn() || !form) {
       setStatus("Sign in to your account to place an order.", true);
@@ -399,7 +402,7 @@
     }
     if (btn) {
       btn.disabled = true;
-      btn.textContent = method === "bank" ? "Placing order…" : "Creating invoice…";
+      btn.textContent = manual ? "Placing order…" : "Creating invoice…";
     }
     setStatus("");
 
@@ -410,7 +413,8 @@
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
         body: JSON.stringify({
           items: lines.map(function (l) { return { variantId: l.variantId, qty: l.qty }; }),
-          details: details
+          details: details,
+          method: method
         })
       });
     })

@@ -1027,7 +1027,7 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 
 .paymethod { display: grid; gap: var(--s-3); margin: 0; padding: 0; border: 0; min-width: 0; }
 .paymethod legend { padding: 0 0 var(--s-2); }
-.paymethod[hidden], [data-paymethod-bank][hidden] { display: none; }
+.paymethod[hidden], [data-paymethod-bank][hidden], [data-paymethod-zelle][hidden] { display: none; }
 
 /* Bank-transfer instructions: shown once, after the order is placed, and
    again from the Account page. */
